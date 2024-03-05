@@ -1,0 +1,28 @@
+version: '3.8'
+services:
+  db:
+    image: mysql/mysql-server:latest
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: team35
+      MYSQL_DATABASE: homedepot
+      MYSQL_ROOT_HOST: '%'
+    volumes:
+      - wawdat:/var/lib/mysql
+    ports:
+      - "53336:3306"
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin:latest
+    restart: always
+    depends_on:
+      - db
+    environment:
+      PMA_HOST: db
+      PMA_USER: root
+      PMA_PASSWORD: team35 
+    ports:
+      - "50083:80"
+
+volumes:
+  wawdat:
