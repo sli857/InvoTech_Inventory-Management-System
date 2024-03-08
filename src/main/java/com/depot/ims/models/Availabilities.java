@@ -22,4 +22,12 @@ public class Availabilities {
     @Column(name = "quantity", nullable = false)
     private Integer quantity;
 
+    @ManyToOne
+    @JoinColumn(name = "PK1_FK_availabilities_sites", referencedColumnName = "pkSites")
+    private Sites site;
+
+    @ManyToOne
+    @JoinColumn(name = "PK2_FK_availabilities_items", referencedColumnName = "pkItems")
+    private Items item;
+
 }
