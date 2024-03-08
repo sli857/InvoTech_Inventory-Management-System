@@ -1,7 +1,11 @@
 package com.depot.ims;
 
+import com.depot.ims.models.Sites;
+import com.depot.ims.repositories.SitesRepository;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
 
 @SpringBootApplication
 public class ImsApplication {
@@ -10,4 +14,21 @@ public class ImsApplication {
 		SpringApplication.run(ImsApplication.class, args);
 	}
 
+	@Bean
+	public CommandLineRunner commandLineRunner(
+			SitesRepository sitesRepository) {
+		return (args) -> {
+			sitesRepository.save(new Sites(null, "HomeDepot 1", "W54 N54", "open",
+					null,
+					true));
+			sitesRepository.save(new Sites(null, "HomeDepot 2", "W54 N53", "open", null,
+					true));
+			sitesRepository.save(new Sites(null, "HomeDepot 3", "W54 N52", "open", null,
+					true));
+			sitesRepository.save(new Sites(null, "HomeDepot 4", "W54 N51", "open", null,
+					true));
+			sitesRepository.save(new Sites(null, "HomeDepot 5", "W54 N50", "open", null,
+					true));
+		};
+	}
 }
