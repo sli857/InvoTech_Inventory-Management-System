@@ -4,19 +4,21 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.sql.Update;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class Sites {
+public class Site {
 
     @Id
     @GeneratedValue
-    @Column(name = "PK_sites", updatable = false, nullable = false)
-    private Integer id;
+    @Column(name = "PK_site", updatable = false, nullable = false)
+    private Integer siteId;
 
     @Column(name = "site_name", unique = true, nullable = false)
     private String siteName;

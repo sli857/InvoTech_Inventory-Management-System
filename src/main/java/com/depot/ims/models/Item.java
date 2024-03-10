@@ -5,16 +5,18 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class Items {
+public class Item {
 
     @Id
     @GeneratedValue
-    @Column(name = "PK_items", updatable = false, nullable = false)
-    private Integer id;
+    @Column(name = "PK_item", updatable = false, nullable = false)
+    private Integer itemId;
 
     @Column(name = "item_name", nullable = false)
     private String itemName;

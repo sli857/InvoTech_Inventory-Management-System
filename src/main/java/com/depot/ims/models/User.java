@@ -7,12 +7,12 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class Users {
+public class User {
 
     @Id
     @GeneratedValue
     @Column(name = "PK_users", updatable = false, nullable = false)
-    private Integer id;
+    private Integer userId;
 
     @Column(unique = true, nullable = false)
     private String username;

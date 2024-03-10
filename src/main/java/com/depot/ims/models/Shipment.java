@@ -11,12 +11,12 @@ import java.sql.Timestamp;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class Shipments {
+public class Shipment {
 
     @Id
     @GeneratedValue
     @Column(name = "PK_shipments", updatable = false, nullable = false)
-    private Integer id;
+    private Integer shipmentId;
 
     @Column(name = "FK_source", nullable = false)
     private Integer source;

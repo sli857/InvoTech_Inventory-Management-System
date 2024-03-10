@@ -1,5 +1,6 @@
 package com.depot.ims.models;
 
+import com.depot.ims.models.compositeKeys.AvailabilityKey;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -9,25 +10,22 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@IdClass(AvailabilityKey.class)
 public class Availabilities {
 
     @Id
-    @Column(name = "PK1_FK_availabilities_sites", updatable = false, nullable = false)
-    private Integer id;
+    @ManyToOne
+    // @JoinColumn(name = "PK1_FK_availabilities_sites", referencedColumnName = "PK_sites")
+    @JoinColumn(name = "PK1_FK_availabilities_sites")
+    private Site siteId;
 
     @Id
-    @Column(name = "PK2_FK_availabilities_items", updatable = false, nullable = false)
-    private Integer itemId;
+    @ManyToOne
+    // @JoinColumn(name = "PK2_FK_availabilities_items", referencedColumnName = "PK_items")
+    @JoinColumn(name = "PK2_FK_availabilities_items")
+    private Item itemId;
 
-    @Column(name = "quantity", nullable = false)
+    @Column(nullable = false)
     private Integer quantity;
-
-    @ManyToOne
-    @JoinColumn(name = "PK1_FK_availabilities_sites", referencedColumnName = "pkSites")
-    private Sites site;
-
-    @ManyToOne
-    @JoinColumn(name = "PK2_FK_availabilities_items", referencedColumnName = "pkItems")
-    private Items item;
 
 }
