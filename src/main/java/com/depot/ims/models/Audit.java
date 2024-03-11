@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.Reference;
 
 import java.sql.Timestamp;
 
@@ -11,6 +12,7 @@ import java.sql.Timestamp;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@Table(name = "Audits")
 public class Audit {
 
     @Id
@@ -18,8 +20,9 @@ public class Audit {
     @Column(name = "PK_audits", updatable = false, nullable = false)
     private Integer auditId;
 
-    @Column(name = "FK_audits_users", nullable = false)
-    private Integer userId;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "FK_audits_users", referencedColumnName = "PK_users", nullable = false)
+    private User user;
 
     @Column(name = "table_name", nullable = false)
     private String tableName;

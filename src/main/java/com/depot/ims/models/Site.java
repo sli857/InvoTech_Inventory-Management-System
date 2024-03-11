@@ -13,11 +13,12 @@ import java.util.ArrayList;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@Table(name = "Sites")
 public class Site {
 
     @Id
     @GeneratedValue
-    @Column(name = "PK_site", updatable = false, nullable = false)
+    @Column(name = "PK_sites", updatable = false, nullable = false)
     private Integer siteId;
 
     @Column(name = "site_name", unique = true, nullable = false)

@@ -7,6 +7,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@Table(name = "Users")
 public class User {
 
     @Id
@@ -14,10 +15,10 @@ public class User {
     @Column(name = "PK_users", updatable = false, nullable = false)
     private Integer userId;
 
-    @Column(unique = true, nullable = false)
+    @Column(name = "username", unique = true, nullable = false)
     private String username;
 
-    @Column(nullable = false)
+    @Column(name = "password", nullable = false)
     private String password;
 
 }

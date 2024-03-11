@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Entity
 @IdClass(ShipKey.class)
+@Table(name = "Ships")
 public class Ships {
 
     @Id
@@ -25,6 +26,6 @@ public class Ships {
     @JoinColumn(name = "PK2_FK_ships_shipments")
     private Shipment shipmentId;
 
-    @Column(nullable = false)
+    @Column(name = "quantity", nullable = false)
     private Integer quantity;
 }

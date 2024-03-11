@@ -11,17 +11,16 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Entity
 @IdClass(AvailabilityKey.class)
+@Table(name = "Availabilities")
 public class Availabilities {
 
     @Id
     @ManyToOne
-    // @JoinColumn(name = "PK1_FK_availabilities_sites", referencedColumnName = "PK_sites")
     @JoinColumn(name = "PK1_FK_availabilities_sites")
     private Site siteId;
 
     @Id
     @ManyToOne
-    // @JoinColumn(name = "PK2_FK_availabilities_items", referencedColumnName = "PK_items")
     @JoinColumn(name = "PK2_FK_availabilities_items")
     private Item itemId;
 

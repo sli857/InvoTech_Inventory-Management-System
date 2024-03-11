@@ -11,11 +11,12 @@ import java.util.ArrayList;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@Table(name = "Items")
 public class Item {
 
     @Id
     @GeneratedValue
-    @Column(name = "PK_item", updatable = false, nullable = false)
+    @Column(name = "PK_items", updatable = false, nullable = false)
     private Integer itemId;
 
     @Column(name = "item_name", nullable = false)

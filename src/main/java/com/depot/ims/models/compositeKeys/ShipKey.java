@@ -11,10 +11,12 @@ import java.util.Objects;
 
 @Data
 public class ShipKey implements Serializable {
-    @Reference(to= Item.class)
-    private Integer itemId; // Matches the type and name of Item in Ship
+
+    @Reference(to = Item.class)
+    private Integer itemId;
+
     @Reference(to = Shipment.class)
-    private Integer shipmentId; // Matches the type and name of Shipment in Ship
+    private Integer shipmentId;
 
     @Override
     public boolean equals(Object o) {

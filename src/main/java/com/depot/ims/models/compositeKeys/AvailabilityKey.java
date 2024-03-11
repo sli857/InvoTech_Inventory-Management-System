@@ -10,10 +10,12 @@ import java.util.Objects;
 
 @Data
 public class AvailabilityKey implements Serializable {
+
     @Reference(to = Site.class)
-    private Integer siteId; // Matches the type and name of Site in Availability
+    private Integer siteId;
+
     @Reference(to = Item.class)
-    private Integer itemId; // Matches the type and name of Item in Availability
+    private Integer itemId;
 
     @Override
     public boolean equals(Object o) {
