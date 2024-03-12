@@ -13,4 +13,7 @@ public interface SitesRepository extends JpaRepository<Site, Integer>{
     List<Site> findBySiteName(String siteName);
 
     List<Site> findAll();
+
+    @Query("SELECT s FROM Site s WHERE s.siteId=?1")
+    Site findBySiteId(Integer siteId);
 }

@@ -10,5 +10,7 @@ public interface ItemsRepository extends JpaRepository<Item,Integer> {
     List<Item> findAll();
 
     @Query("SELECT i FROM Item i WHERE i.itemName = ?1")
-    List<Item> findItemsByItemName(String item_name);
+    List<Item> findByItemName(String itemName);
+    @Query("SELECT i FROM Item i WHERE i.itemId = ?1")
+    Item findByItemId(Integer itemId);
 }

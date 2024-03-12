@@ -11,7 +11,7 @@ import lombok.*;
 public class User {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(name = "PK_users", updatable = false, nullable = false)
     private Integer userId;
 

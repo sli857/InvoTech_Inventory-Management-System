@@ -1,5 +1,6 @@
 package com.depot.ims.controllers;
 
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.depot.ims.repositories.SitesRepository;
@@ -29,17 +30,18 @@ public class SitesController {
         return this.sitesRepository.findAll();
     }
 
-    @GetMapping("/{siteName}")
+    @GetMapping("/siteId={siteId}")
+    public Site getSitesById (@PathVariable Integer siteId) {
+        return this.sitesRepository.findBySiteId(siteId);
+    }
+    @GetMapping("/siteName={siteName}")
     public List<Site> getSitesByName(@PathVariable String siteName) {
         return this.sitesRepository.findBySiteName(siteName);
     }
 
-//    @PostMapping("/add")
-//    public Site postMethodName(@RequestBody String siteName) {
-//
-//        // return sitesRepository.save(new Sites(null, siteName, siteLocation, "open",
-//        // null, true));
-//        return sitesRepository.save(new Site(null, siteName, "W45 N54", "open", null, true));
-//    }
+    @PostMapping(value = "/add", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public Site postMethodName(@RequestBody Site site) {
+        return sitesRepository.save(site);
+    }
 
 }

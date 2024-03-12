@@ -15,7 +15,7 @@ import java.util.ArrayList;
 public class Item {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(name = "PK_items", updatable = false, nullable = false)
     private Integer itemId;
 

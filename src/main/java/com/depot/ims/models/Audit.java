@@ -16,13 +16,13 @@ import java.sql.Timestamp;
 public class Audit {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(name = "PK_audits", updatable = false, nullable = false)
     private Integer auditId;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "FK_audits_users", referencedColumnName = "PK_users", nullable = false)
-    private User user;
+    private User userId;
 
     @Column(name = "table_name", nullable = false)
     private String tableName;

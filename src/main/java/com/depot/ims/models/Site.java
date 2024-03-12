@@ -17,7 +17,7 @@ import java.util.ArrayList;
 public class Site {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(name = "PK_sites", updatable = false, nullable = false)
     private Integer siteId;
 

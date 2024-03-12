@@ -15,7 +15,7 @@ import java.sql.Timestamp;
 public class Shipment {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(name = "PK_shipments", updatable = false, nullable = false)
     private Integer shipmentId;
 

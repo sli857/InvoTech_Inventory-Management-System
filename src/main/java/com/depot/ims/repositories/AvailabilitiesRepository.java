@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 
-public interface AvailabilityRepository extends JpaRepository<Availability, Integer> {
+public interface AvailabilitiesRepository extends JpaRepository<Availability, Integer> {
 
     List<Availability> findAll();
 

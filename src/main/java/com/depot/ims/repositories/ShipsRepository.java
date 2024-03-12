@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 
-public interface ShipRepository extends JpaRepository<Ship, Integer> {
+public interface ShipsRepository extends JpaRepository<Ship, Integer> {
 
     List<Ship> findAll();
 
