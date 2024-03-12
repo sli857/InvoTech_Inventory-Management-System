@@ -19,10 +19,9 @@ public class Item {
     @Column(name = "PK_items", updatable = false, nullable = false)
     private Integer itemId;
 
-    @Column(name = "item_name", nullable = false)
+    @Column(name = "item_name", unique = true, nullable = false)
     private String itemName;
 
     @Column(name = "item_price", nullable = false)
     private Double itemPrice;
-
 }
