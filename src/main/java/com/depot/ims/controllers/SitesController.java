@@ -24,15 +24,15 @@ public class SitesController {
         this.sitesRepository = sitesRepository;
     }
 
-//    @GetMapping
-//    public List<Site> getSites() {
-//        return this.sitesRepository.findAll();
-//    }
-//
-//    @GetMapping("/{siteName}")
-//    public List<Site> getSitesByName(@PathVariable String siteName) {
-//        return this.sitesRepository.findBySiteName(siteName);
-//    }
+    @GetMapping
+    public List<Site> getSites() {
+        return this.sitesRepository.findAll();
+    }
+
+    @GetMapping("/{siteName}")
+    public List<Site> getSitesByName(@PathVariable String siteName) {
+        return this.sitesRepository.findBySiteName(siteName);
+    }
 
 //    @PostMapping("/add")
 //    public Site postMethodName(@RequestBody String siteName) {
