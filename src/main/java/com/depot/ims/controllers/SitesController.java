@@ -3,17 +3,13 @@ package com.depot.ims.controllers;
 import com.depot.ims.repositories.SitesRepository;
 import com.depot.ims.models.Sites;
 import java.util.List;
-import org.springframework.web.bind.annotation.RestController;
+
+import org.springframework.web.bind.annotation.*;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 
 @RestController
 @RequestMapping("/sites")
-
+@CrossOrigin(origins = "http://localhost:5173")
 public class SitesController {
 
     private final SitesRepository sitesRepository;
