@@ -14,11 +14,11 @@ public interface ShipmentRepository extends JpaRepository<Shipment, Integer> {
     @Query("select s from Shipment s where s.shipmentId = ?1")
     List<Site> findByShipmentId(Integer shipmentId);
 
-    @Query("select s from Shipment s where s.shipmentSource = ?1")
-    List<Site> findByShipmentSource(Integer shipmentSource);
+    @Query("select s from Shipment s where s.source = ?1")
+    List<Site> findByShipmentSource(Integer source);
 
-    @Query("select s from Shipment s where s.shipmentDestination = ?1")
-    List<Site> findByShipmentDestination(Integer shipmentDestination);
+    @Query("select s from Shipment s where s.destination = ?1")
+    List<Site> findByShipmentDestination(Integer destination);
 
     @Query("select s from Shipment s where s.currentLocation = ?1")
     List<Site> findByCurrentLocation(String currentLocation);
