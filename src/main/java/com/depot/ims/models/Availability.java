@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @IdClass(AvailabilityKey.class)
 @Table(name = "Availabilities")
-public class Availabilities {
+public class Availability {
 
     @Id
     @ManyToOne

@@ -9,8 +9,8 @@ import org.springframework.data.jpa.repository.Query;
 
 public interface SitesRepository extends JpaRepository<Site, Integer>{
 
-//    @Query("select s from Sites s where s.siteName = ?1")
-//    List<Site> findBySiteName(String siteName);
-//
-//    List<Site> findAll();
+    @Query("select s from Site s where s.siteName = ?1")
+    List<Site> findBySiteName(String siteName);
+
+    List<Site> findAll();
 }
