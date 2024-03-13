@@ -13,10 +13,10 @@ import java.util.Objects;
 public class ShipKey implements Serializable {
 
     @Reference(to = Item.class)
-    private Integer itemId;
+    private Long itemId;
 
     @Reference(to = Shipment.class)
-    private Integer shipmentId;
+    private Long shipmentId;
 
     @Override
     public boolean equals(Object o) {

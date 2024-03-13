@@ -11,9 +11,9 @@ import lombok.*;
 public class User {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "PK_users", updatable = false, nullable = false)
-    private Integer userId;
+    private Long userId;
 
     @Column(name = "username", unique = true, nullable = false)
     private String username;
