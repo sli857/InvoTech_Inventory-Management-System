@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.*;
 import com.depot.ims.repositories.SitesRepository;
 
 import java.sql.Date;
+import java.util.Objects;
+import java.util.stream.Stream;
 
 import com.depot.ims.models.Site;
 
@@ -41,7 +43,7 @@ public class SitesController {
 
     @GetMapping("/status")
     public ResponseEntity<?> getStatusBySiteId(
-            @RequestParam(value = "siteId", required = true) Long siteID) {
+            @RequestParam(value = "siteId") Long siteID) {
         Site site = sitesRepository.findBySiteId(siteID);
         if (site == null) {
             return ResponseEntity.badRequest().body("Site not found by siteId");
@@ -58,23 +60,32 @@ public class SitesController {
     @Modifying
     @PostMapping("/update")
     public ResponseEntity<?> updateSite(
-            @RequestParam(value = "siteId", required = true)
+            @RequestParam(value = "siteId")
             Long siteID,
             @RequestParam(value = "status", required = false)
             String newStatus,
             @RequestParam(value = "name", required = false)
             String newName,
+            @RequestParam(value = "siteLocation", required = false)
+            String newSiteLocation,
+            @RequestParam(value = "internalSite", required = false)
+            Boolean newInternalSite,
             @RequestParam(value = "ceaseDate", required = false)
             @DateTimeFormat(style = "YYYY-MM-DD")
             String newCeaseDate) {
 
-        if (newStatus == null && newName == null && newCeaseDate == null) {
+        if(!sitesRepository.existsById(siteID)){
+            return ResponseEntity.badRequest().body("Site not found by siteId");
+        }
+        if (Stream.of(newStatus,newName,newSiteLocation,newInternalSite,newCeaseDate).allMatch(Objects::isNull)) {
             return ResponseEntity.badRequest().body("No value for this update is specified.");
         }
 
         Site site = sitesRepository.findBySiteId(siteID);
-        if (newStatus != null) site.setSiteStatus(newStatus);
-        if (newName != null) site.setSiteName(newName);
+        if(newStatus != null) site.setSiteStatus(newStatus);
+        if(newName != null) site.setSiteName(newName);
+        if(newSiteLocation != null) site.setSiteLocation(newSiteLocation);
+        if(newInternalSite != null) site.setInternalSite(newInternalSite);
         if (newCeaseDate != null) {
             try {
                 Date date = Date.valueOf(newCeaseDate);
