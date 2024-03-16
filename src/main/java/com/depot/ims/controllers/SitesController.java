@@ -62,9 +62,9 @@ public class SitesController {
     public ResponseEntity<?> updateSite(
             @RequestParam(value = "siteId")
             Long siteID,
-            @RequestParam(value = "status", required = false)
+            @RequestParam(value = "siteStatus", required = false)
             String newStatus,
-            @RequestParam(value = "name", required = false)
+            @RequestParam(value = "siteName", required = false)
             String newName,
             @RequestParam(value = "siteLocation", required = false)
             String newSiteLocation,
