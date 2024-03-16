@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 
-public interface UsersRepository extends JpaRepository<User, Integer> {
+public interface UsersRepository extends JpaRepository<User, Long> {
     List<User> findAll();
 
     @Query("SELECT u FROM User u WHERE u.userId=?1")

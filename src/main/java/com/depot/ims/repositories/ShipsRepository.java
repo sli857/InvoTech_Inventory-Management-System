@@ -1,12 +1,13 @@
 package com.depot.ims.repositories;
 
 import com.depot.ims.models.Ship;
+import com.depot.ims.models.compositeKeys.ShipKey;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 
-public interface ShipsRepository extends JpaRepository<Ship, Integer> {
+public interface ShipsRepository extends JpaRepository<Ship, ShipKey> {
 
     List<Ship> findAll();
 

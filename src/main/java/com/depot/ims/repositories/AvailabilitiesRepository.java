@@ -1,12 +1,13 @@
 package com.depot.ims.repositories;
 
 import com.depot.ims.models.Availability;
+import com.depot.ims.models.compositeKeys.AvailabilityKey;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 
-public interface AvailabilitiesRepository extends JpaRepository<Availability, Integer> {
+public interface AvailabilitiesRepository extends JpaRepository<Availability, AvailabilityKey> {
 
     List<Availability> findAll();
 

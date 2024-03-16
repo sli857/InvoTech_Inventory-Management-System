@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 
-public interface ShipmentsRepository extends JpaRepository<Shipment, Integer> {
+public interface ShipmentsRepository extends JpaRepository<Shipment, Long> {
 
     List<Shipment> findAll();
 
