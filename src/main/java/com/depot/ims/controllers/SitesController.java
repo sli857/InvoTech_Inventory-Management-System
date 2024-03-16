@@ -1,17 +1,18 @@
 package com.depot.ims.controllers;
 
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import com.depot.ims.repositories.SitesRepository;
 
-import java.sql.Timestamp;
-import java.util.List;
+import java.sql.Date;
 
 import com.depot.ims.models.Site;
 
 @RestController
-@RequestMapping("/sites")
+@RequestMapping(value = "/sites", produces = MediaType.APPLICATION_JSON_VALUE)
 public class SitesController {
 
     private final SitesRepository sitesRepository;
@@ -21,69 +22,83 @@ public class SitesController {
     }
 
     @GetMapping
-    public List<Site> getSites() {
-        return this.sitesRepository.findAll();
+    public ResponseEntity<?> getSites() {
+        return ResponseEntity.ok(this.sitesRepository.findAll());
     }
 
-    @GetMapping("/sites?siteId={siteID}")
-    public Site getSiteById (@PathVariable Long siteID) {
-        return this.sitesRepository.findBySiteId(siteID);
+    @GetMapping("/site")
+    public ResponseEntity<?> getSite(
+            @RequestParam(value = "siteId", required = false) Long siteID,
+            @RequestParam(value = "siteName", required = false) String siteName) {
+        if (siteID != null) {
+            return ResponseEntity.ok(sitesRepository.findBySiteId(siteID));
+        } else if (siteName != null) {
+            return ResponseEntity.ok(sitesRepository.findBySiteName(siteName));
+        } else {
+            return ResponseEntity.badRequest().body("Either siteId or siteName must be provided");
+        }
     }
-    @GetMapping("/sites?siteName={siteName}")
-    public List<Site> getSitesByName(@PathVariable String siteName) {
-        return this.sitesRepository.findBySiteName(siteName);
+
+    @GetMapping("/status")
+    public ResponseEntity<?> getStatusBySiteId(
+            @RequestParam(value = "siteId", required = true) Long siteID) {
+        Site site = sitesRepository.findBySiteId(siteID);
+        if (site == null) {
+            return ResponseEntity.badRequest().body("Site not found by siteId");
+        } else {
+            return ResponseEntity.ok(site.getSiteStatus());
+        }
     }
-    @GetMapping("/status?siteId={siteID}")
-    public String getStatusBySiteId(@PathVariable Long siteID){
-        return null;
-    }
+
     @PostMapping(value = "/add", consumes = MediaType.APPLICATION_JSON_VALUE)
     public Site addSite(@RequestBody Site site) {
         return sitesRepository.save(site);
     }
 
-    @PostMapping(value="/status?siteId={siteID}", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public Site updateStatus(@PathVariable Long siteID, @RequestBody String status){
-//        return sitesRepository.updateStatus(siteID, status);
-        try {
-            Site site = getSiteById(siteID);
-            site.setSiteStatus(status);
-            return site;
+    @Modifying
+    @PostMapping("/update")
+    public ResponseEntity<?> updateSite(
+            @RequestParam(value = "siteId", required = true)
+            Long siteID,
+            @RequestParam(value = "status", required = false)
+            String newStatus,
+            @RequestParam(value = "name", required = false)
+            String newName,
+            @RequestParam(value = "ceaseDate", required = false)
+            @DateTimeFormat(style = "YYYY-MM-DD")
+            String newCeaseDate) {
+
+        if (newStatus == null && newName == null && newCeaseDate == null) {
+            return ResponseEntity.badRequest().body("No value for this update is specified.");
         }
-        catch (NullPointerException e){
-            System.out.println(e.getMessage());
-            return null;
+
+        Site site = sitesRepository.findBySiteId(siteID);
+        if (newStatus != null) site.setSiteStatus(newStatus);
+        if (newName != null) site.setSiteName(newName);
+        if (newCeaseDate != null) {
+            try {
+                Date date = Date.valueOf(newCeaseDate);
+                site.setCeaseDate(date);
+            } catch (IllegalArgumentException e) {
+                return ResponseEntity.badRequest().body("Date format is illegal.");
+            }
         }
+
+        Site updatedSite = sitesRepository.save(site);
+        return ResponseEntity.ok(updatedSite);
     }
 
-    @PostMapping(value="/name?siteId={siteID}", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public Site updateName(@PathVariable Long siteID, @RequestBody String name){
+    @DeleteMapping("/delete")
+    public ResponseEntity<?> deleteSite(@RequestParam("siteId") Long siteID) {
         try {
-            Site site = getSiteById(siteID);
-            site.setSiteName(name);
-            return site;
-        }
-        catch (NullPointerException e){
-            System.out.println(e.getMessage());
-            return null;
-        }
-    }
-    @PostMapping(value="/ceaseDate?siteId={siteID}", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public Site updateStatus(@PathVariable Long siteID, @RequestBody Timestamp ceaseDate){
-        try {
-            Site site = getSiteById(siteID);
-            site.setCeaseDate(ceaseDate);
-            return site;
-        }
-        catch (NullPointerException e){
-            System.out.println(e.getMessage());
-            return null;
+            boolean isFound = sitesRepository.existsById(siteID);
+            if (isFound) {
+                sitesRepository.deleteById(siteID);
+                return ResponseEntity.ok().body("Successfully deleted");
+            }
+            return ResponseEntity.badRequest().body("Site not found by siteId");
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body("siteId cannot be null");
         }
     }
-    @DeleteMapping("/deleteSites?siteId={siteID}")
-    public Site deleteSite(@PathVariable Long siteID){
-        return null;
-    }
-
-
 }

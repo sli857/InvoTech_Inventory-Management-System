@@ -5,7 +5,9 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.sql.Update;
+import org.springframework.format.annotation.DateTimeFormat;
 
+import java.sql.Date;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 
@@ -16,7 +18,7 @@ import java.util.ArrayList;
 @Table(name = "Sites")
 public class Site {
 
-    @Id
+    @Id()
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "PK_sites", updatable = false, nullable = false)
     private Long siteId;
@@ -31,7 +33,8 @@ public class Site {
     private String siteStatus;
 
     @Column(name = "cease_date")
-    private Timestamp ceaseDate;
+    @DateTimeFormat(style = "YYYY-MM-DD")
+    private Date ceaseDate;
 
     @Column(name = "internal_site")
     private Boolean internalSite;
