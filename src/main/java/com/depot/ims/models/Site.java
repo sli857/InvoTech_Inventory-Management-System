@@ -1,25 +1,24 @@
 package com.depot.ims.models;
 
-import java.sql.Timestamp;
-
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
+
+import java.sql.Date;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class Sites {
+@Table(name = "Sites")
+public class Site {
 
-    @Id
-    @GeneratedValue
+    @Id()
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "PK_sites", updatable = false, nullable = false)
-    private Integer id;
+    private Long siteId;
 
     @Column(name = "site_name", unique = true, nullable = false)
     private String siteName;
@@ -31,7 +30,8 @@ public class Sites {
     private String siteStatus;
 
     @Column(name = "cease_date")
-    private Timestamp ceaseDate;
+    @DateTimeFormat(style = "YYYY-MM-DD")
+    private Date ceaseDate;
 
     @Column(name = "internal_site")
     private Boolean internalSite;

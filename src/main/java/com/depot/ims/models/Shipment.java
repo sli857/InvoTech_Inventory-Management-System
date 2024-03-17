@@ -1,25 +1,23 @@
 package com.depot.ims.models;
 
-import java.sql.Timestamp;
-
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.sql.Timestamp;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class Shipments {
+@Table(name = "Shipments")
+public class Shipment {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "PK_shipments", updatable = false, nullable = false)
-    private Integer id;
+    private Long shipmentId;
 
     @Column(name = "FK_source", nullable = false)
     private Integer source;

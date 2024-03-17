@@ -1,9 +1,6 @@
 package com.depot.ims.models;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -12,17 +9,17 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class Items {
+@Table(name = "Items")
+public class Item {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "PK_items", updatable = false, nullable = false)
-    private Integer id;
+    private Long itemId;
 
-    @Column(name = "item_name", nullable = false)
+    @Column(name = "item_name", unique = true, nullable = false)
     private String itemName;
 
     @Column(name = "item_price", nullable = false)
     private Double itemPrice;
-
 }
