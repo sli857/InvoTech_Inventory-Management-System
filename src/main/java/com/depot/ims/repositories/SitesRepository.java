@@ -1,14 +1,19 @@
 package com.depot.ims.repositories;
 
-import com.depot.ims.models.Sites;
-import java.util.List;
+import com.depot.ims.models.Site;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
-public interface SitesRepository extends JpaRepository<Sites, Integer> {
+import java.util.List;
 
-    @Query("select s from Sites s where s.siteName = ?1")
-    List<Sites> findBySiteName(String siteName);
+public interface SitesRepository extends JpaRepository<Site, Long> {
 
-    List<Sites> findAll();
+    @Query("select s from Site s where s.siteName = ?1")
+    Site findBySiteName(String siteName);
+
+    List<Site> findAll();
+
+    @Query("SELECT s FROM Site s WHERE s.siteId=?1")
+    Site findBySiteId(long siteId);
+
 }

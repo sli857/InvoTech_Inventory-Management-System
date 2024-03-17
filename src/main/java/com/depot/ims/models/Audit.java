@@ -1,28 +1,27 @@
 package com.depot.ims.models;
 
-import java.sql.Timestamp;
-
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.sql.Timestamp;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class Audits {
+@Table(name = "Audits")
+public class Audit {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "PK_audits", updatable = false, nullable = false)
-    private Integer id;
+    private Long auditId;
 
-    @Column(name = "FK_audits_users", nullable = false)
-    private Integer userId;
+    @OneToOne /*(cascade = CascadeType.ALL)*/
+    @JoinColumn(name = "FK_audits_users", referencedColumnName = "PK_users", nullable = false)
+    private User userId;
 
     @Column(name = "table_name", nullable = false)
     private String tableName;
