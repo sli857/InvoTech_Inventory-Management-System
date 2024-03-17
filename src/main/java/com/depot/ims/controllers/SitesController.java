@@ -15,6 +15,7 @@ import com.depot.ims.models.Site;
 
 @RestController
 @RequestMapping(value = "/sites", produces = MediaType.APPLICATION_JSON_VALUE)
+@CrossOrigin(origins = "http://localhost:5173/")
 public class SitesController {
 
     private final SitesRepository sitesRepository;
