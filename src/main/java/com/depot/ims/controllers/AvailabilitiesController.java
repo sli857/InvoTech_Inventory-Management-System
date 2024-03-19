@@ -5,7 +5,6 @@ import com.depot.ims.models.Item;
 import com.depot.ims.models.Site;
 import com.depot.ims.repositories.AvailabilitiesRepository;
 import com.depot.ims.repositories.SitesRepository;
-
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
