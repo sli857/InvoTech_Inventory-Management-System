@@ -2,7 +2,6 @@ package com.depot.ims.models.compositeKeys;
 
 import com.depot.ims.models.Item;
 import com.depot.ims.models.Shipment;
-import jakarta.persistence.Entity;
 import lombok.Data;
 import org.springframework.data.annotation.Reference;
 
@@ -13,10 +12,10 @@ import java.util.Objects;
 public class ShipKey implements Serializable {
 
     @Reference(to = Item.class)
-    private Integer itemId;
+    private Long itemId;
 
     @Reference(to = Shipment.class)
-    private Integer shipmentId;
+    private Long shipmentId;
 
     @Override
     public boolean equals(Object o) {
@@ -24,7 +23,7 @@ public class ShipKey implements Serializable {
         if (o == null || getClass() != o.getClass()) return false;
         ShipKey that = (ShipKey) o;
         return Objects.equals(itemId, that.itemId) &&
-            Objects.equals(shipmentId, that.shipmentId);
+                Objects.equals(shipmentId, that.shipmentId);
     }
 
     @Override

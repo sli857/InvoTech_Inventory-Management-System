@@ -3,9 +3,10 @@ package com.depot.ims.repositories;
 import com.depot.ims.models.Audit;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+
 import java.util.List;
 
-public interface AuditsRepository extends JpaRepository<Audit, Integer> {
+public interface AuditsRepository extends JpaRepository<Audit, Long> {
     List<Audit> findAll();
 
     @Query("SELECT a FROM Audit a WHERE a.auditId=?1")

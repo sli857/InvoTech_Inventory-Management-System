@@ -12,10 +12,10 @@ import java.util.Objects;
 public class AvailabilityKey implements Serializable {
 
     @Reference(to = Site.class)
-    private Integer siteId;
+    private Long siteId;
 
     @Reference(to = Item.class)
-    private Integer itemId;
+    private Long itemId;
 
     @Override
     public boolean equals(Object o) {
@@ -23,7 +23,7 @@ public class AvailabilityKey implements Serializable {
         if (o == null || getClass() != o.getClass()) return false;
         AvailabilityKey that = (AvailabilityKey) o;
         return Objects.equals(siteId, that.siteId) &&
-            Objects.equals(itemId, that.itemId);
+                Objects.equals(itemId, that.itemId);
     }
 
     @Override

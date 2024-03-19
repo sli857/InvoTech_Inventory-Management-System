@@ -22,12 +22,12 @@ public class UsersController {
     }
 
     @GetMapping("/userId={userID}")
-    public User getUserById(@PathVariable Integer userID){
+    public User getUserById(@PathVariable Integer userID) {
         return this.usersRepository.findByUserId(userID);
     }
 
     @PostMapping(value = "/addUser", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public User addItem(@RequestBody User user){
+    public User addItem(@RequestBody User user) {
         return this.usersRepository.save(user);
     }
 

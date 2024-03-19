@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.Reference;
 
 import java.sql.Timestamp;
 
@@ -16,11 +15,11 @@ import java.sql.Timestamp;
 public class Audit {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "PK_audits", updatable = false, nullable = false)
-    private Integer auditId;
+    private Long auditId;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne /*(cascade = CascadeType.ALL)*/
     @JoinColumn(name = "FK_audits_users", referencedColumnName = "PK_users", nullable = false)
     private User userId;
 

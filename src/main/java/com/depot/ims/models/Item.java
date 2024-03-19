@@ -5,8 +5,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.ArrayList;
-
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -15,9 +13,9 @@ import java.util.ArrayList;
 public class Item {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "PK_items", updatable = false, nullable = false)
-    private Integer itemId;
+    private Long itemId;
 
     @Column(name = "item_name", unique = true, nullable = false)
     private String itemName;

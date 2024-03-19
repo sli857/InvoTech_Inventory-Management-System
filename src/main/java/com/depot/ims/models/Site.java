@@ -4,10 +4,9 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.sql.Update;
+import org.springframework.format.annotation.DateTimeFormat;
 
-import java.sql.Timestamp;
-import java.util.ArrayList;
+import java.sql.Date;
 
 @Data
 @NoArgsConstructor
@@ -16,10 +15,10 @@ import java.util.ArrayList;
 @Table(name = "Sites")
 public class Site {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @Id()
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "PK_sites", updatable = false, nullable = false)
-    private Integer siteId;
+    private Long siteId;
 
     @Column(name = "site_name", unique = true, nullable = false)
     private String siteName;
@@ -31,7 +30,8 @@ public class Site {
     private String siteStatus;
 
     @Column(name = "cease_date")
-    private Timestamp ceaseDate;
+    @DateTimeFormat(style = "YYYY-MM-DD")
+    private Date ceaseDate;
 
     @Column(name = "internal_site")
     private Boolean internalSite;

@@ -1,7 +1,9 @@
 package com.depot.ims.models;
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
@@ -11,9 +13,9 @@ import lombok.*;
 public class User {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "PK_users", updatable = false, nullable = false)
-    private Integer userId;
+    private Long userId;
 
     @Column(name = "username", unique = true, nullable = false)
     private String username;
@@ -21,4 +23,6 @@ public class User {
     @Column(name = "password", nullable = false)
     private String password;
 
+    @Column(name = "position", nullable = false)
+    private String position;
 }
