@@ -32,7 +32,10 @@ public interface AvailabilitiesRepository extends JpaRepository<Availability, In
     int findCombineLevel(@Param("siteList") List<Site> siteList, @Param("itemId") Item itemId);
 
     //a facility/corporate manager should be able to choose 2 sites and view the difference in.
-    //Map<Item, Integer> findDiffLevel(Site site1, Site site2);
+    @Query("SELECT (a.quantity - a1.quantity) FROM Availability a, Availability a1 WHERE a.siteId IN :site1 AND a.itemId = :item AND a1.siteId IN :site2 AND a1.itemId = :item")
+    int findDiffLevel(Site site1, Site site2, Item item);
+
+
 
 
 

@@ -58,6 +58,8 @@ import java.util.List;
             }
             int sum = availabilitiesRepository.findCombineLevel(list, item1);
             System.out.println(sum);
+            int diff = availabilitiesRepository.findDiffLevel(site1, site2, item1);
+            System.out.println(diff);
 
 
 

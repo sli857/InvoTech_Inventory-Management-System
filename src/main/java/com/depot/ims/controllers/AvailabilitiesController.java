@@ -31,7 +31,6 @@ public class AvailabilitiesController {
     public ResponseEntity<?> getAvailability(
             @RequestParam(value = "siteId", required = false) Long siteID,
             @RequestParam(value = "itemId", required = false) String itemID) {
-
         return null;
     }
 
