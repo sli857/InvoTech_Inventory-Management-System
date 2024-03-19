@@ -31,11 +31,15 @@ class ImsApplicationTests {
 	@Test
 	public void testItemRepository() {
 
-//		Site site1 = new Site(1L, "HomeDepot 2", "W54 N53", "open", null, true);
-//		Site site2 = new Site(2L, "HomeDepot 3", "W54 N52", "open", null, true);
-//		sitesRepository.save(site1);
-//		sitesRepository.save(site2);
-//		sitesRepository.updateSiteName(2L, "newname");
+		Site site1 = new Site(1L, "HomeDepot 2", "W54 N53", "open", null, true);
+		Site site2 = new Site(2L, "HomeDepot 3", "W54 N52", "open", null, true);
+		sitesRepository.save(site1);
+		sitesRepository.save(site2);
+		sitesRepository.updateSiteName(2L, "newname");
+		Site actualSite = sitesRepository.findBySiteId(2L);
+		String name = actualSite.getSiteName();
+		assertEquals(name, "newname");
+		
 
 
 
