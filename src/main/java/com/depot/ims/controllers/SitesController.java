@@ -54,8 +54,14 @@ public class SitesController {
     }
 
     @PostMapping(value = "/add", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public Site addSite(@RequestBody Site site) {
-        return sitesRepository.save(site);
+    public ResponseEntity<?> addSite(@RequestBody Site site) {
+        try{
+            sitesRepository.save(site);
+            return ResponseEntity.ok(site);
+        }
+        catch(Exception e){
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
     @Modifying
@@ -92,7 +98,7 @@ public class SitesController {
                 Date date = Date.valueOf(newCeaseDate);
                 site.setCeaseDate(date);
             } catch (IllegalArgumentException e) {
-                return ResponseEntity.badRequest().body("Date format is illegal.");
+                return ResponseEntity.badRequest().body("ceaseDate format error, expected:YYYY-MM-DD");
             }
         }
 
@@ -110,7 +116,7 @@ public class SitesController {
             }
             return ResponseEntity.badRequest().body("Site not found by siteId");
         } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().body("siteId cannot be null");
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 }
