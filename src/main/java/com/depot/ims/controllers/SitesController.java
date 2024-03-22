@@ -1,21 +1,21 @@
 package com.depot.ims.controllers;
 
-import com.depot.ims.models.Site;
-import com.depot.ims.repositories.SitesRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import com.depot.ims.repositories.SitesRepository;
 
 import java.sql.Date;
 import java.util.Objects;
 import java.util.stream.Stream;
 
+import com.depot.ims.models.Site;
+
 @RestController
 @RequestMapping(value = "/sites", produces = MediaType.APPLICATION_JSON_VALUE)
-@CrossOrigin(origins = "http://localhost:1234/")
-
+@CrossOrigin(origins = "http://localhost:5173/")
 public class SitesController {
 
     private final SitesRepository sitesRepository;
@@ -54,8 +54,14 @@ public class SitesController {
     }
 
     @PostMapping(value = "/add", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public Site addSite(@RequestBody Site site) {
-        return sitesRepository.save(site);
+    public ResponseEntity<?> addSite(@RequestBody Site site) {
+        try{
+            sitesRepository.save(site);
+            return ResponseEntity.ok(site);
+        }
+        catch(Exception e){
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
     @Modifying
@@ -75,24 +81,24 @@ public class SitesController {
             @DateTimeFormat(style = "YYYY-MM-DD")
             String newCeaseDate) {
 
-        if (!sitesRepository.existsById(siteID)) {
+        if(!sitesRepository.existsById(siteID)){
             return ResponseEntity.badRequest().body("Site not found by siteId");
         }
-        if (Stream.of(newStatus, newName, newSiteLocation, newInternalSite, newCeaseDate).allMatch(Objects::isNull)) {
+        if (Stream.of(newStatus,newName,newSiteLocation,newInternalSite,newCeaseDate).allMatch(Objects::isNull)) {
             return ResponseEntity.badRequest().body("No value for this update is specified.");
         }
 
         Site site = sitesRepository.findBySiteId(siteID);
-        if (newStatus != null) site.setSiteStatus(newStatus);
-        if (newName != null) site.setSiteName(newName);
-        if (newSiteLocation != null) site.setSiteLocation(newSiteLocation);
-        if (newInternalSite != null) site.setInternalSite(newInternalSite);
+        if(newStatus != null) site.setSiteStatus(newStatus);
+        if(newName != null) site.setSiteName(newName);
+        if(newSiteLocation != null) site.setSiteLocation(newSiteLocation);
+        if(newInternalSite != null) site.setInternalSite(newInternalSite);
         if (newCeaseDate != null) {
             try {
                 Date date = Date.valueOf(newCeaseDate);
                 site.setCeaseDate(date);
             } catch (IllegalArgumentException e) {
-                return ResponseEntity.badRequest().body("Date format is illegal.");
+                return ResponseEntity.badRequest().body("ceaseDate format error, expected:YYYY-MM-DD");
             }
         }
 
@@ -110,32 +116,7 @@ public class SitesController {
             }
             return ResponseEntity.badRequest().body("Site not found by siteId");
         } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().body("siteId cannot be null");
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
-
-    @DeleteMapping("/close")
-    public ResponseEntity<?> closeSite(@RequestParam("siteID") Long siteID, @RequestParam(value = "ceaseDate")
-    @DateTimeFormat(style = "YYYY-MM-DD")  String CeaseDate) {
-        //change the Cease
-        Date date = null;
-        try {
-            date = Date.valueOf(CeaseDate);
-        }  catch (IllegalArgumentException e) {
-        return ResponseEntity.badRequest().body("Date format is illegal.");
-        }
-
-        try {
-            boolean isFound = sitesRepository.existsById(siteID);
-            if(isFound) {
-                sitesRepository.deleteSite(siteID, date);
-                return ResponseEntity.ok().body("Successfully deleted");
-            }
-            return ResponseEntity.badRequest().body("Site not found by siteId");
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().body("siteId cannot be null");
-        }
-    }
-
-
 }

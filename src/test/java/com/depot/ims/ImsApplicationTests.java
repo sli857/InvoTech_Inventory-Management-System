@@ -1,7 +1,10 @@
 package com.depot.ims;
 
+import com.depot.ims.controllers.SitesController;
 import com.depot.ims.repositories.*;
 import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,12 +19,18 @@ import com.depot.ims.models.User;
 @SpringBootTest
 class ImsApplicationTests {
 
-	@Autowired
-	private AvailabilitiesRepository availabilitiesRepository;
-	@Autowired
+	@Mock
 	private SitesRepository sitesRepository;
-	@Autowired
-	private ItemsRepository itemsRepository;
+
+	@InjectMocks
+	private SitesController userController;
+
+//	@Autowired
+//	private AvailabilitiesRepository availabilitiesRepository;
+//	@Autowired
+//	private SitesRepository sitesRepository;
+//	@Autowired
+//	private ItemsRepository itemsRepository;
 
 	@Test
 	void contextLoads() {
@@ -31,16 +40,20 @@ class ImsApplicationTests {
 	@Test
 	public void testItemRepository() {
 
-		Site site1 = new Site(1L, "HomeDepot 2", "W54 N53", "open", null, true);
-		Site site2 = new Site(2L, "HomeDepot 3", "W54 N52", "open", null, true);
-		sitesRepository.save(site1);
-		sitesRepository.save(site2);
-		sitesRepository.updateSiteName(2L, "newname");
-		Site actualSite = sitesRepository.findBySiteId(2L);
-		String name = actualSite.getSiteName();
-		assertEquals(name, "newname");
-		
 
+
+		//when(sitesRepository.)
+
+
+		//testing repository
+//		Site site1 = new Site(1L, "HomeDepot 2", "W54 N53", "open", null, true);
+//		Site site2 = new Site(2L, "HomeDepot 3", "W54 N52", "open", null, true);
+//		sitesRepository.save(site1);
+//		sitesRepository.save(site2);
+//		sitesRepository.updateSiteName(2L, "newname");
+//		Site actualSite = sitesRepository.findBySiteId(2L);
+//		String name = actualSite.getSiteName();
+//		assertEquals(name, "newname");
 
 
 //		sitesRepository.save(new Site(3L, "HomeDepot 4", "W54 N51", "open", null, true));

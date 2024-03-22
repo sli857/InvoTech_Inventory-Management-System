@@ -24,8 +24,15 @@ public class ItemsController {
     public ResponseEntity<?> getItems() {return ResponseEntity.ok(this.itemsRepository.findAll());}
 
     @PostMapping(value = "/addItem", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public Item addItem(@RequestBody Item item) {
-        return this.itemsRepository.save(item);
+    public  ResponseEntity<?> addItem(@RequestBody Item item) {
+        try{
+            this.itemsRepository.save(item);
+            return ResponseEntity.ok(item);
+
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+
+        }
     }
 
     @GetMapping("/item")
