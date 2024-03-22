@@ -38,12 +38,15 @@ class ShipsControllerTests {
 
     @Test
     void testGetAllShips() throws Exception {
+        // Given
         Ship ship1 = new Ship();
         Ship ship2 = new Ship();
         List<Ship> ships = Arrays.asList(ship1, ship2);
 
+        // When
         when(shipsRepository.findAll()).thenReturn(ships);
 
+        // Then
         mockMvc.perform(get("/ships")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
@@ -52,11 +55,14 @@ class ShipsControllerTests {
 
     @Test
     void testGetShipsByItemId() throws Exception {
+        // Given
         Ship ship1 = new Ship();
         List<Ship> ships = List.of(ship1);
 
+        // When
         when(shipsRepository.findByItemId(any(Integer.class))).thenReturn(ships);
 
+        // Then
         mockMvc.perform(get("/ships/item=1")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
@@ -65,11 +71,14 @@ class ShipsControllerTests {
 
     @Test
     void testGetShipsByShipmentId() throws Exception {
+        // Given
         Ship ship1 = new Ship();
         List<Ship> ships = List.of(ship1);
 
+        // When
         when(shipsRepository.findByShipmentId(any(Integer.class))).thenReturn(ships);
 
+        // Then
         mockMvc.perform(get("/ships/shipment=1")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
@@ -78,11 +87,14 @@ class ShipsControllerTests {
 
     @Test
     void testGetShipsByItemIdAndShipmentId() throws Exception {
+        // Given
         Ship ship1 = new Ship();
         List<Ship> ships = List.of(ship1);
 
+        // When
         when(shipsRepository.findByItemIdAndShipmentId(any(Integer.class), any(Integer.class))).thenReturn(ships);
 
+        // Then
         mockMvc.perform(get("/ships/item=1/shipment=1")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
