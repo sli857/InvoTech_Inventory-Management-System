@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import com.depot.ims.models.Availability;
 import com.depot.ims.models.Site;
@@ -38,9 +39,17 @@ class ImsApplicationTests {
 	}
 
 	@Test
-	public void testItemRepository() {
+	public void testAvailability() {
+		//mock the repository class
+		//test the return of controller class
 
+	}
+	@Test
+	public void testItem() {
+		//mock the repository class
+		//test the return of controller class
 
+		//fail();
 
 		//when(sitesRepository.)
 
@@ -68,5 +77,8 @@ class ImsApplicationTests {
 //		availabilitiesRepository.save(new Availability(site2, item1, 20));
 
 	}
+
+
+
 
 }
