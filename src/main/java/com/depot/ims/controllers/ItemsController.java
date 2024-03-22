@@ -23,7 +23,7 @@ public class ItemsController {
     @GetMapping
     public ResponseEntity<?> getItems() {return ResponseEntity.ok(this.itemsRepository.findAll());}
 
-    @PostMapping(value = "/addItem", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/add", consumes = MediaType.APPLICATION_JSON_VALUE)
     public  ResponseEntity<?> addItem(@RequestBody Item item) {
         try{
             this.itemsRepository.save(item);
@@ -61,7 +61,7 @@ public class ItemsController {
         if (!itemsRepository.existsById(itemID)) {
             return ResponseEntity.badRequest().body("item not found by itemId");
         }
-        if (Stream.of( newName, newPrice).allMatch(Objects::isNull)) {
+        if (Stream.of(newName, newPrice).allMatch(Objects::isNull)) {
             return ResponseEntity.badRequest().body("No value for this update is specified.");
         }
         Item item = itemsRepository.findByItemId(itemID);

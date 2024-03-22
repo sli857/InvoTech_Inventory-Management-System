@@ -45,9 +45,9 @@ public class AvailabilitiesController {
     }
 
     //given the siteID, I want to see a list of availabilities
-    @GetMapping("/site={siteId}")
+    @GetMapping("/site")
     public ResponseEntity<?> getAvailability(
-            @RequestParam(value = "siteId") Long siteID) {
+            @RequestParam(value = "siteId",required = false) Long siteID) {
         //make sure the given ID is valid
         if (siteID != null) {
             //make sure the given ID exist in our inventory
@@ -64,7 +64,7 @@ public class AvailabilitiesController {
             }
             }
 
-        return ResponseEntity.badRequest().body("exceptions");
+        return ResponseEntity.badRequest().body("please provide a valid siteID");
     }
 
     //As a corporate manager, I want to see all sites that contain the given items.
@@ -88,7 +88,7 @@ public class AvailabilitiesController {
 
         return ResponseEntity.badRequest().body("expecting JSON array");
     }
-    @GetMapping("/item={itemId}")
+    @GetMapping("/item")
     public  ResponseEntity<?>  getAvailabilitiesByItemId(@RequestParam(value = "itemId") Long itemId) {
         if (itemId != null) {
             if(!itemsRepository.existsById(itemId)){
@@ -102,7 +102,7 @@ public class AvailabilitiesController {
         }
     }
 
-    @GetMapping("/site={siteId}/item={itemId}")
+    @GetMapping("/site/item")
     public ResponseEntity<?> getAvailabilityBySiteIdAndItemId(
             @RequestParam(value = "siteId") Long siteId,
             @RequestParam(value = "itemId") Long itemId) {
@@ -116,6 +116,6 @@ public class AvailabilitiesController {
         Site site = this.sitesRepository.findBySiteId(siteId);
         return  ResponseEntity.ok(availabilitiesRepository.findBySiteIdAndItemId(site, item));
     }
-    
+
 
 }

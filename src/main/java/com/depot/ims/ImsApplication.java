@@ -29,14 +29,30 @@ import java.util.List;
 
             Site site1 = new Site(1L, "HomeDepot 2", "W54 N53", "open", null, true);
             Site site2 = new Site(2L, "HomeDepot 3", "W54 N52", "open", null, true);
+            Site site3 = new Site(3L, "HomeDepot 4", "W54 N52", "open", null, true);
+
+
             sitesRepository.save(site1);
             sitesRepository.save(site2);
+            sitesRepository.save(site3);
+
 
             sitesRepository.updateSiteName(2L, "newname");
             Site actualSite = sitesRepository.findBySiteId(2L);
             String name = actualSite.getSiteName();
 
+            Item item1 = new Item(1L, "item1", 2.0);
+            Item item2 = new Item(2L, "item2", 3.0);
+            Item items3 = new Item(3L, "item3", 4.0);
+            itemsRepository.save(item1);
+            itemsRepository.save(item2);
+            itemsRepository.save(items3);
+
             System.out.println(name);
+
+            availabilitiesRepository.save(new Availability(site1, item1, 10));
+            availabilitiesRepository.save(new Availability(site2, item1, 20));
+            availabilitiesRepository.save(new Availability(site3, item2, 40));
 
 //            Site site1 = new Site(1L, "HomeDepot 2", "W54 N53", "open", null, true);
 //            Site site2 = new Site(2L, "HomeDepot 3", "W54 N52", "open", null, true);
@@ -50,8 +66,7 @@ import java.util.List;
 //            itemsRepository.save(item2);
 //            itemsRepository.save(new Item(3L, "item3", 4.0));
 //
-//            availabilitiesRepository.save(new Availability(site1, item1, 10));
-//            availabilitiesRepository.save(new Availability(site2, item1, 20));
+
 //            List<Site> list = new ArrayList<>();
 //            list.add(site1);
 //            list.add(site2);
