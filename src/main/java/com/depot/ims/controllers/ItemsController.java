@@ -1,6 +1,6 @@
 package com.depot.ims.controllers;
 
-import com.depot.ims.models.Item;
+import com.depot.ims.models.tables.Item;
 import com.depot.ims.repositories.ItemsRepository;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;

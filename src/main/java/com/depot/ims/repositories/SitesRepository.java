@@ -1,6 +1,6 @@
 package com.depot.ims.repositories;
 
-import com.depot.ims.models.Site;
+import com.depot.ims.models.tables.Site;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 

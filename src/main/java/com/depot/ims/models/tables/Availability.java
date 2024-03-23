@@ -1,6 +1,6 @@
-package com.depot.ims.models;
+package com.depot.ims.models.tables;
 
-import com.depot.ims.models.compositeKeys.AvailabilityKey;
+import com.depot.ims.models.tables.compositeKeys.AvailabilityKey;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;

@@ -1,6 +1,6 @@
 package com.depot.ims.controllers;
 
-import com.depot.ims.models.Ship;
+import com.depot.ims.models.tables.Ship;
 import com.depot.ims.repositories.ShipsRepository;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;

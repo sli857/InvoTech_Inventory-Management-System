@@ -1,6 +1,6 @@
 package com.depot.ims.controllers;
 
-import com.depot.ims.models.Audit;
+import com.depot.ims.models.tables.Audit;
 import com.depot.ims.repositories.AuditsRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;

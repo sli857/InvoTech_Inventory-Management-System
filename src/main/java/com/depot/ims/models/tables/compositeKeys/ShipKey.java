@@ -1,7 +1,7 @@
-package com.depot.ims.models.compositeKeys;
+package com.depot.ims.models.tables.compositeKeys;
 
-import com.depot.ims.models.Item;
-import com.depot.ims.models.Shipment;
+import com.depot.ims.models.tables.Item;
+import com.depot.ims.models.tables.Shipment;
 import lombok.Data;
 import org.springframework.data.annotation.Reference;
 

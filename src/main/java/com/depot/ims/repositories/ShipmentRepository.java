@@ -1,12 +1,12 @@
 package com.depot.ims.repositories;
 
-import com.depot.ims.models.Shipment;
+import com.depot.ims.models.tables.Shipment;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 
-public interface ShipmentsRepository extends JpaRepository<Shipment, Long> {
+public interface ShipmentRepository extends JpaRepository<Shipment, Long> {
 
     List<Shipment> findAll();
 
