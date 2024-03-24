@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -25,4 +27,8 @@ public class User {
 
     @Column(name = "position", nullable = false)
     private String position;
+
+    @OneToMany(mappedBy = "userId", cascade = CascadeType.ALL)
+    private List<Audit> audits;
+
 }

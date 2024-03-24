@@ -19,7 +19,7 @@ public class Audit {
     @Column(name = "PK_audits", updatable = false, nullable = false)
     private Long auditId;
 
-    @OneToOne /*(cascade = CascadeType.ALL)*/
+    @ManyToOne
     @JoinColumn(name = "FK_audits_users", referencedColumnName = "PK_users", nullable = false)
     private User userId;
 
