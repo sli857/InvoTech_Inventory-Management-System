@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.sql.Timestamp;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -39,5 +40,8 @@ public class Shipment {
 
     @Column(name = "shipment_status", nullable = false)
     private String shipmentStatus;
+
+    @OneToMany(mappedBy = "shipmentId", cascade = CascadeType.ALL)
+    private List<Ship> ships;
 
 }

@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.sql.Date;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -35,5 +36,8 @@ public class Site {
 
     @Column(name = "internal_site")
     private Boolean internalSite;
+
+    @OneToMany(mappedBy = "siteId", cascade = CascadeType.ALL)
+    private List<Availability> availabilities;
 
 }

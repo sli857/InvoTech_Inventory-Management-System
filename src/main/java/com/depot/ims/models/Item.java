@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -22,4 +24,10 @@ public class Item {
 
     @Column(name = "item_price", nullable = false)
     private Double itemPrice;
+
+    @OneToMany(mappedBy = "itemId", cascade = CascadeType.ALL)
+    private List<Availability> availabilities;
+
+    @OneToMany(mappedBy = "itemId", cascade = CascadeType.ALL)
+    private List<Ship> ships;
 }

@@ -16,12 +16,12 @@ public class Availability {
 
     @Id
     @ManyToOne
-    @JoinColumn(name = "PK1_FK_availabilities_sites")
+    @JoinColumn(name = "PK1_FK_availabilities_sites", referencedColumnName = "PK_sites")
     private Site siteId;
 
     @Id
     @ManyToOne
-    @JoinColumn(name = "PK2_FK_availabilities_items")
+    @JoinColumn(name = "PK2_FK_availabilities_items", referencedColumnName = "PK_items")
     private Item itemId;
 
     @Column(nullable = false)

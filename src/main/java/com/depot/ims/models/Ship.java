@@ -16,14 +16,12 @@ public class Ship {
 
     @Id
     @ManyToOne
-    // @JoinColumn(name = "PK1_FK_ships_items", referencedColumnName = "PK_items")
-    @JoinColumn(name = "PK1_FK_ships_items")
+    @JoinColumn(name = "PK1_FK_ships_items", referencedColumnName = "PK_items")
     private Item itemId;
 
     @Id
     @ManyToOne
-    // @JoinColumn(name = "PK2_FK_ships_shipments", referencedColumnName = "PK_shipments")
-    @JoinColumn(name = "PK2_FK_ships_shipments")
+    @JoinColumn(name = "PK2_FK_ships_shipments", referencedColumnName = "PK_shipments")
     private Shipment shipmentId;
 
     @Column(name = "quantity", nullable = false)
