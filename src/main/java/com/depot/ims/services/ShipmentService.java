@@ -14,10 +14,10 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Map;
 
 @Service
-public class ShipmentServices {
+public class ShipmentService {
     private AvailabilitiesRepository availabilitiesRepository;
     private ShipmentRepository shipmentRepository;
-    private static final Logger logger = LoggerFactory.getLogger(ShipmentServices.class);
+    private static final Logger logger = LoggerFactory.getLogger(ShipmentService.class);
 
     @Autowired
     public void shipmentService(AvailabilitiesRepository availabilitiesRepository, ShipmentRepository shipmentRepository) {

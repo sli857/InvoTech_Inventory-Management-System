@@ -3,7 +3,7 @@ package com.depot.ims.controllers;
 import com.depot.ims.models.Shipment;
 import com.depot.ims.repositories.ShipmentRepository;
 import com.depot.ims.request.ShipmentRequest;
-import com.depot.ims.services.ShipmentServices;
+import com.depot.ims.services.ShipmentService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -17,11 +17,11 @@ import java.util.Objects;
 public class ShipmentController {
 
     private final ShipmentRepository shipmentRepository;
-    private final ShipmentServices shipmentServices;
+    private final ShipmentService shipmentService;
 
-    public ShipmentController(ShipmentRepository shipmentRepository, ShipmentServices shipmentServices) {
+    public ShipmentController(ShipmentRepository shipmentRepository, ShipmentService shipmentService) {
         this.shipmentRepository = shipmentRepository;
-        this.shipmentServices = shipmentServices;
+        this.shipmentService = shipmentService;
     }
 
     @GetMapping
@@ -71,7 +71,7 @@ public class ShipmentController {
 
     @PostMapping(value = "/add", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> addShipment(@RequestBody ShipmentRequest shipmentRequest) {
-        ResponseEntity<?> responseEntity = shipmentServices.addShipmentAndUpdateQuantities(shipmentRequest);
+        ResponseEntity<?> responseEntity = shipmentService.addShipmentAndUpdateQuantities(shipmentRequest);
         return Objects.requireNonNullElseGet(responseEntity, () -> ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to add shipment and update quantities."));
     }
 }
