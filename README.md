@@ -38,9 +38,6 @@ Tests follow Behavior-Driven Development (BDD) principles where each test method
 - `createItem()`: Creates an Item entity and saves it to the database using `itemRepository`.
 - `createShipment()`: Creates a Shipment entity and saves it to the database using `shipmentRepository`.
 
-These tests ensure that the CRUD operations on the Ship entity work correctly and that the custom query methods
-in `ShipRepository` return the expected results.
-
 # Controllers
 
 ### Annotations
@@ -54,7 +51,6 @@ external service, enabling isolated unit testing of the controller logic.
 ### Setup
 
 ```java
-
 @BeforeEach
 public void setup() {
     MockitoAnnotations.openMocks(this);
@@ -93,7 +89,6 @@ and asserts the response status and the structure/content of the returned JSON.
 ### Annotations
 
 ```java
-
 @Mock
 ShipRepository shipRepository = mock(ShipRepository.class);
 ```
