@@ -1,7 +1,7 @@
 package com.depot.ims.repositories;
 
-import com.depot.ims.models.tables.Availability;
-import com.depot.ims.models.tables.compositeKeys.AvailabilityKey;
+import com.depot.ims.models.Availability;
+import com.depot.ims.models.compositeKeys.AvailabilityKey;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;

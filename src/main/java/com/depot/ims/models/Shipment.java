@@ -1,4 +1,4 @@
-package com.depot.ims.models.tables;
+package com.depot.ims.models;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -13,6 +13,7 @@ import java.sql.Timestamp;
 @AllArgsConstructor
 @Builder
 @Entity
+@Builder
 @Table(name = "Shipments")
 public class Shipment {
 

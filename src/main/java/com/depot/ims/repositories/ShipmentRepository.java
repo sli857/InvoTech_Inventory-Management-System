@@ -1,6 +1,6 @@
 package com.depot.ims.repositories;
 
-import com.depot.ims.models.tables.Shipment;
+import com.depot.ims.models.Shipment;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -8,10 +8,8 @@ import java.util.List;
 
 public interface ShipmentRepository extends JpaRepository<Shipment, Long> {
 
-    List<Shipment> findAll();
-
     @Query("select s from Shipment s where s.shipmentId = ?1")
-    List<Shipment> findByShipmentId(Integer shipmentId);
+    Shipment findByShipmentId(Integer shipmentId);
 
     @Query("select s from Shipment s where s.source = ?1")
     List<Shipment> findByShipmentSource(Integer source);

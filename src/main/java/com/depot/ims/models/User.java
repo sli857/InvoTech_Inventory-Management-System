@@ -1,4 +1,4 @@
-package com.depot.ims.models.tables;
+package com.depot.ims.models;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

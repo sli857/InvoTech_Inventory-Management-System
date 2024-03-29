@@ -1,7 +1,7 @@
 package com.depot.ims.services;
 
-import com.depot.ims.models.request.ShipmentRequest;
-import com.depot.ims.models.tables.Shipment;
+import com.depot.ims.request.ShipmentRequest;
+import com.depot.ims.models.Shipment;
 import com.depot.ims.repositories.AvailabilitiesRepository;
 import com.depot.ims.repositories.ShipmentRepository;
 import org.slf4j.Logger;

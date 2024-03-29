@@ -1,7 +1,8 @@
 package com.depot.ims.controllers;
 
-import com.depot.ims.models.tables.Ship;
-import com.depot.ims.repositories.ShipsRepository;
+import com.depot.ims.models.Ship;
+import com.depot.ims.repositories.ShipRepository;
+import com.depot.ims.services.ShipService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -11,32 +12,36 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/ships")
-public class ShipsController {
+public class ShipController {
 
-    private final ShipsRepository shipsRepository;
+    private final ShipRepository shipRepository;
+    private final ShipService shipService;
 
-    public ShipsController(ShipsRepository shipsRepository) {
-        this.shipsRepository = shipsRepository;
+    public ShipController(ShipRepository shipRepository, ShipService shipService) {
+        this.shipRepository = shipRepository;
+        this.shipService = shipService;
     }
 
     @GetMapping
     public List<Ship> getAllShips() {
-        return shipsRepository.findAll();
+        return shipRepository.findAll();
     }
 
     @GetMapping("/item={itemId}")
     public List<Ship> getShipsByItemId(@PathVariable Integer itemId) {
-        return shipsRepository.findByItemId(itemId);
+        return shipRepository.findByItemId(shipService.getItemById(itemId));
     }
 
     @GetMapping("/shipment={shipmentId}")
     public List<Ship> getShipsByShipmentId(@PathVariable Integer shipmentId) {
-        return shipsRepository.findByShipmentId(shipmentId);
+        return shipRepository.findByShipmentId(shipService.getShipmentById(shipmentId));
     }
 
     @GetMapping("/item={itemId}/shipment={shipmentId}")
     public List<Ship> getShipsByItemIdAndShipmentId(@PathVariable Integer itemId, @PathVariable Integer shipmentId) {
-        return shipsRepository.findByItemIdAndShipmentId(itemId, shipmentId);
+        return shipRepository.findByItemIdAndShipmentId(
+                shipService.getItemById(itemId),
+                shipService.getShipmentById(shipmentId)
+        );
     }
-
 }

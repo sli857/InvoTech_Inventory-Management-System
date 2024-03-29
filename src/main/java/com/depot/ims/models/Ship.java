@@ -1,8 +1,9 @@
-package com.depot.ims.models.tables;
+package com.depot.ims.models;
 
-import com.depot.ims.models.tables.compositeKeys.ShipKey;
+import com.depot.ims.models.compositeKeys.ShipKey;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -10,6 +11,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@Builder
 @IdClass(ShipKey.class)
 @Table(name = "Ships")
 public class Ship {

@@ -1,6 +1,6 @@
 package com.depot.ims.controllers;
 
-import com.depot.ims.models.tables.Availability;
+import com.depot.ims.models.Availability;
 import com.depot.ims.repositories.AvailabilitiesRepository;
 import org.springframework.web.bind.annotation.*;
 

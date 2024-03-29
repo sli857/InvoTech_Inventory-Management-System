@@ -1,8 +1,8 @@
 package com.depot.ims.controllers;
 
-import com.depot.ims.models.request.ShipmentRequest;
-import com.depot.ims.models.tables.Shipment;
+import com.depot.ims.models.Shipment;
 import com.depot.ims.repositories.ShipmentRepository;
+import com.depot.ims.request.ShipmentRequest;
 import com.depot.ims.services.ShipmentServices;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -30,7 +30,7 @@ public class ShipmentController {
     }
 
     @GetMapping("/shipmentId={shipmentId}")
-    public List<Shipment> getShipmentById(@PathVariable Integer shipmentId) {
+    public Shipment getShipmentById(@PathVariable Integer shipmentId) {
         return shipmentRepository.findByShipmentId(shipmentId);
     }
 
@@ -74,5 +74,4 @@ public class ShipmentController {
         ResponseEntity<?> responseEntity = shipmentServices.addShipmentAndUpdateQuantities(shipmentRequest);
         return Objects.requireNonNullElseGet(responseEntity, () -> ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to add shipment and update quantities."));
     }
-
 }

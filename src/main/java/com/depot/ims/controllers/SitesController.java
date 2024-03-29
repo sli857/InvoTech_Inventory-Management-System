@@ -1,6 +1,6 @@
 package com.depot.ims.controllers;
 
-import com.depot.ims.models.tables.Site;
+import com.depot.ims.models.Site;
 import com.depot.ims.repositories.SitesRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.format.annotation.DateTimeFormat;

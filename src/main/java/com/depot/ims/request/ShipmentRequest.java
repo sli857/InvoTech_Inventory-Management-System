@@ -1,4 +1,4 @@
-package com.depot.ims.models.request;
+package com.depot.ims.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
