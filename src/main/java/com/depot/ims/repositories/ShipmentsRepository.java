@@ -8,10 +8,8 @@ import java.util.List;
 
 public interface ShipmentsRepository extends JpaRepository<Shipment, Long> {
 
-    List<Shipment> findAll();
-
     @Query("select s from Shipment s where s.shipmentId = ?1")
-    List<Shipment> findByShipmentId(Integer shipmentId);
+    Shipment findByShipmentId(Integer shipmentId);
 
     @Query("select s from Shipment s where s.source = ?1")
     List<Shipment> findByShipmentSource(Integer source);

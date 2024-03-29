@@ -1,8 +1,8 @@
 package com.depot.ims.models;
 
 import com.depot.ims.repositories.ItemsRepository;
+import com.depot.ims.repositories.ShipRepository;
 import com.depot.ims.repositories.ShipmentsRepository;
-import com.depot.ims.repositories.ShipsRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,9 +23,8 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 })
 class ShipTest {
 
-    // Autowiring repositories for dependency injection
     @Autowired
-    private ShipsRepository shipsRepository;
+    private ShipRepository shipRepository;
 
     @Autowired
     private ItemsRepository itemsRepository;
@@ -57,7 +56,7 @@ class ShipTest {
         createShip(shipment3, item1, 30);
 
         // When
-        List<Ship> res = shipsRepository.findAll();
+        List<Ship> res = shipRepository.findAll();
 
         // Then
         assertNotNull(res);
@@ -72,7 +71,7 @@ class ShipTest {
         createShip(shipment3, item1, 30);
 
         // When
-        List<Ship> res = shipsRepository.findByItemId(item1);
+        List<Ship> res = shipRepository.findByItemId(item1);
 
         // Then
         assertNotNull(res);
@@ -87,8 +86,8 @@ class ShipTest {
         createShip(shipment3, item1, 30);
 
         // When
-        List<Ship> res = shipsRepository.findByShipmentId(shipment1);
-        List<Ship> res2 = shipsRepository.findByShipmentId(shipment2);
+        List<Ship> res = shipRepository.findByShipmentId(shipment1);
+        List<Ship> res2 = shipRepository.findByShipmentId(shipment2);
 
         // Then
         assertNotNull(res);
@@ -105,8 +104,8 @@ class ShipTest {
         createShip(shipment3, item1, 30);
 
         // When
-        List<Ship> res = shipsRepository.findByItemIdAndShipmentId(item1, shipment1);
-        List<Ship> res2 = shipsRepository.findByItemIdAndShipmentId(item2, shipment2);
+        List<Ship> res = shipRepository.findByItemIdAndShipmentId(item1, shipment1);
+        List<Ship> res2 = shipRepository.findByItemIdAndShipmentId(item2, shipment2);
 
         // Then
         assertNotNull(res);
@@ -123,7 +122,7 @@ class ShipTest {
                 .itemId(item)
                 .quantity(quantity)
                 .build();
-        shipsRepository.saveAndFlush(ship);
+        shipRepository.saveAndFlush(ship);
     }
 
     private Item createItem(String name, double price) {

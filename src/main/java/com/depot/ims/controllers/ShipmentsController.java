@@ -25,7 +25,7 @@ public class ShipmentsController {
     }
 
     @GetMapping("/shipmentId={shipmentId}")
-    public List<Shipment> getShipmentById(@PathVariable Integer shipmentId) {
+    public Shipment getShipmentById(@PathVariable Integer shipmentId) {
         return shipmentsRepository.findByShipmentId(shipmentId);
     }
 

@@ -1,16 +1,21 @@
 ## Testing Documentation
 
+# Repositories
+
+
 # Controllers
 
-`@InjectMocks` is ensuring that a mock object of ShipsRepository is injected into the ShipsController when the tests are
+### Annotations
+
+`@InjectMocks`: Ensures that a mock object of ShipsRepository is injected into the ShipsController when the tests are
 run. This allows the controller to interact with a mocked version of the repository instead of a real database or
 external service, enabling isolated unit testing of the controller logic.
 
-The `setup()` method in the test class is annotated with `@BeforeEach`, which means it will run before each test method
-in the class. In this method, the following actions are performed:
+`@Mock` is used to create a mock object to be injected into the `ShipsController`.
+
+### Setup
 
 ```java
-
 @BeforeEach
 public void setup() {
     MockitoAnnotations.openMocks(this);
@@ -18,30 +23,36 @@ public void setup() {
 }
 ```
 
-1. `MockitoAnnotations.openMocks(this);`: This line initializes annotated fields in the test class for mocking with
+`MockitoAnnotations.openMocks(this);`: This line initializes annotated fields in the test class for mocking with
    Mockito. Specifically, it initializes the `@Mock` and `@InjectMocks` annotations, ensuring that the mock objects are
    properly set up before each test method is executed.
 
-2. `mockMvc = MockMvcBuilders.standaloneSetup(shipsController).build();`: This line sets up a standalone MockMvc
+`mockMvc = MockMvcBuilders.standaloneSetup(shipsController).build();`: This line sets up a standalone MockMvc
    instance for testing the `ShipsController` without the need for a complete Spring application context. It initializes
    the MockMvc instance with the `ShipsController`, enabling you to perform HTTP requests and verify responses in the
    controller's context during the test.
 
+### Test Methods
 
-This test method, named `testGetAllShips()`, is designed to test the behavior of the `getAllShips()` endpoint in
-the `ShipsController` class.
+`testGetAllShips()`: Tests the endpoint for retrieving all ships.
+It sets up mock behavior for the shipRepository to return a list of ships when `findAll()` is called.
+Then, it performs an HTTP GET request to `/ships` 
+and asserts that the response status is OK and the returned JSON array has a length of 2.
 
-1. **Data Setup**: It creates two `Ship` objects (`ship1` and `ship2`) and adds them to a list called `ships`.
+`testGetShipsByItemId()`: Tests the endpoint
+for retrieving ships by item ID. It sets up mock behavior for `shipService`
+and `shipRepository` and then performs an HTTP GET request to `/ships/item={itemId}`.
 
-2. **Mocking Repository Behavior**: It sets up behavior for the `shipsRepository` mock object. Specifically, it tells
-   Mockito that when `shipsRepository.findAll()` is called, it should return the list of ships created in the previous
-   step.
+`testGetShipsByShipmentId()`: Similar to the previous test but for retrieving ships by shipment ID.
 
-3. **Performing Mock HTTP Request**: It uses the `mockMvc` instance to perform a mock HTTP GET request to the `/ships`
-   endpoint.
+`testGetShipsByItemIdAndShipmentId()`: Tests the endpoint for retrieving ships by both item ID and shipment ID.
 
-4. **Expectations**: It sets up expectations on the response of this mock request:
-    - Expects the HTTP response status to be `200 OK` (`status().isOk()`).
-    - Expects the content of the response to be in JSON format (`contentType(MediaType.APPLICATION_JSON)`).
-    - Expects the content of the response to match the provided JSON representation of the list of
-      ships (`content().json("[{},{}]")`).
+### Assertions
+
+Using `MockMvc` and its `perform()` method, 
+it simulates HTTP requests to the endpoints provided by the `ShipController` 
+and asserts the response status and the structure/content of the returned JSON.
+
+# Services
+
+
