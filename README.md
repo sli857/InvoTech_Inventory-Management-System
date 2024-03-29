@@ -90,7 +90,7 @@ and asserts the response status and the structure/content of the returned JSON.
 
 ```java
 @Mock
-ShipRepository shipRepository = mock(ShipRepository.class);
+private ShipmentRepository shipmentRepositoryMock = mock(ShipmentRepository.class);
 ```
 
 Here mocks are explicitly created using the `mock()` and explicitly assigns them to class fields.
