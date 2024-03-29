@@ -1,8 +1,8 @@
 package com.depot.ims.models;
 
-import com.depot.ims.repositories.ItemsRepository;
+import com.depot.ims.repositories.ItemRepository;
 import com.depot.ims.repositories.ShipRepository;
-import com.depot.ims.repositories.ShipmentsRepository;
+import com.depot.ims.repositories.ShipmentRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,10 +27,10 @@ class ShipTest {
     private ShipRepository shipRepository;
 
     @Autowired
-    private ItemsRepository itemsRepository;
+    private ItemRepository itemRepository;
 
     @Autowired
-    private ShipmentsRepository shipmentsRepository;
+    private ShipmentRepository shipmentRepository;
 
     private Item item1;
     private Item item2;
@@ -130,7 +130,7 @@ class ShipTest {
                 .itemName(name)
                 .itemPrice(price)
                 .build();
-        return itemsRepository.saveAndFlush(item);
+        return itemRepository.saveAndFlush(item);
     }
 
     private Shipment createShipment(int source, int destination, String currentLocation, long departureTimeMillis, long estimatedArrivalTimeMillis) {
@@ -143,7 +143,7 @@ class ShipTest {
                 .actualArrivalTime(null)
                 .shipmentStatus("In Transit")
                 .build();
-        return shipmentsRepository.saveAndFlush(shipment);
+        return shipmentRepository.saveAndFlush(shipment);
     }
 
 }

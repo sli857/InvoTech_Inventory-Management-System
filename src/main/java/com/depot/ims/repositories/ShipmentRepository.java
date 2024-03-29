@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 
-public interface ShipmentsRepository extends JpaRepository<Shipment, Long> {
+public interface ShipmentRepository extends JpaRepository<Shipment, Long> {
 
     @Query("select s from Shipment s where s.shipmentId = ?1")
     Shipment findByShipmentId(Integer shipmentId);

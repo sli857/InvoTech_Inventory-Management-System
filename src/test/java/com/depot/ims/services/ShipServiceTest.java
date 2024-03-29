@@ -2,8 +2,8 @@ package com.depot.ims.services;
 
 import com.depot.ims.models.Item;
 import com.depot.ims.models.Shipment;
-import com.depot.ims.repositories.ItemsRepository;
-import com.depot.ims.repositories.ShipmentsRepository;
+import com.depot.ims.repositories.ItemRepository;
+import com.depot.ims.repositories.ShipmentRepository;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 
@@ -15,19 +15,19 @@ import static org.mockito.Mockito.*;
 class ShipServiceTest {
 
     @Mock
-    private ShipmentsRepository shipmentsRepositoryMock = mock(ShipmentsRepository.class);
+    private ShipmentRepository shipmentRepositoryMock = mock(ShipmentRepository.class);
 
     @Mock
-    private ItemsRepository itemsRepositoryMock = mock(ItemsRepository.class);
+    private ItemRepository itemRepositoryMock = mock(ItemRepository.class);
 
-    private final ShipService shipService = new ShipService(shipmentsRepositoryMock, itemsRepositoryMock);
+    private final ShipService shipService = new ShipService(shipmentRepositoryMock, itemRepositoryMock);
 
     @Test
     void getShipmentById_ValidId_ReturnsShipment() {
         // Given
         int shipmentId = 123;
         Shipment expectedShipment = new Shipment();
-        given(shipmentsRepositoryMock.findByShipmentId(shipmentId)).willReturn(expectedShipment);
+        given(shipmentRepositoryMock.findByShipmentId(shipmentId)).willReturn(expectedShipment);
 
         // When
         Shipment actualShipment = shipService.getShipmentById(shipmentId);
@@ -35,21 +35,21 @@ class ShipServiceTest {
         // Then
         assertNotNull(actualShipment);
         assertEquals(expectedShipment, actualShipment);
-        verify(shipmentsRepositoryMock, times(1)).findByShipmentId(shipmentId);
+        verify(shipmentRepositoryMock, times(1)).findByShipmentId(shipmentId);
     }
 
     @Test
     void getShipmentById_InvalidId_ReturnsNull() {
         // Given
         int shipmentId = 456;
-        given(shipmentsRepositoryMock.findByShipmentId(shipmentId)).willReturn(null);
+        given(shipmentRepositoryMock.findByShipmentId(shipmentId)).willReturn(null);
 
         // When
         Shipment actualShipment = shipService.getShipmentById(shipmentId);
 
         // Then
         assertNull(actualShipment);
-        verify(shipmentsRepositoryMock, times(1)).findByShipmentId(shipmentId);
+        verify(shipmentRepositoryMock, times(1)).findByShipmentId(shipmentId);
     }
 
     @Test
@@ -57,7 +57,7 @@ class ShipServiceTest {
         // Given
         int itemId = 789;
         Item expectedItem = new Item();
-        given(itemsRepositoryMock.findByItemId(itemId)).willReturn(expectedItem);
+        given(itemRepositoryMock.findByItemId(itemId)).willReturn(expectedItem);
 
         // When
         Item actualItem = shipService.getItemById(itemId);
@@ -65,20 +65,20 @@ class ShipServiceTest {
         // Then
         assertNotNull(actualItem);
         assertEquals(expectedItem, actualItem);
-        verify(itemsRepositoryMock, times(1)).findByItemId(itemId);
+        verify(itemRepositoryMock, times(1)).findByItemId(itemId);
     }
 
     @Test
     void getItemById_InvalidId_ReturnsNull() {
         // Given
         int itemId = 101;
-        given(itemsRepositoryMock.findByItemId(itemId)).willReturn(null);
+        given(itemRepositoryMock.findByItemId(itemId)).willReturn(null);
 
         // When
         Item actualItem = shipService.getItemById(itemId);
 
         // Then
         assertNull(actualItem);
-        verify(itemsRepositoryMock, times(1)).findByItemId(itemId);
+        verify(itemRepositoryMock, times(1)).findByItemId(itemId);
     }
 }

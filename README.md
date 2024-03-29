@@ -2,7 +2,6 @@
 
 # Repositories
 
-
 # Controllers
 
 ### Annotations
@@ -16,6 +15,7 @@ external service, enabling isolated unit testing of the controller logic.
 ### Setup
 
 ```java
+
 @BeforeEach
 public void setup() {
     MockitoAnnotations.openMocks(this);
@@ -24,19 +24,20 @@ public void setup() {
 ```
 
 `MockitoAnnotations.openMocks(this);`: This line initializes annotated fields in the test class for mocking with
-   Mockito. Specifically, it initializes the `@Mock` and `@InjectMocks` annotations, ensuring that the mock objects are
-   properly set up before each test method is executed.
+Mockito.
+Specifically, it initializes the `@Mock` and `@InjectMocks` annotations, ensuring that the mock objects are
+properly set up before each test method is executed.
 
 `mockMvc = MockMvcBuilders.standaloneSetup(shipsController).build();`: This line sets up a standalone MockMvc
-   instance for testing the `ShipsController` without the need for a complete Spring application context. It initializes
-   the MockMvc instance with the `ShipsController`, enabling you to perform HTTP requests and verify responses in the
-   controller's context during the test.
+instance for testing the `ShipsController` without the need for a complete Spring application context.
+It initializes the MockMvc instance with the `ShipsController`,
+enabling you to perform HTTP requests and verify responses in the controller's context during the test.
 
 ### Test Methods
 
 `testGetAllShips()`: Tests the endpoint for retrieving all ships.
 It sets up mock behavior for the shipRepository to return a list of ships when `findAll()` is called.
-Then, it performs an HTTP GET request to `/ships` 
+Then, it performs an HTTP GET request to `/ships`
 and asserts that the response status is OK and the returned JSON array has a length of 2.
 
 `testGetShipsByItemId()`: Tests the endpoint
@@ -49,8 +50,8 @@ and `shipRepository` and then performs an HTTP GET request to `/ships/item={item
 
 ### Assertions
 
-Using `MockMvc` and its `perform()` method, 
-it simulates HTTP requests to the endpoints provided by the `ShipController` 
+Using `MockMvc` and its `perform()` method,
+it simulates HTTP requests to the endpoints provided by the `ShipController`
 and asserts the response status and the structure/content of the returned JSON.
 
 # Services
