@@ -1,6 +1,8 @@
 package com.depot.ims.controllers;
 
+import com.depot.ims.models.Item;
 import com.depot.ims.models.Ship;
+import com.depot.ims.models.Shipment;
 import com.depot.ims.repositories.ShipsRepository;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -25,17 +27,20 @@ public class ShipsController {
     }
 
     @GetMapping("/item={itemId}")
-    public List<Ship> getShipsByItemId(@PathVariable Integer itemId) {
+    public List<Ship> getShipsByItemId(@PathVariable Item itemId) {
+        // insert service call to find by item based on passed in Long itemId
         return shipsRepository.findByItemId(itemId);
     }
 
     @GetMapping("/shipment={shipmentId}")
-    public List<Ship> getShipsByShipmentId(@PathVariable Integer shipmentId) {
+    public List<Ship> getShipsByShipmentId(@PathVariable Shipment shipmentId) {
+        // insert service call to find by shipment based on passed in Long shipmentId
         return shipsRepository.findByShipmentId(shipmentId);
     }
 
     @GetMapping("/item={itemId}/shipment={shipmentId}")
-    public List<Ship> getShipsByItemIdAndShipmentId(@PathVariable Integer itemId, @PathVariable Integer shipmentId) {
+    public List<Ship> getShipsByItemIdAndShipmentId(@PathVariable Item itemId, @PathVariable Shipment shipmentId) {
+        // insert service call to find by item and shipment based on passed in Long itemId and Long shipmentId
         return shipsRepository.findByItemIdAndShipmentId(itemId, shipmentId);
     }
 

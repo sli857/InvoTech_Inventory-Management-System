@@ -1,6 +1,8 @@
 package com.depot.ims.controllers;
 
+import com.depot.ims.models.Item;
 import com.depot.ims.models.Ship;
+import com.depot.ims.models.Shipment;
 import com.depot.ims.repositories.ShipsRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -14,7 +16,6 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -58,9 +59,10 @@ class ShipsControllerTests {
         // Given
         Ship ship1 = new Ship();
         List<Ship> ships = List.of(ship1);
+        Item item = new Item();
 
         // When
-        when(shipsRepository.findByItemId(any(Integer.class))).thenReturn(ships);
+        when(shipsRepository.findByItemId(item)).thenReturn(ships);
 
         // Then
         mockMvc.perform(get("/ships/item=1")
@@ -74,9 +76,10 @@ class ShipsControllerTests {
         // Given
         Ship ship1 = new Ship();
         List<Ship> ships = List.of(ship1);
+        Shipment shipment = new Shipment();
 
         // When
-        when(shipsRepository.findByShipmentId(any(Integer.class))).thenReturn(ships);
+        when(shipsRepository.findByShipmentId(shipment)).thenReturn(ships);
 
         // Then
         mockMvc.perform(get("/ships/shipment=1")
@@ -90,9 +93,11 @@ class ShipsControllerTests {
         // Given
         Ship ship1 = new Ship();
         List<Ship> ships = List.of(ship1);
+        Item item = new Item();
+        Shipment shipment = new Shipment();
 
         // When
-        when(shipsRepository.findByItemIdAndShipmentId(any(Integer.class), any(Integer.class))).thenReturn(ships);
+        when(shipsRepository.findByItemIdAndShipmentId(item, shipment)).thenReturn(ships);
 
         // Then
         mockMvc.perform(get("/ships/item=1/shipment=1")
