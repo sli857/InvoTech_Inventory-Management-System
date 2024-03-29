@@ -13,7 +13,6 @@ import java.sql.Timestamp;
 @AllArgsConstructor
 @Builder
 @Entity
-@Builder
 @Table(name = "Shipments")
 public class Shipment {
 
