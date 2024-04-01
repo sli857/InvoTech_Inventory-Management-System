@@ -2,7 +2,9 @@ package com.depot.ims.services;
 
 import com.depot.ims.models.Item;
 import com.depot.ims.models.Shipment;
+import com.depot.ims.repositories.AvailabilitiesRepository;
 import com.depot.ims.repositories.ItemRepository;
+import com.depot.ims.repositories.ShipRepository;
 import com.depot.ims.repositories.ShipmentRepository;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -13,14 +15,19 @@ import static org.mockito.Mockito.*;
 
 // For more information, please refer to the documentation in the README under Testing Documentation
 class ShipServiceTest {
-
     @Mock
     private ShipmentRepository shipmentRepositoryMock = mock(ShipmentRepository.class);
-
     @Mock
     private ItemRepository itemRepositoryMock = mock(ItemRepository.class);
+    @Mock
+    private ShipRepository shipRepositoryMock = mock(ShipRepository.class);
+    @Mock
+    private AvailabilitiesRepository availabilitiesRepositoryMock = mock(AvailabilitiesRepository.class);
 
-    private final ShipService shipService = new ShipService(shipmentRepositoryMock, itemRepositoryMock);
+    private final ShipService shipService = new ShipService(shipRepositoryMock,
+            shipmentRepositoryMock,
+            itemRepositoryMock,
+            availabilitiesRepositoryMock);
 
     @Test
     void getShipmentById_ValidId_ReturnsShipment() {

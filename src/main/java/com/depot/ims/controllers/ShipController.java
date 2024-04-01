@@ -3,10 +3,8 @@ package com.depot.ims.controllers;
 import com.depot.ims.models.Ship;
 import com.depot.ims.repositories.ShipRepository;
 import com.depot.ims.services.ShipService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -44,4 +42,10 @@ public class ShipController {
                 shipService.getShipmentById(shipmentId)
         );
     }
+
+    @PostMapping(value = "/add", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public Ship addShip(@RequestBody Ship ship) {
+        return shipService.addShip(ship);
+    }
+
 }

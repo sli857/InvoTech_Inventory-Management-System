@@ -8,9 +8,6 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.List;
 
 public interface AvailabilitiesRepository extends JpaRepository<Availability, AvailabilityKey> {
-
-    List<Availability> findAll();
-
     @Query("select a from Availability a where a.siteId = ?1")
     List<Availability> findBySiteId(Integer siteId);
 
