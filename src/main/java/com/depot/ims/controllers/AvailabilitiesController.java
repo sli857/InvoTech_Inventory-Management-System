@@ -47,7 +47,7 @@ public class AvailabilitiesController {
     //given the siteID, I want to see a list of availabilities
     @GetMapping("/site")
     public ResponseEntity<?> getAvailability(
-            @RequestParam(value = "siteId",required = false) Long siteID) {
+            @RequestParam(value = "siteId") Long siteID) {
         //make sure the given ID is valid
         if (siteID != null) {
             //make sure the given ID exist in our inventory
