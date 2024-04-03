@@ -21,15 +21,15 @@ Tests follow Behavior-Driven Development (BDD) principles where each test method
 ### Test Methods
 
 - `findAllTest()`: Tests the `findAll()` method of `ShipRepository`.
-  It creates some ships, invokes the method, and checks if the returned list is not null and contains three items.
+  It invokes the method and checks if the returned list is not null and contains three items.
 - `findByItemIdTest()`: Tests the `findByItemId()` method of `ShipRepository`.
-  It creates ships, invokes the method with a specific item ID,
+  It invokes the method with a specific item ID,
   and checks if the returned list is not null and contains two items.
 - `findByShipmentIdTest()`: Tests the `findByShipmentId()` method of `ShipRepository`.
-  It creates ships, invokes the method with a specific shipment ID,
+  It invokes the method with a specific shipment ID,
   and checks if the returned list is not null and contains one item.
 - `findByItemIdAndShipmentIdTest()`: Tests the `findByItemIdAndShipmentId()` method of `ShipRepository`.
-  It creates ships, invokes the method with specific item and shipment IDs,
+  It invokes the method with specific item and shipment IDs,
   and checks if the returned lists are not null and contain one item each.
 
 ### Helper Methods
