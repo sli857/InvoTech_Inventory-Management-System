@@ -7,7 +7,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.TestPropertySource;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Timestamp;
 import java.util.List;
@@ -71,7 +73,8 @@ class ShipTest {
         createShip(shipment3, item1, 30);
 
         // When
-        List<Ship> res = shipRepository.findByItemId(item1);
+        List<Ship> res1 = shipRepository.findAll();
+        List<Ship> res = shipRepository.findByItemId(1L);
 
         // Then
         assertNotNull(res);
@@ -86,8 +89,8 @@ class ShipTest {
         createShip(shipment3, item1, 30);
 
         // When
-        List<Ship> res = shipRepository.findByShipmentId(shipment1);
-        List<Ship> res2 = shipRepository.findByShipmentId(shipment2);
+        List<Ship> res = shipRepository.findByShipmentId(1L);
+        List<Ship> res2 = shipRepository.findByShipmentId(2L);
 
         // Then
         assertNotNull(res);
@@ -104,8 +107,8 @@ class ShipTest {
         createShip(shipment3, item1, 30);
 
         // When
-        List<Ship> res = shipRepository.findByItemIdAndShipmentId(item1, shipment1);
-        List<Ship> res2 = shipRepository.findByItemIdAndShipmentId(item2, shipment2);
+        List<Ship> res = shipRepository.findByItemIdAndShipmentId(1L, 1L);
+        List<Ship> res2 = shipRepository.findByItemIdAndShipmentId(2L, 2L);
 
         // Then
         assertNotNull(res);

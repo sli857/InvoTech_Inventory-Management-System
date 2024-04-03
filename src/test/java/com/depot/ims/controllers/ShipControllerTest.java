@@ -1,10 +1,7 @@
 package com.depot.ims.controllers;
 
-import com.depot.ims.models.Item;
 import com.depot.ims.models.Ship;
-import com.depot.ims.models.Shipment;
 import com.depot.ims.repositories.ShipRepository;
-import com.depot.ims.services.ShipService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -24,16 +21,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 // For more information, please refer to the documentation in the README under Testing Documentation
 class ShipControllerTest {
-
     @InjectMocks
     ShipController shipController;
-
     @Mock
     ShipRepository shipRepository;
-
-    @Mock
-    ShipService shipService;
-
     private MockMvc mockMvc;
 
     @BeforeEach
@@ -67,7 +58,6 @@ class ShipControllerTest {
         ships.add(new Ship());
 
         // When
-        when(shipService.getItemById(itemId)).thenReturn(new Item());
         when(shipRepository.findByItemId(any())).thenReturn(ships);
 
         // Then
@@ -85,7 +75,6 @@ class ShipControllerTest {
         ships.add(new Ship());
 
         // When
-        when(shipService.getShipmentById(shipmentId)).thenReturn(new Shipment());
         when(shipRepository.findByShipmentId(any())).thenReturn(ships);
 
         // Then
@@ -104,8 +93,6 @@ class ShipControllerTest {
         ships.add(new Ship());
 
         // When
-        when(shipService.getItemById(itemId)).thenReturn(new Item());
-        when(shipService.getShipmentById(shipmentId)).thenReturn(new Shipment());
         when(shipRepository.findByItemIdAndShipmentId(any(), any())).thenReturn(ships);
 
         // Then
