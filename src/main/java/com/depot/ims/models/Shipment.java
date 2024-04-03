@@ -22,10 +22,10 @@ public class Shipment {
     private Long shipmentId;
 
     @Column(name = "FK_source", nullable = false)
-    private Integer source;
+    private Long source;
 
     @Column(name = "FK_destination", nullable = false)
-    private Integer destination;
+    private Long destination;
 
     @Column(name = "current_location")
     private String currentLocation;

@@ -118,7 +118,7 @@ class ShipTest {
         return itemRepository.saveAndFlush(item);
     }
 
-    private Shipment createShipment(int source, int destination, String currentLocation, long departureTimeMillis, long estimatedArrivalTimeMillis) {
+    private Shipment createShipment(long source, long destination, String currentLocation, long departureTimeMillis, long estimatedArrivalTimeMillis) {
         Shipment shipment = Shipment.builder()
                 .source(source)
                 .destination(destination)

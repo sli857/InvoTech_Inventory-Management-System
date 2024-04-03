@@ -7,11 +7,11 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.List;
 
 public interface AuditsRepository extends JpaRepository<Audit, Long> {
-    List<Audit> findAll();
 
     @Query("SELECT a FROM Audit a WHERE a.auditId=?1")
-    Audit findByAuditId(Integer auditId);
+    Audit findByAuditId(Long auditId);
 
     @Query("SELECT a from Audit a WHERE a.userId=?1")
-    List<Audit> findByUserId(Integer userId);
+    List<Audit> findByUserId(Long userId);
+
 }

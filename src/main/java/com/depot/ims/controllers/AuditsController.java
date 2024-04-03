@@ -26,12 +26,12 @@ public class AuditsController {
     }
 
     @GetMapping("/auditId={auditId}")
-    public Audit getAuditById(@PathVariable Integer auditId) {
+    public Audit getAuditById(@PathVariable Long auditId) {
         return auditsRepository.findByAuditId(auditId);
     }
 
     @GetMapping("/userId={userId}")
-    public List<Audit> getAuditsByUserId(@PathVariable Integer userId) {
+    public List<Audit> getAuditsByUserId(@PathVariable Long userId) {
         return auditsRepository.findByUserId(userId);
     }
 

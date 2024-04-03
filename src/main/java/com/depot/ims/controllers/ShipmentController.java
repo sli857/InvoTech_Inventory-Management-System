@@ -25,17 +25,17 @@ public class ShipmentController {
     }
 
     @GetMapping("/shipmentId={shipmentId}")
-    public Shipment getShipmentById(@PathVariable Integer shipmentId) {
+    public Shipment getShipmentById(@PathVariable Long shipmentId) {
         return shipmentRepository.findByShipmentId(shipmentId);
     }
 
     @GetMapping("/source={source}")
-    public List<Shipment> getShipmentsBySource(@PathVariable Integer source) {
+    public List<Shipment> getShipmentsBySource(@PathVariable Long source) {
         return shipmentRepository.findByShipmentSource(source);
     }
 
     @GetMapping("/destination={destination}")
-    public List<Shipment> getShipmentsByDestination(@PathVariable Integer destination) {
+    public List<Shipment> getShipmentsByDestination(@PathVariable Long destination) {
         return shipmentRepository.findByShipmentDestination(destination);
     }
 

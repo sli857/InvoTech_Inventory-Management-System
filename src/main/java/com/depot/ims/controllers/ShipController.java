@@ -41,5 +41,5 @@ public class ShipController {
     public Ship addShip(@RequestBody Ship ship) {
         return shipRepository.save(ship);
     }
-// TODO turn primitives to objects in repositories, implement shipment service to create ship (shouldn't be able to add ship), remove ship POST, change to return ResponseEntity
+
 }

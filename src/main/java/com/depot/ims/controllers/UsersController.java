@@ -22,7 +22,7 @@ public class UsersController {
     }
 
     @GetMapping("/userId={userID}")
-    public User getUserById(@PathVariable Integer userID) {
+    public User getUserById(@PathVariable Long userID) {
         return this.usersRepository.findByUserId(userID);
     }
 
