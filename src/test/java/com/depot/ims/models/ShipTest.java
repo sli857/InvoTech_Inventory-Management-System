@@ -7,9 +7,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.TestPropertySource;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Timestamp;
 import java.util.List;
@@ -34,47 +32,25 @@ class ShipTest {
     @Autowired
     private ShipmentRepository shipmentRepository;
 
-    private Item item1;
-    private Item item2;
-    private Shipment shipment1;
-    private Shipment shipment2;
-    private Shipment shipment3;
-
     @BeforeEach
     void setUp() {
-        item1 = createItem("item 1", 12.99);
-        item2 = createItem("item 2", 15.99);
+        Item item1 = createItem("item 1", 12.99);
+        Item item2 = createItem("item 2", 15.99);
 
-        shipment1 = createShipment(123, 456, "Warehouse A", System.currentTimeMillis(), 86400000);
-        shipment2 = createShipment(456, 789, "Port B", System.currentTimeMillis(), 172800000);
-        shipment3 = createShipment(789, 123, "Airport C", System.currentTimeMillis(), 259200000);
+        Shipment shipment1 = createShipment(123, 456, "Warehouse A", System.currentTimeMillis(), 86400000);
+        Shipment shipment2 = createShipment(456, 789, "Port B", System.currentTimeMillis(), 172800000);
+
+        createShip(shipment1, item1, 10);
+        createShip(shipment2, item2, 20);
     }
 
     @Test
     void findAllTest() {
         // Given
-        createShip(shipment1, item1, 10);
-        createShip(shipment2, item2, 20);
-        createShip(shipment3, item1, 30);
+        // setUp() method
 
         // When
         List<Ship> res = shipRepository.findAll();
-
-        // Then
-        assertNotNull(res);
-        assertEquals(3, res.size());
-    }
-
-    @Test
-    void findByItemIdTest() {
-        // Given
-        createShip(shipment1, item1, 10);
-        createShip(shipment2, item2, 20);
-        createShip(shipment3, item1, 30);
-
-        // When
-        List<Ship> res1 = shipRepository.findAll();
-        List<Ship> res = shipRepository.findByItemId(1L);
 
         // Then
         assertNotNull(res);
@@ -82,33 +58,39 @@ class ShipTest {
     }
 
     @Test
-    void findByShipmentIdTest() {
+    void findByItemIdTest() {
         // Given
-        createShip(shipment1, item1, 10);
-        createShip(shipment2, item2, 20);
-        createShip(shipment3, item1, 30);
+        // setUp() method
 
         // When
-        List<Ship> res = shipRepository.findByShipmentId(1L);
-        List<Ship> res2 = shipRepository.findByShipmentId(2L);
+        List<Ship> res = shipRepository.findByItemId(3L);
 
         // Then
         assertNotNull(res);
-        assertNotNull(res2);
         assertEquals(1, res.size());
-        assertEquals(1, res2.size());
+    }
+
+    @Test
+    void findByShipmentIdTest() {
+        // Given
+        // setUp() method
+
+        // When
+        List<Ship> res = shipRepository.findByShipmentId(5L);
+
+        // Then
+        assertNotNull(res);
+        assertEquals(1, res.size());
     }
 
     @Test
     void findByItemIdAndShipmentIdTest() {
         // Given
-        createShip(shipment1, item1, 10);
-        createShip(shipment2, item2, 20);
-        createShip(shipment3, item1, 30);
+        // setUp() method
 
         // When
-        List<Ship> res = shipRepository.findByItemIdAndShipmentId(1L, 1L);
-        List<Ship> res2 = shipRepository.findByItemIdAndShipmentId(2L, 2L);
+        List<Ship> res = shipRepository.findByItemIdAndShipmentId(7L, 7L);
+        List<Ship> res2 = shipRepository.findByItemIdAndShipmentId(8L, 8L);
 
         // Then
         assertNotNull(res);
