@@ -6,8 +6,6 @@ import IMSSites from "./../content/IMSSites"
 import IMSShipments from "./../content/IMSShipments"
 import IMSNoMatch from "./../content/IMSNoMatch"
 import IMSSite from "../content/IMSSite";
-import IMSLogout from "../authorization/IMSLogout";
-
 
 /**
  * IMSApp Component
@@ -30,7 +28,6 @@ function IMSApp() {
         <Route index element={<IMSSites />} />
         <Route path="/site/:siteId" element={<IMSSite />} />
         <Route path="shipments" element={<IMSShipments />} />
-        <Route path="logout" element={<IMSLogout />} />
         <Route path="*" element={<IMSNoMatch />} />
       </Route>
     </Routes>
