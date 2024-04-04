@@ -10,6 +10,9 @@ import com.depot.ims.repositories.ShipmentRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+/**
+ * Service class for managing Ship operations
+ */
 @Service
 public class ShipService {
     private final ShipRepository shipRepository;
@@ -17,6 +20,14 @@ public class ShipService {
     private final ItemRepository itemRepository;
     private final AvailabilityRepository availabilityRepository;
 
+    /**
+     * Constructor for ShipService.
+     *
+     * @param shipRepository         The ShipRepository instance.
+     * @param shipmentRepository     The ShipmentRepository instance.
+     * @param itemRepository         The ItemRepository instance.
+     * @param availabilityRepository The AvailabilityRepository instance.
+     */
     public ShipService(ShipRepository shipRepository,
                        ShipmentRepository shipmentRepository,
                        ItemRepository itemRepository,
@@ -27,6 +38,12 @@ public class ShipService {
         this.availabilityRepository = availabilityRepository;
     }
 
+    /**
+     * Adds a new Ship.
+     *
+     * @param ship The Ship object to be added.
+     * @return ResponseEntity containing the result of the ship addition operation.
+     */
     public ResponseEntity<?> addShip(Ship ship) {
         // Validate
         if (ship == null || ship.getShipmentId() == null || ship.getItemId() == null || ship.getQuantity() == null) {
