@@ -2,6 +2,7 @@ package com.depot.ims.models;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -11,6 +12,7 @@ import java.sql.Timestamp;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@Builder
 @Table(name = "Shipments")
 public class Shipment {
 
@@ -20,10 +22,10 @@ public class Shipment {
     private Long shipmentId;
 
     @Column(name = "FK_source", nullable = false)
-    private Integer source;
+    private Long source;
 
     @Column(name = "FK_destination", nullable = false)
-    private Integer destination;
+    private Long destination;
 
     @Column(name = "current_location")
     private String currentLocation;

@@ -1,28 +1,27 @@
 package com.depot.ims.controllers;
 import com.depot.ims.models.User;
-import com.depot.ims.repositories.UsersRepository;
+import com.depot.ims.repositories.UserRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Optional;
 import java.util.stream.Stream;
 import java.util.Objects;
 
 @RestController
 @RequestMapping(value = "/users",  produces = MediaType.APPLICATION_JSON_VALUE)
 @CrossOrigin(origins = "http://localhost:5173/")
-public class UsersController {
-    private final UsersRepository usersRepository;
+public class UserController {
+    private final UserRepository userRepository;
 
-    public UsersController(UsersRepository usersRepository) {
-        this.usersRepository = usersRepository;
+    public UserController(UserRepository userRepository) {
+        this.userRepository = userRepository;
     }
 
     @GetMapping
     public ResponseEntity<?> getUsers() {
-        return ResponseEntity.ok(this.usersRepository.findAll());
+        return ResponseEntity.ok(this.userRepository.findAll());
     }
 
     @GetMapping("/user")
@@ -31,10 +30,10 @@ public class UsersController {
             @RequestParam(value = "username", required = false) String username) {
         // user id has to be unique!!
         if (userId != null) {
-            return ResponseEntity.ok(usersRepository.findByUserId(userId));
+            return ResponseEntity.ok(userRepository.findByUserId(userId));
             // username has to be unique!!
         } else if (username != null) {
-            return ResponseEntity.ok(usersRepository.findByUsername(username));
+            return ResponseEntity.ok(userRepository.findByUsername(username));
         } else {
             return ResponseEntity.badRequest().body("You have to provide your user Id or username");
         }
@@ -48,7 +47,7 @@ public class UsersController {
             return ResponseEntity.badRequest().body("Username and password are required");
         }
 
-        User user = usersRepository.findByUsername(username);
+        User user = userRepository.findByUsername(username);
         if (user != null && passwordMatches(user.getPassword(), password)) {
             return ResponseEntity.ok().body("User exists and password matches");
         } else if (user != null) {
@@ -65,7 +64,7 @@ public class UsersController {
 
     @PostMapping(value = "/add", consumes = MediaType.APPLICATION_JSON_VALUE)
     public User addUser(@RequestBody User user) {
-        return this.usersRepository.save(user);
+        return this.userRepository.save(user);
     }
 
     @Modifying
@@ -77,7 +76,7 @@ public class UsersController {
             String newUsername,
             @RequestParam(value = "password", required = false)
             String newPassword) {
-        if (!usersRepository.existsById(userID)) {
+        if (!userRepository.existsById(userID)) {
             return ResponseEntity.badRequest().body("User not found by user id!");
         }
         // user id cannot be changed!
@@ -85,20 +84,20 @@ public class UsersController {
             return ResponseEntity.badRequest().body("No value for this update is specified");
         }
 
-        User user = usersRepository.findByUserId(userID);
+        User user = userRepository.findByUserId(userID);
         if (newUsername != null) user.setUsername(newUsername);
         if (newPassword != null) user.setPassword(newPassword);
 
-        User updatedUser = usersRepository.save(user);
+        User updatedUser = userRepository.save(user);
         return ResponseEntity.ok(updatedUser);
     }
 
     @DeleteMapping("/delete")
     public ResponseEntity<?> deleteUser(@RequestParam("userId") Long userID) {
         try {
-            boolean isFound = usersRepository.existsById(userID);
+            boolean isFound = userRepository.existsById(userID);
             if (isFound) {
-                usersRepository.deleteById(userID);
+                userRepository.deleteById(userID);
                 return ResponseEntity.ok().body("Successfully deleted");
             }
             return ResponseEntity.badRequest().body("User not found by user Id");

@@ -1,7 +1,7 @@
 package com.depot.ims.controllers;
 
 import com.depot.ims.models.Shipment;
-import com.depot.ims.repositories.ShipmentsRepository;
+import com.depot.ims.repositories.ShipmentRepository;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -11,57 +11,57 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/shipments")
-public class ShipmentsController {
+public class ShipmentController {
 
-    private final ShipmentsRepository shipmentsRepository;
+    private final ShipmentRepository shipmentRepository;
 
-    public ShipmentsController(ShipmentsRepository shipmentsRepository) {
-        this.shipmentsRepository = shipmentsRepository;
+    public ShipmentController(ShipmentRepository shipmentRepository) {
+        this.shipmentRepository = shipmentRepository;
     }
 
     @GetMapping
     public List<Shipment> getAllShipments() {
-        return shipmentsRepository.findAll();
+        return shipmentRepository.findAll();
     }
 
     @GetMapping("/shipmentId={shipmentId}")
-    public List<Shipment> getShipmentById(@PathVariable Integer shipmentId) {
-        return shipmentsRepository.findByShipmentId(shipmentId);
+    public Shipment getShipmentById(@PathVariable Long shipmentId) {
+        return shipmentRepository.findByShipmentId(shipmentId);
     }
 
     @GetMapping("/source={source}")
-    public List<Shipment> getShipmentsBySource(@PathVariable Integer source) {
-        return shipmentsRepository.findByShipmentSource(source);
+    public List<Shipment> getShipmentsBySource(@PathVariable Long source) {
+        return shipmentRepository.findByShipmentSource(source);
     }
 
     @GetMapping("/destination={destination}")
-    public List<Shipment> getShipmentsByDestination(@PathVariable Integer destination) {
-        return shipmentsRepository.findByShipmentDestination(destination);
+    public List<Shipment> getShipmentsByDestination(@PathVariable Long destination) {
+        return shipmentRepository.findByShipmentDestination(destination);
     }
 
     @GetMapping("/currentLocation={currentLocation}")
     public List<Shipment> getShipmentsByCurrentLocation(@PathVariable String currentLocation) {
-        return shipmentsRepository.findByCurrentLocation(currentLocation);
+        return shipmentRepository.findByCurrentLocation(currentLocation);
     }
 
     @GetMapping("/departureTime={departureTime}")
     public List<Shipment> getShipmentsByDepartureTime(@PathVariable String departureTime) {
-        return shipmentsRepository.findByDepartureTime(departureTime);
+        return shipmentRepository.findByDepartureTime(departureTime);
     }
 
     @GetMapping("/estimatedArrivalTime={estimatedArrivalTime}")
     public List<Shipment> getShipmentsByEstimatedArrivalTime(@PathVariable String estimatedArrivalTime) {
-        return shipmentsRepository.findByEstimatedArrivalTime(estimatedArrivalTime);
+        return shipmentRepository.findByEstimatedArrivalTime(estimatedArrivalTime);
     }
 
     @GetMapping("/actualArrivalTime={actualArrivalTime}")
     public List<Shipment> getShipmentsByActualArrivalTime(@PathVariable String actualArrivalTime) {
-        return shipmentsRepository.findByActualArrivalTime(actualArrivalTime);
+        return shipmentRepository.findByActualArrivalTime(actualArrivalTime);
     }
 
     @GetMapping("/status={shipmentStatus}")
     public List<Shipment> getShipmentsByStatus(@PathVariable String shipmentStatus) {
-        return shipmentsRepository.findByShipmentStatus(shipmentStatus);
+        return shipmentRepository.findByShipmentStatus(shipmentStatus);
     }
 
 }

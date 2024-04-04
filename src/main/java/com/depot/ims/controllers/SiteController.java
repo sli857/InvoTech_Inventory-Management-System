@@ -1,7 +1,7 @@
 package com.depot.ims.controllers;
 
 import com.depot.ims.models.Site;
-import com.depot.ims.repositories.SitesRepository;
+import com.depot.ims.repositories.SiteRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.MediaType;
@@ -16,18 +16,18 @@ import java.util.stream.Stream;
 @RequestMapping(value = "/sites", produces = MediaType.APPLICATION_JSON_VALUE)
 @CrossOrigin(origins = "http://localhost:5173/")
 
-public class SitesController {
+public class SiteController {
 
-    private final SitesRepository sitesRepository;
+    private final SiteRepository siteRepository;
 
-    public SitesController(SitesRepository sitesRepository) {
-        this.sitesRepository = sitesRepository;
+    public SiteController(SiteRepository siteRepository) {
+        this.siteRepository = siteRepository;
     }
 
     @GetMapping
 
     public ResponseEntity<?> getSites() {
-        return ResponseEntity.ok(this.sitesRepository.findAll());
+        return ResponseEntity.ok(this.siteRepository.findAll());
     }
 
     @GetMapping("/site")
@@ -35,9 +35,9 @@ public class SitesController {
             @RequestParam(value = "siteId", required = false) Long siteID,
             @RequestParam(value = "siteName", required = false) String siteName) {
         if (siteID != null) {
-            return ResponseEntity.ok(sitesRepository.findBySiteId(siteID));
+            return ResponseEntity.ok(siteRepository.findBySiteId(siteID));
         } else if (siteName != null) {
-            return ResponseEntity.ok(sitesRepository.findBySiteName(siteName));
+            return ResponseEntity.ok(siteRepository.findBySiteName(siteName));
         } else {
             return ResponseEntity.badRequest().body("Either siteId or siteName must be provided");
         }
@@ -46,7 +46,7 @@ public class SitesController {
     @GetMapping("/status")
     public ResponseEntity<?> getStatusBySiteId(
             @RequestParam(value = "siteId") Long siteID) {
-        Site site = sitesRepository.findBySiteId(siteID);
+        Site site = siteRepository.findBySiteId(siteID);
         if (site == null) {
             return ResponseEntity.badRequest().body("Site not found by siteId");
         } else {
@@ -56,7 +56,7 @@ public class SitesController {
 
     @PostMapping(value = "/add", consumes = MediaType.APPLICATION_JSON_VALUE)
     public Site addSite(@RequestBody Site site) {
-        return sitesRepository.save(site);
+        return siteRepository.save(site);
     }
 
     @Modifying
@@ -76,14 +76,14 @@ public class SitesController {
             @DateTimeFormat(style = "YYYY-MM-DD")
             String newCeaseDate) {
 
-        if (!sitesRepository.existsById(siteID)) {
+        if (!siteRepository.existsById(siteID)) {
             return ResponseEntity.badRequest().body("Site not found by siteId");
         }
         if (Stream.of(newStatus, newName, newSiteLocation, newInternalSite, newCeaseDate).allMatch(Objects::isNull)) {
             return ResponseEntity.badRequest().body("No value for this update is specified.");
         }
 
-        Site site = sitesRepository.findBySiteId(siteID);
+        Site site = siteRepository.findBySiteId(siteID);
         if (newStatus != null) site.setSiteStatus(newStatus);
         if (newName != null) site.setSiteName(newName);
         if (newSiteLocation != null) site.setSiteLocation(newSiteLocation);
@@ -97,16 +97,16 @@ public class SitesController {
             }
         }
 
-        Site updatedSite = sitesRepository.save(site);
+        Site updatedSite = siteRepository.save(site);
         return ResponseEntity.ok(updatedSite);
     }
 
     @DeleteMapping("/delete")
     public ResponseEntity<?> deleteSite(@RequestParam("siteId") Long siteID) {
         try {
-            boolean isFound = sitesRepository.existsById(siteID);
+            boolean isFound = siteRepository.existsById(siteID);
             if (isFound) {
-                sitesRepository.deleteById(siteID);
+                siteRepository.deleteById(siteID);
                 return ResponseEntity.ok().body("Successfully deleted");
             }
             return ResponseEntity.badRequest().body("Site not found by siteId");
