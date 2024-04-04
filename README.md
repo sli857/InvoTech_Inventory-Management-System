@@ -105,5 +105,13 @@ This allows controlling the behavior of the repositories when their methods are 
 
 ### Test Methods
 
-- `getShipmentById_ValidId_ReturnsShipment`: Tests `addShip()` with valid input objects 
+- `addShipQuantityUpdateTest`: Tests `addShip()` with valid input objects 
   and ensures the quantity is correctly updated.
+- `addShipInvalidShipmentTest`: Tests `addShip()` with invalid input Shipment objects 
+  and ensures the correct exception is thrown.
+- `addShipInvalidItemTest`: Tests `addShip()` with invalid input item objects 
+  and ensures the correct exception is thrown.
+- `addShipInvalidQuantityTest`: Tests `addShip()` with insufficient quantity 
+  and ensures the correct exception is thrown.
+- `addShipNullTest`: Tests `addShip()` with null input Ship objects 
+  and ensures the correct exception is thrown.

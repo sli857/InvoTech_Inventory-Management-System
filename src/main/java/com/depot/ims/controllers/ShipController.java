@@ -4,6 +4,7 @@ import com.depot.ims.models.Ship;
 import com.depot.ims.repositories.ShipRepository;
 import com.depot.ims.services.ShipService;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -41,7 +42,7 @@ public class ShipController {
     }
 
     @PostMapping(value = "/add", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public Ship addShip(@RequestBody Ship ship) {
+    public ResponseEntity<?> addShip(@RequestBody Ship ship) {
         return shipService.addShip(ship);
     }
 
