@@ -25,6 +25,7 @@ public class ShipService {
         this.itemRepository = itemRepository;
         this.availabilityRepository = availabilityRepository;
     }
+
     public Ship addShip(Ship ship) {
         // Validate
         // Check if the shipment, source, destination, and item exist in the database
@@ -69,5 +70,5 @@ public class ShipService {
         // Save the changes
         return shipRepository.save(ship);
     }
-    // TODO turn primitives to objects in repositories, implement shipment service to create ship (shouldn't be able to add ship), remove ship POST, change to return ResponseEntity
+
 }
