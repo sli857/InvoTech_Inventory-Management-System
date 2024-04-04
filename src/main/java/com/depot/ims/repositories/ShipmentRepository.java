@@ -6,18 +6,16 @@ import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 
-public interface ShipmentsRepository extends JpaRepository<Shipment, Long> {
-
-    List<Shipment> findAll();
+public interface ShipmentRepository extends JpaRepository<Shipment, Long> {
 
     @Query("select s from Shipment s where s.shipmentId = ?1")
-    List<Shipment> findByShipmentId(Integer shipmentId);
+    Shipment findByShipmentId(Long shipmentId);
 
     @Query("select s from Shipment s where s.source = ?1")
-    List<Shipment> findByShipmentSource(Integer source);
+    List<Shipment> findByShipmentSource(Long source);
 
     @Query("select s from Shipment s where s.destination = ?1")
-    List<Shipment> findByShipmentDestination(Integer destination);
+    List<Shipment> findByShipmentDestination(Long destination);
 
     @Query("select s from Shipment s where s.currentLocation = ?1")
     List<Shipment> findByCurrentLocation(String currentLocation);

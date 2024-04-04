@@ -3,11 +3,9 @@ package com.depot.ims.controllers;
 import com.depot.ims.models.Availability;
 import com.depot.ims.models.Item;
 import com.depot.ims.models.Site;
-import com.depot.ims.repositories.AvailabilitiesRepository;
-import com.depot.ims.repositories.ItemsRepository;
-import com.depot.ims.repositories.SitesRepository;
-import com.fasterxml.jackson.databind.JsonNode;
-import org.springframework.data.repository.query.Param;
+import com.depot.ims.repositories.AvailabilityRepository;
+import com.depot.ims.repositories.ItemRepository;
+import com.depot.ims.repositories.SiteRepository;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.MultiValueMap;
@@ -20,26 +18,26 @@ import java.util.Map;
 @RestController
 @RequestMapping(value = "/availabilities", produces = MediaType.APPLICATION_JSON_VALUE)
 @CrossOrigin(origins = "http://localhost:5173/")
-public class AvailabilitiesController {
-    private final AvailabilitiesRepository availabilitiesRepository;
-    private final SitesRepository sitesRepository;
-    private final ItemsRepository itemsRepository;
+public class AvailabilityController {
+    private final AvailabilityRepository availabilityRepository;
+    private final SiteRepository siteRepository;
+    private final ItemRepository itemRepository;
 
-    public AvailabilitiesController(AvailabilitiesRepository availabilitiesRepository, SitesRepository sitesRepository, ItemsRepository itemsRepository) {
-        this.availabilitiesRepository = availabilitiesRepository;
-        this.sitesRepository = sitesRepository;
-        this.itemsRepository = itemsRepository;
+    public AvailabilityController(AvailabilityRepository availabilityRepository, SiteRepository siteRepository, ItemRepository itemRepository) {
+        this.availabilityRepository = availabilityRepository;
+        this.siteRepository = siteRepository;
+        this.itemRepository = itemRepository;
     }
 
     @GetMapping
     public ResponseEntity<?> getAllAvailabilities() {
-        return ResponseEntity.ok(this.availabilitiesRepository.findAll());
+        return ResponseEntity.ok(this.availabilityRepository.findAll());
     }
 
     @PostMapping(value = "/add", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> addAvailabilities(@RequestBody Availability availability) {
         try {
-            this.availabilitiesRepository.save(availability);
+            this.availabilityRepository.save(availability);
             return ResponseEntity.ok(availability);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
@@ -53,16 +51,13 @@ public class AvailabilitiesController {
         //make sure the given ID is valid
         if (siteID != null) {
             //make sure the given ID exist in our inventory
-            if(!sitesRepository.existsById(siteID)){
+            if(!siteRepository.existsById(siteID)){
                 return ResponseEntity.badRequest().body("Site not found by siteId");
             }
-            //get the site object
-            Site site = sitesRepository.findBySiteId(siteID);
             try{
-                List<Availability> availabilityList = this.availabilitiesRepository.findBySiteId(site);
-                return ResponseEntity.ok(availabilityList);
+                return ResponseEntity.ok(availabilityRepository.findBySiteId(siteID));
             } catch (Exception e) {
-                return ResponseEntity.badRequest().body("exceptions");
+                return ResponseEntity.badRequest().body(e);
             }
         }
 
@@ -73,26 +68,26 @@ public class AvailabilitiesController {
     //provides me with a list of items id
     @GetMapping(value = "/searchByItems")
     public ResponseEntity<?> getSitesByItems(@RequestParam MultiValueMap<String, String> items) {
-        System.out.println(items);
+//        System.out.println(items);
 
         List<Item> itemList = new ArrayList<>();
         for (Map.Entry<String, List<String>> entry : items.entrySet()) {
             List<String> values = entry.getValue();
             for (String value : values) {
                 Long id = Long.parseLong(value);
-                Item item = this.itemsRepository.findByItemId(id);
+                Item item = this.itemRepository.findByItemId(id);
                 itemList.add(item);
             }
         }
 
         //case one, there is only item
         if (itemList.size() == 1) {
-            List<Site> sites = this.availabilitiesRepository.findSitesByItems(itemList);
+            List<Site> sites = this.availabilityRepository.findSitesByItems(itemList);
             return ResponseEntity.ok(sites);
         } else if (itemList.size() == 2) {
             List<Site> results = new ArrayList<>();
-            List<Site> sitesWithItem1 = this.availabilitiesRepository.findSitesByOneItem(itemList.get(0));
-            List<Site> sitesWithItem2 = this.availabilitiesRepository.findSitesByOneItem(itemList.get(1));
+            List<Site> sitesWithItem1 = this.availabilityRepository.findSitesByOneItem(itemList.get(0));
+            List<Site> sitesWithItem2 = this.availabilityRepository.findSitesByOneItem(itemList.get(1));
             for (Site site: sitesWithItem1) {
                 if(sitesWithItem2.contains(site)) {
                     results.add(site);
@@ -101,11 +96,11 @@ public class AvailabilitiesController {
             return ResponseEntity.ok(results);
         } else if (itemList.size() > 2) {
 
-            List<Site> results = this.availabilitiesRepository.findSitesByOneItem(itemList.get(0));
+            List<Site> results = this.availabilityRepository.findSitesByOneItem(itemList.get(0));
 
             // Iterate through the remaining lists and retain only the common elements
             for (int i = 1; i < itemList.size(); i++) {
-                results.retainAll(this.availabilitiesRepository.findSitesByOneItem(itemList.get(i)));
+                results.retainAll(this.availabilityRepository.findSitesByOneItem(itemList.get(i)));
             }
 
             return ResponseEntity.ok(results);
@@ -119,11 +114,11 @@ public class AvailabilitiesController {
     @GetMapping("/item")
     public  ResponseEntity<?>  getAvailabilitiesByItemId(@RequestParam(value = "itemId") Long itemId) {
         if (itemId != null) {
-            if(!itemsRepository.existsById(itemId)){
+            if(!itemRepository.existsById(itemId)){
                 return ResponseEntity.badRequest().body("item not found by itemId");
             }
-            Item item = this.itemsRepository.findByItemId(itemId);
-            List<Site> sites = this.availabilitiesRepository.findSitesByOneItem(item);
+            Item item = this.itemRepository.findByItemId(itemId);
+            List<Site> sites = this.availabilityRepository.findSitesByOneItem(item);
             return  ResponseEntity.ok(sites);
         } else {
             return ResponseEntity.badRequest().body("expecting JSON array");
@@ -134,15 +129,14 @@ public class AvailabilitiesController {
     public ResponseEntity<?> getAvailabilityBySiteIdAndItemId(
             @RequestParam(value = "siteId") Long siteId,
             @RequestParam(value = "itemId") Long itemId) {
-        if(!itemsRepository.existsById(itemId)){
+        if(!itemRepository.existsById(itemId)){
             return ResponseEntity.badRequest().body("item not found by itemId");
         }
-        if(!sitesRepository.existsById(siteId)){
+        if(!siteRepository.existsById(siteId)){
             return ResponseEntity.badRequest().body("Site not found by siteId");
         }
-        Item item = this.itemsRepository.findByItemId(itemId);
-        Site site = this.sitesRepository.findBySiteId(siteId);
-        return  ResponseEntity.ok(availabilitiesRepository.findBySiteIdAndItemId(site, item));
+
+        return  ResponseEntity.ok(availabilityRepository.findBySiteIdAndItemId(siteId, itemId));
     }
 
 

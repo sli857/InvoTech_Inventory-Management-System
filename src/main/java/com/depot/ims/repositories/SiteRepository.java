@@ -4,16 +4,12 @@ import com.depot.ims.models.Site;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
-import java.util.List;
-
-public interface SitesRepository extends JpaRepository<Site, Long> {
+public interface SiteRepository extends JpaRepository<Site, Long> {
 
     @Query("select s from Site s where s.siteName = ?1")
     Site findBySiteName(String siteName);
 
-    List<Site> findAll();
-
     @Query("SELECT s FROM Site s WHERE s.siteId=?1")
-    Site findBySiteId(long siteId);
+    Site findBySiteId(Long siteId);
 
 }

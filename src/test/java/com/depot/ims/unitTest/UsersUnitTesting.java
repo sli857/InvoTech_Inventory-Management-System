@@ -5,9 +5,9 @@ import static org.mockito.Mockito.*;
 import static org.hamcrest.Matchers.is;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import com.depot.ims.controllers.UsersController;
+import com.depot.ims.controllers.UserController;
 import com.depot.ims.models.User;
-import com.depot.ims.repositories.UsersRepository;
+import com.depot.ims.repositories.UserRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -25,14 +25,14 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
 
-@WebMvcTest(UsersController.class)
+@WebMvcTest(UserController.class)
 public class UsersUnitTesting {
 
     @Autowired
     private MockMvc mockMvc;
 
     @MockBean
-    private UsersRepository usersRepository;
+    private UserRepository userRepository;
 
     // test for the getUsers endpoint
     @Test
@@ -50,7 +50,7 @@ public class UsersUnitTesting {
         List<User> users = Arrays.asList(
                 new User(1L, "user1", "password1", "role1"),
                 new User(2L, "user2", "password2", "role2"));
-        when(usersRepository.findAll()).thenReturn(users);
+        when(userRepository.findAll()).thenReturn(users);
 
         MvcResult result = mockMvc.perform(get("/users")
                         .contentType(MediaType.APPLICATION_JSON))
@@ -66,7 +66,7 @@ public class UsersUnitTesting {
     public void testGetUser() throws Exception {
         // Setup mock user
         User user = new User(1L, "user1", "password1", "role1");
-        when(usersRepository.findByUserId(1L)).thenReturn(user);
+        when(userRepository.findByUserId(1L)).thenReturn(user);
 
         // Perform GET request to /user endpoint with userId as request parameter
         mockMvc.perform(get("/users/user")
@@ -86,7 +86,7 @@ public class UsersUnitTesting {
         User user = new User(null, "user1", "password1", "role1");
         User savedUser = new User(1L, "user1", "password1", "role1");
 
-        when(usersRepository.save(any(User.class))).thenReturn(savedUser);
+        when(userRepository.save(any(User.class))).thenReturn(savedUser);
 
         ObjectMapper objectMapper = new ObjectMapper();
         String userJson = objectMapper.writeValueAsString(user);
@@ -109,7 +109,7 @@ public class UsersUnitTesting {
         user.setUsername("user");
         user.setPassword("password"); // Assume the password is not hashed for this simple test
 
-        when(usersRepository.findByUsername("user")).thenReturn(user);
+        when(userRepository.findByUsername("user")).thenReturn(user);
 
         mockMvc.perform(get("/users/confirm")
                         .param("username", "user")
@@ -125,7 +125,7 @@ public class UsersUnitTesting {
         user.setUsername("user");
         user.setPassword("password");
 
-        when(usersRepository.findByUsername("user")).thenReturn(user);
+        when(userRepository.findByUsername("user")).thenReturn(user);
 
         mockMvc.perform(get("/users/confirm")
                         .param("username", "user")
@@ -137,7 +137,7 @@ public class UsersUnitTesting {
     // when user does not exist
     @Test
     public void whenUserDoesNotExist_thenReturnBadRequest() throws Exception {
-        when(usersRepository.findByUsername("nonexistent")).thenReturn(null);
+        when(userRepository.findByUsername("nonexistent")).thenReturn(null);
 
         mockMvc.perform(get("/users/confirm")
                         .param("username", "nonexistent")
@@ -154,9 +154,9 @@ public class UsersUnitTesting {
         User existingUser = new User(userId, "oldUsername", "oldPassword", "role1");
         User updatedUser = new User(userId, "newUsername", "newPassword", "role1");
 
-        when(usersRepository.existsById(userId)).thenReturn(true);
-        when(usersRepository.findByUserId(userId)).thenReturn(existingUser);
-        when(usersRepository.save(any(User.class))).thenReturn(updatedUser);
+        when(userRepository.existsById(userId)).thenReturn(true);
+        when(userRepository.findByUserId(userId)).thenReturn(existingUser);
+        when(userRepository.save(any(User.class))).thenReturn(updatedUser);
 
         mockMvc.perform(post("/users/update")
                         .param("userId", userId.toString())
@@ -171,7 +171,7 @@ public class UsersUnitTesting {
     @Test
     public void testDeleteUser() throws Exception {
         Long userId = 1L;
-        when(usersRepository.existsById(userId)).thenReturn(true);
+        when(userRepository.existsById(userId)).thenReturn(true);
 
         mockMvc.perform(delete("/users/delete")
                         .param("userId", userId.toString()))
@@ -179,14 +179,14 @@ public class UsersUnitTesting {
                 .andExpect(content().string("Successfully deleted"));
 
         // Verify deleteUser was called
-        verify(usersRepository).deleteById(userId);
+        verify(userRepository).deleteById(userId);
     }
 
     // user not found deletion case
     @Test
     public void testDeleteNotFoundUser() throws Exception {
         Long userId = 1L;
-        when(usersRepository.existsById(userId)).thenReturn(false);
+        when(userRepository.existsById(userId)).thenReturn(false);
 
         mockMvc.perform(delete("/users/delete")
                         .param("userId", userId.toString()))
@@ -194,7 +194,7 @@ public class UsersUnitTesting {
                 .andExpect(content().string("User not found by user Id"));
 
         // Ensure deleteUser was never called
-        verify(usersRepository, never()).deleteById(any());
+        verify(userRepository, never()).deleteById(any());
     }
 
 
