@@ -30,13 +30,13 @@ function IMSLayout() {
           </Navbar.Brand>
           <Nav className="me-auto">
             <Nav.Link as={Link} to="/">
-              Home
+              Sites
             </Nav.Link>
             <Nav.Link as={Link} to="shipments">
               Shipments
             </Nav.Link>
-            <Nav.Link as={Link} to="warehouses">
-              Warehouse
+            <Nav.Link as={Link} to="logout">
+              Logout
             </Nav.Link>
           </Nav>
         </Container>

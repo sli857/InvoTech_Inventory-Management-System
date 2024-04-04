@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 
-public interface AuditsRepository extends JpaRepository<Audit, Long> {
+public interface AuditRepository extends JpaRepository<Audit, Long> {
 
     @Query("SELECT a FROM Audit a WHERE a.auditId=?1")
     Audit findByAuditId(Long auditId);

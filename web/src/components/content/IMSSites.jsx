@@ -2,13 +2,15 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button, Card, Col, Form, Row, Table, Dropdown, DropdownButton, Container, OverlayTrigger, Tooltip, } from 'react-bootstrap';
 import removeIcon from '../../assets/remove_icon.png';
+import { Typeahead } from 'react-bootstrap-typeahead';
+import 'react-bootstrap-typeahead/css/Typeahead.css';
 
 /**
- * The IMSHome component displays a list of sites, allows for filtering, adding, and removing sites.
+ * The IMSSites component displays a list of sites, allows for filtering, adding, and removing sites.
  * It fetches site data from a backend service on load and provides an interface for site management.
  * Users can add a new site via a form, filter sites based on location and name, and remove sites.
  */
-function IMSHome() {
+function IMSSites() {
   // State for managing site data
   const [sites, setSites] = useState([]);
   const [siteName, setSiteName] = useState('');
@@ -16,11 +18,15 @@ function IMSHome() {
   const [siteStatus, setStatus] = useState('');
   const [ceaseDate, setCeaseDate] = useState('');
   const [internalSite, setInternalSite] = useState(false);
-  const [siteCount, setSiteCount] = useState(0);
+  const [availableItems, setAvailableItems] = useState([]);
   
   // State for filter queries
   const [selectedLocation, setSelectedLocation] = useState('Select Location');
   const [selectedName, setSelectedName] = useState('Select Name');
+  const [selectedStatus, setSelectedStatus] = useState('Select Status');
+  const [selectedInternalSite, setSelectedInternalSite] = useState('Select Internal Site');
+  // State for item querry 
+  const [selectedItems, setSelectedItems] = useState([]);
   
   // State for form validation
   const [siteNameValid, setSiteNameValid] = useState(true);
@@ -35,11 +41,12 @@ function IMSHome() {
    */
   useEffect(() => {
     fetchSites();
+    fetchItems();
   }, []);
 
   /**
-     * Fetches sites from the backend and updates the component state.
-     */
+   * Fetches sites from the backend and updates the component state.
+   */
   const fetchSites = async () => {
     try {
       const response = await fetch("http://localhost:8080/sites");
@@ -48,7 +55,42 @@ function IMSHome() {
       }
       const data = await response.json();
       setSites(data);
-      setSiteCount(data.length);
+    } catch (error) {
+      console.error("There was a problem with fetching sites:", error);
+    }
+  };
+
+  /**
+   * Fetches all items from the backend and updates the component state.
+   */
+  const fetchItems = async () => {
+    try {
+      const response = await fetch("http://localhost:8080/items");
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+      const data = await response.json();
+      setAvailableItems(data);
+    } catch (error) {
+      console.error("There was a problem with fetching sites:", error);
+    }
+  };
+
+  /**
+   * Fetches all the sites that contain all the items selected in the Select Items querry 
+   */
+  const fetchSitesWithItems = async (currentSelection) => {
+    let counter = 0;
+    // for each item selected: generate an url extension by combining them with an & for api request
+    const queryParams = currentSelection.map(item => `item${counter++}=${item.itemId}`).join(`&`); 
+    const url = `http://localhost:8080/availabilities/searchByItems?${queryParams}`;
+    try {
+      const response = await fetch(url);
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+      const data = await response.json();
+      setSites(data);
     } catch (error) {
       console.error("There was a problem with fetching sites:", error);
     }
@@ -74,6 +116,7 @@ function IMSHome() {
       // Prevent form submission if validation fails
       return;
     }
+    // Add the site to the database 
     const response = await fetch("http://localhost:8080/sites/add", {
       method: "POST",
       headers: {
@@ -123,24 +166,51 @@ function IMSHome() {
     }
   };
 
-  // Filter sites based on selectedName and selectedLocation
+  // Filter sites based on name, locaation, status and whether they are internal site
   const filteredSites = sites.filter(site => {
     return (selectedName === 'Select Name' || site.siteName === selectedName) &&
-      (selectedLocation === 'Select Location' || site.siteLocation === selectedLocation);
+      (selectedLocation === 'Select Location' || site.siteLocation === selectedLocation) &&
+      (selectedInternalSite === 'Select Internal Site' || (selectedInternalSite === 'Yes' && site.internalSite) || (selectedInternalSite === 'No' && !site.internalSite)) &&
+      (selectedStatus === 'Select Status' || site.siteStatus === selectedStatus);
   });
+
   // Helper function to reset filter fields 
   const resetFilters = () => {
     setSelectedLocation('Select Location');
     setSelectedName('Select Name');
+    setSelectedInternalSite('Select Internal Site');
+    setSelectedStatus('Select Status');
   };
 
+  /**
+   * JSX Component that represents the Home Page of the Application
+   */
   return (
     <Container fluid="md" className="mt-3">
-      <h2 className="text-center mb-4">{siteCount} Sites Active</h2>
+      {/* Filter sites based on item */}
+      <Row className="mb-3">
+        <Col>
+          <Typeahead
+            id="items-typeahead"
+            labelKey="itemName"
+            multiple
+            onChange={(selected) => {
+              // Update the state component with each new selection
+              setSelectedItems(selected); 
+              // Fetch sites with the new set of selected Items
+              fetchSitesWithItems(selected);
+            }}
+            options={availableItems}
+            placeholder="Select items..."
+            selected={selectedItems}
+          />
+        </Col>
+      </Row>
+      {/* Table of sites */}
       <Row className="mb-4">
         <Col>
           <Table striped bordered hover responsive>
-            <caption>{filteredSites.length} Sites Active</caption>
+            <caption style={{fontSize: '20px'}}>{filteredSites.length} Sites In Table</caption>
             <thead className="table-dark">
               <tr>
                 <th>ID</th>
@@ -149,7 +219,7 @@ function IMSHome() {
                 <th>Status</th>
                 <th>Cease Date</th>
                 <th>Internal Site</th>
-                <th>Action</th>
+                <th>Remove Site</th>
               </tr>
             </thead>
             <tbody>
@@ -240,49 +310,53 @@ function IMSHome() {
 
         {/* Filters */}
         <Col md={6}>
-          <Row className="mb-3">
-            <Col>
-              <Card>
-                <Card.Body>
-                  <Card.Title>Filter by Location</Card.Title>
-                  <DropdownButton id="dropdown-location-button" title={selectedLocation}>
-                    {sites.map((site) => (
-                      <Dropdown.Item key={site.siteId} onClick={() => setSelectedLocation(site.siteLocation)}>
-                        {site.siteLocation}
-                      </Dropdown.Item>
-                    ))}
-                    <Dropdown.Item onClick={() => setSelectedLocation('Select Location')}>None</Dropdown.Item>
-                  </DropdownButton>
-                </Card.Body>
-              </Card>
-            </Col>
-          </Row>
-          <Row>
-            <Col>
-              <Card>
-                <Card.Body>
-                  <Card.Title>Filter by Name</Card.Title>
-                  <DropdownButton id="dropdown-name-button" title={selectedName}>
-                    {sites.map((site) => (
-                      <Dropdown.Item key={site.siteId} onClick={() => setSelectedName(site.siteName)}>
-                        {site.siteName}
-                      </Dropdown.Item>
-                    ))}
-                    <Dropdown.Item onClick={() => setSelectedName('Select Name')}>None</Dropdown.Item>
-                  </DropdownButton>
-                </Card.Body>
-              </Card>
-            </Col>
-          </Row>
-          <Row>
-            <Col>
-              <Button variant="secondary" onClick={resetFilters}>Reset Filters</Button>
-            </Col>
-          </Row>
+          <Card>
+            <Card.Body>
+              <Card.Title>Filters</Card.Title>
+              <div className="d-flex flex-column gap-3">
+                {/* Filter by Name */}
+                <DropdownButton id="dropdown-name-button" title={selectedName || 'Select Name'}>
+                  {sites.map((site) => (
+                    <Dropdown.Item key={`name-${site.siteId}`} onClick={() => setSelectedName(site.siteName)}>
+                      {site.siteName}
+                    </Dropdown.Item>
+                  ))}
+                  <Dropdown.Item onClick={() => setSelectedName('Select Name')}>None</Dropdown.Item>
+                </DropdownButton>
+
+                {/* Filter by Location */}
+                <DropdownButton id="dropdown-location-button" title={selectedLocation || 'Select Location'}>
+                  {sites.map((site) => (
+                    <Dropdown.Item key={`location-${site.siteId}`} onClick={() => setSelectedLocation(site.siteLocation)}>
+                      {site.siteLocation}
+                    </Dropdown.Item>
+                  ))}
+                  <Dropdown.Item onClick={() => setSelectedLocation('Select Location')}>None</Dropdown.Item>
+                </DropdownButton>
+
+                {/* Filter by Internal Site */}
+                <DropdownButton id="dropdown-internal-button" title={selectedInternalSite || 'Internal Site'}>
+                  <Dropdown.Item onClick={() => setSelectedInternalSite('Yes')}>Yes</Dropdown.Item>
+                  <Dropdown.Item onClick={() => setSelectedInternalSite('No')}>No</Dropdown.Item>
+                  <Dropdown.Item onClick={() => setSelectedInternalSite('Select Internal Site')}>None</Dropdown.Item>
+                </DropdownButton>
+
+                {/* Filter by Site Status */}
+                <DropdownButton id="dropdown-status-button" title={selectedStatus || 'Site Status'}>
+                  <Dropdown.Item onClick={() => setSelectedStatus('Open')}>Open</Dropdown.Item>
+                  <Dropdown.Item onClick={() => setSelectedStatus('Closed')}>Closed</Dropdown.Item>
+                  <Dropdown.Item onClick={() => setSelectedStatus('Select Status')}>None</Dropdown.Item>
+                </DropdownButton>
+
+                {/* Reset Filters Button */}
+                <Button variant="secondary" onClick={resetFilters}>Reset Filters</Button>
+              </div>
+            </Card.Body>
+          </Card>
         </Col>
       </Row>
     </Container>
   );
 }
 
-export default IMSHome;
+export default IMSSites;

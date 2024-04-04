@@ -1,0 +1,159 @@
+#####################################
+############### Setup ###############
+#####################################
+stages:
+  - lint
+  - test
+  - report
+  - build
+  - release
+
+#####################################
+############## Hidden ###############
+#####################################
+.config:
+  retry:
+    max: 2
+    when: runner_system_failure
+
+.build-image:
+  image: docker:20.10.16
+  stage: release
+  variables:
+    IMAGE_TAG: "" 
+    DOCKERFILE_PATH: ""
+    DOCKER_BUILD_OPTS: ""
+  services:
+    - docker:20.10.16-dind
+  script:
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+    - docker build . -t $CI_REGISTRY_IMAGE/$IMAGE_TAG -f $DOCKERFILE_PATH $DOCKER_BUILD_OPTS
+    - docker push $CI_REGISTRY_IMAGE/$IMAGE_TAG
+  tags:
+    - dind
+
+#####################################
+############## Linting ##############
+#####################################
+checkstyle:
+  stage: lint
+  image: maven:3-eclipse-temurin-17-alpine
+  script:
+    - mvn checkstyle:check
+  rules:
+    - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
+  allow_failure: true
+  retry: !reference [.config, retry]
+    
+  
+#####################################
+########## Testing Backend ##########
+#####################################
+test-jdk17:
+  stage: test
+  image: maven:3-eclipse-temurin-17-alpine
+  script: 
+    - mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent test jacoco:report
+  artifacts:
+    paths:
+      - target/site/jacoco/jacoco.xml
+  rules:
+    - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
+  retry: !reference [.config, retry]
+
+coverage-jdk17:
+  stage: report
+  image: registry.gitlab.com/haynes/jacoco2cobertura:1.0.9 
+  script: 
+    - python /opt/cover2cover.py target/site/jacoco/jacoco.xml $CI_PROJECT_DIR/src/main/java/ > target/site/cobertura.xml
+  needs: ["test-jdk17"]
+  artifacts:
+    reports:
+      coverage_report:
+        coverage_format: cobertura
+        path: target/site/cobertura.xml
+  rules:
+    - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
+  retry: !reference [.config, retry]
+
+#####################################
+######### Testing Frontend ##########
+#####################################
+test-frontend:
+  stage: test
+  image: alpine:latest
+  script:
+    - echo hello
+  rules:
+    - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
+  retry: !reference [.config, retry]
+  
+#####################################
+###### Build & Release Backend ######
+#####################################
+build-jar:
+  stage: build
+  image: maven:3-eclipse-temurin-17-alpine
+  script:
+    - mvn clean package
+  artifacts:
+    paths:
+     - target/*.jar
+    expire_in: 1 hour
+  rules:
+    - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
+  retry: !reference [.config, retry]
+
+mr-build-backend:
+  extends: .build-image
+  variables:
+    IMAGE_TAG: "backend:dev-$CI_MERGE_REQUEST_IID"
+    DOCKERFILE_PATH: "./dockerfiles/backend/Dockerfile"
+    DOCKER_BUILD_OPTS: "--build-arg JAR_FILE=./target/*.jar"
+  dependencies:
+    - build-jar
+  script:
+    - !reference [.build-image, script]
+  rules:
+    - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
+  retry: !reference [.config, retry]
+
+release-build-backend:
+  extends: .build-image
+  variables:
+    IMAGE_TAG: "backend:latest"
+    DOCKERFILE_PATH: "./dockerfiles/backend/Dockerfile"
+    DOCKER_OPTS: "--build-arg JAR_FILE=./target/*.jar"
+  dependencies:
+    - build-jar
+  script:
+    - mnv clean package
+    - !reference [.build-image, script]
+  only:
+    - main 
+  retry: !reference [.config, retry]
+
+#####################################
+###### Build & Release Frontend #####
+#####################################
+mr-build-frontend:
+  extends: .build-image
+  variables:
+    IMAGE_TAG: "frontend:dev-$CI_MERGE_REQUEST_IID"
+    DOCKERFILE_PATH: "./dockerfiles/frontend/Dockerfile"
+  script:
+    - !reference [.build-image, script]
+  rules:
+    - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
+  retry: !reference [.config, retry]
+
+release-build-backend:
+  extends: .build-image
+  variables:
+    IMAGE_TAG: "frontend:latest"
+    DOCKERFILE_PATH: "./dockerfiles/frontend/Dockerfile"
+  script:
+    - !reference [.build-image, script]
+  only:
+    - main 
+  retry: !reference [.config, retry]

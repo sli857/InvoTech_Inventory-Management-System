@@ -7,9 +7,11 @@ function IMSSite() {
   const { siteId } = useParams();
 
   useEffect(() => {
-    fetch(`http://localhost:8080/availabilities?siteId=${siteId}`)
+    fetch(`http://localhost:8080/availabilities/site?siteId=${siteId}`)
       .then(response => response.json())
-      .then(data => { setItems(data); console.log(data); })
+      .then(data => {
+        setItems(data);
+      })
       .catch(error => console.error("Failed to fetch items", error));
   }, [siteId]);
 
@@ -19,15 +21,24 @@ function IMSSite() {
         <tr>
           <th>Item ID</th>
           <th>Item Name</th>
+          <th>Item Price</th>
           <th>Quantity Available</th>
+          <th>Site Name</th>
+          <th>Location</th>
+          <th>Status</th>
         </tr>
       </thead>
       <tbody>
-        {items.map(item => (
-          <tr key={item.itemId}>
-            <td>{item.itemId}</td>
-            <td>{item.itemName}</td> 
-            <td>{item.quantity}</td>
+        {/* creates a key by combining the siteId, itemId, and index which guarantee that each key is unique */}
+        {items.map(({ itemId, quantity, siteId }, index) => (
+          <tr key={`${siteId.siteId}-${itemId.itemId}-${index}`}> 
+            <td>{itemId.itemId}</td>
+            <td>{itemId.itemName}</td>
+            <td>${itemId.itemPrice.toFixed(2)}</td> 
+            <td>{quantity}</td>
+            <td>{siteId.siteName}</td>
+            <td>{siteId.siteLocation}</td>
+            <td>{siteId.siteStatus}</td>
           </tr>
         ))}
       </tbody>
