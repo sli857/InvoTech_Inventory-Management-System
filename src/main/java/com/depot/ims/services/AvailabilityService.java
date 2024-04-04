@@ -82,10 +82,10 @@ public class AvailabilityService {
 
 
     /**
-     * Adds a new Ship.
+     * Get sites that contains all the items with the given item id
      *
      * @param items contains multiple item id
-     * @return ResponseEntity containing all availabilities of the site with the given siteID.
+     * @return ResponseEntity containing sites that contains all the items with the given item id.
      */
     public ResponseEntity<?> getSitesByItems(@RequestParam MultiValueMap<String, String> items) {
 //        System.out.println(items);
@@ -131,6 +131,12 @@ public class AvailabilityService {
         return ResponseEntity.ok(allSite);
     }
 
+    /**
+     * Get sites that contains the item with the given item id
+     *
+     * @param itemId id of item
+     * @return ResponseEntity containing sites that contains the item with the given item id.
+     */
     @GetMapping("/item")
     public  ResponseEntity<?>  getAvailabilitiesByItemId(@RequestParam(value = "itemId") Long itemId) {
         if (itemId != null) {
@@ -145,6 +151,13 @@ public class AvailabilityService {
         }
     }
 
+    /**
+     * Get availability with given site id and item id
+     *
+     * @param itemId id of item
+     * @param siteId id of site
+     * @return ResponseEntity containing availability with given site id and item id.
+     */
     @GetMapping("/site/item")
     public ResponseEntity<?> getAvailabilityBySiteIdAndItemId(
             @RequestParam(value = "siteId") Long siteId,
