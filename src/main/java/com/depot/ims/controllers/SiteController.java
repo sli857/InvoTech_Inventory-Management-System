@@ -2,15 +2,12 @@ package com.depot.ims.controllers;
 
 import com.depot.ims.models.Site;
 import com.depot.ims.repositories.SiteRepository;
+import com.depot.ims.services.SiteService;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.sql.Date;
-import java.util.Objects;
-import java.util.stream.Stream;
 
 @RestController
 @RequestMapping(value = "/sites", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -19,9 +16,11 @@ import java.util.stream.Stream;
 public class SiteController {
 
     private final SiteRepository siteRepository;
+    private final SiteService siteService;
 
-    public SiteController(SiteRepository siteRepository) {
+    public SiteController(SiteRepository siteRepository, SiteService siteService) {
         this.siteRepository = siteRepository;
+        this.siteService = siteService;
     }
 
     @GetMapping
@@ -32,86 +31,45 @@ public class SiteController {
 
     @GetMapping("/site")
     public ResponseEntity<?> getSite(
-            @RequestParam(value = "siteId", required = false) Long siteID,
+            @RequestParam(value = "siteId", required = false) Long siteId,
             @RequestParam(value = "siteName", required = false) String siteName) {
-        if (siteID != null) {
-            return ResponseEntity.ok(siteRepository.findBySiteId(siteID));
-        } else if (siteName != null) {
-            return ResponseEntity.ok(siteRepository.findBySiteName(siteName));
-        } else {
-            return ResponseEntity.badRequest().body("Either siteId or siteName must be provided");
-        }
+        return siteService.getSite(siteId, siteName);
     }
 
     @GetMapping("/status")
     public ResponseEntity<?> getStatusBySiteId(
-            @RequestParam(value = "siteId") Long siteID) {
-        Site site = siteRepository.findBySiteId(siteID);
-        if (site == null) {
-            return ResponseEntity.badRequest().body("Site not found by siteId");
-        } else {
-            return ResponseEntity.ok(site.getSiteStatus());
-        }
+            @RequestParam(value = "siteId") Long siteId) {
+        return siteService.getStatusBySiteId(siteId);
     }
 
     @PostMapping(value = "/add", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public Site addSite(@RequestBody Site site) {
-        return siteRepository.save(site);
+    public ResponseEntity<?> addSite(@RequestBody Site site) {
+        return siteService.addSite(site);
     }
 
     @Modifying
     @PostMapping("/update")
     public ResponseEntity<?> updateSite(
             @RequestParam(value = "siteId")
-            Long siteID,
+            Long siteId,
             @RequestParam(value = "siteStatus", required = false)
             String newStatus,
             @RequestParam(value = "siteName", required = false)
             String newName,
             @RequestParam(value = "siteLocation", required = false)
-            String newSiteLocation,
+            String newLocation,
             @RequestParam(value = "internalSite", required = false)
             Boolean newInternalSite,
             @RequestParam(value = "ceaseDate", required = false)
             @DateTimeFormat(style = "YYYY-MM-DD")
             String newCeaseDate) {
 
-        if (!siteRepository.existsById(siteID)) {
-            return ResponseEntity.badRequest().body("Site not found by siteId");
-        }
-        if (Stream.of(newStatus, newName, newSiteLocation, newInternalSite, newCeaseDate).allMatch(Objects::isNull)) {
-            return ResponseEntity.badRequest().body("No value for this update is specified.");
-        }
-
-        Site site = siteRepository.findBySiteId(siteID);
-        if (newStatus != null) site.setSiteStatus(newStatus);
-        if (newName != null) site.setSiteName(newName);
-        if (newSiteLocation != null) site.setSiteLocation(newSiteLocation);
-        if (newInternalSite != null) site.setInternalSite(newInternalSite);
-        if (newCeaseDate != null) {
-            try {
-                Date date = Date.valueOf(newCeaseDate);
-                site.setCeaseDate(date);
-            } catch (IllegalArgumentException e) {
-                return ResponseEntity.badRequest().body("Date format is illegal.");
-            }
-        }
-
-        Site updatedSite = siteRepository.save(site);
-        return ResponseEntity.ok(updatedSite);
+        return siteService.updateSite(siteId, newStatus, newName, newLocation, newCeaseDate,
+                newInternalSite);
     }
 
     @DeleteMapping("/delete")
-    public ResponseEntity<?> deleteSite(@RequestParam("siteId") Long siteID) {
-        try {
-            boolean isFound = siteRepository.existsById(siteID);
-            if (isFound) {
-                siteRepository.deleteById(siteID);
-                return ResponseEntity.ok().body("Successfully deleted");
-            }
-            return ResponseEntity.badRequest().body("Site not found by siteId");
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().body("siteId cannot be null");
-        }
+    public ResponseEntity<?> deleteSite(@RequestParam("siteId") Long siteId) {
+        return siteService.deleteSite(siteId);
     }
 }
