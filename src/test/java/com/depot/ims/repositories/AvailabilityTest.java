@@ -22,7 +22,7 @@ import java.util.List;
         "spring.jpa.database-platform=org.hibernate.dialect.H2Dialect",
         "spring.jpa.hibernate.ddl-auto=update"
 })
-public class AvailabilityRepositoryTest {
+public class AvailabilityTest {
 
     @Autowired
     private AvailabilityRepository availabilityRepository;

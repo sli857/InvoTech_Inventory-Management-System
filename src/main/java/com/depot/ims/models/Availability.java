@@ -4,11 +4,13 @@ import com.depot.ims.models.compositeKeys.AvailabilityKey;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.Builder;
 import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 @Entity
 @IdClass(AvailabilityKey.class)
 @Table(name = "Availabilities")
