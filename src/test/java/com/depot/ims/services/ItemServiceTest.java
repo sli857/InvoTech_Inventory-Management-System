@@ -2,33 +2,22 @@ package com.depot.ims.services;
 
 import com.depot.ims.models.Item;
 import com.depot.ims.repositories.*;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.web.servlet.MockMvc;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 public class ItemServiceTest {
-    @InjectMocks
-    ItemService itemsService;
+
     @Mock
-    ItemRepository itemsRepository;
+    private ItemRepository itemsRepository = mock(ItemRepository.class);
 
-    private MockMvc mockMvc;
-
-    @BeforeEach
-    public void setup() {
-        MockitoAnnotations.openMocks(this);
-    }
+    private final ItemService itemsService = new ItemService(itemsRepository);
 
     //test 1: test the getItem method inside the controller
     @Test

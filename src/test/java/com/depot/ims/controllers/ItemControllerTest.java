@@ -1,6 +1,5 @@
 package com.depot.ims.controllers;
 
-import com.depot.ims.repositories.ShipRepository;
 import com.depot.ims.services.*;
 import com.depot.ims.repositories.*;
 import org.junit.jupiter.api.BeforeEach;
@@ -21,12 +20,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ItemControllerTest {
-
-    @InjectMocks
-    ShipController shipController;
-    @Mock
-    ShipRepository shipRepository;
-
 
     @InjectMocks
     ItemController itemController;
@@ -60,20 +53,23 @@ public class ItemControllerTest {
         mockMvc.perform(get("/items"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").isArray())
+                .andExpect(jsonPath("$[0]").value(item))
+                .andExpect(jsonPath("$[1]").value(item2))
                 .andExpect(jsonPath("$.length()").value(2));
     }
 
     @Test
     void addItem() throws Exception {
+        Item item = new Item(2L, "name", 1.1);
         String jsonBody = "{"
-                + "\"itemName\": \"Example Item\","
-                + "\"itemPrice\": 10.99"
+                + "\"itemId\": 2,"
+                + "\"itemName\": \"name\","
+                + "\"itemPrice\": 1.1"
                 + "}";
         mockMvc.perform(post("/items/add")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(jsonBody))
                 .andExpect(status().isOk());
-
     }
 
     @Test
@@ -93,8 +89,6 @@ public class ItemControllerTest {
                 .andExpect(status().isOk());
 
     }
-
-
 
 
 }

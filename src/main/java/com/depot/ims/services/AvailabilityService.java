@@ -137,7 +137,6 @@ public class AvailabilityService {
      * @param itemId id of item
      * @return ResponseEntity containing sites that contains the item with the given item id.
      */
-    @GetMapping("/item")
     public  ResponseEntity<?>  getAvailabilitiesByItemId(@RequestParam(value = "itemId") Long itemId) {
         if (itemId != null) {
             if(!itemRepository.existsById(itemId)){
@@ -158,7 +157,6 @@ public class AvailabilityService {
      * @param siteId id of site
      * @return ResponseEntity containing availability with given site id and item id.
      */
-    @GetMapping("/site/item")
     public ResponseEntity<?> getAvailabilityBySiteIdAndItemId(
             @RequestParam(value = "siteId") Long siteId,
             @RequestParam(value = "itemId") Long itemId) {
