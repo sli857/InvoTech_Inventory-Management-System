@@ -11,5 +11,6 @@ public interface SiteRepository extends JpaRepository<Site, Long> {
 
     @Query("SELECT s FROM Site s WHERE s.siteId=?1")
     Site findBySiteId(Long siteId);
-
+    @Query("SELECT s.siteStatus FROM Site s WHERE s.siteId=?1")
+    String findSiteStatusBySiteId(Long siteId);
 }

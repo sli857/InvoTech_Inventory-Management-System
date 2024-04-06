@@ -25,6 +25,7 @@ class ShipControllerTest {
     ShipController shipController;
     @Mock
     ShipRepository shipRepository;
+
     private MockMvc mockMvc;
 
     @BeforeEach
