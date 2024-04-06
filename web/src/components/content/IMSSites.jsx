@@ -33,8 +33,13 @@ function IMSSites() {
   const [siteLocationValid, setSiteLocationValid] = useState(true);
   const [siteStatusValid, setSiteStatusValid] = useState(true);
   
+  // Used for displaying an error for GPS coordinates 
+  let locationError = "Please enter site location in format 'latitude longitude'.";
+  
   // Navigation hook for redirecting
   const navigate = useNavigate();
+
+  
 
   /**
    * Calls the fetchSites function on page LOAD
@@ -105,9 +110,11 @@ function IMSSites() {
 
     // Validate inputs
     const nameIsValid = siteName.trim() !== '';
-    const locationIsValid = siteLocation.trim() !== '';
     const statusIsValid = siteStatus.trim() !== '' && (siteStatus === 'open' || siteStatus === 'closed');
-
+    // Validate location using the helper function
+    locationError = validateLocationFormat(siteLocation);
+    const locationIsValid = locationError === "";
+  
     setSiteNameValid(nameIsValid);
     setSiteLocationValid(locationIsValid);
     setSiteStatusValid(statusIsValid);
@@ -181,6 +188,34 @@ function IMSSites() {
     setSelectedInternalSite('Select Internal Site');
     setSelectedStatus('Select Status');
   };
+
+  // Helper function to validate the location format and range
+  function validateLocationFormat(location) {
+    const regex = /^([-+]?\d{1,2}(\.\d+)?)[ ]([-+]?\d{1,3}(\.\d+)?)$/;
+    const match = location.match(regex);
+
+    if (!match) {
+      return "Location must be in the format: 'latitude longitude'.";
+    }
+
+    const latitude = parseFloat(match[1]);
+    const longitude = parseFloat(match[3]);
+
+    if (latitude < -90 || latitude > 90) {
+      return "Latitude must be between -90 and +90 degrees.";
+    }
+
+    if (longitude < -180 || longitude > 180) {
+      return "Longitude must be between -180 and +180 degrees.";
+    }
+
+    // If the location is valid
+    return "";
+  }
+
+
+
+  
 
   /**
    * JSX Component that represents the Home Page of the Application
@@ -279,7 +314,7 @@ function IMSSites() {
                     }}
                     isInvalid={!siteLocationValid}
                   />
-                  {!siteLocationValid && <Form.Control.Feedback type="invalid">Please enter a location.</Form.Control.Feedback>}
+                  {!siteLocationValid && <Form.Control.Feedback type="invalid">{locationError}</Form.Control.Feedback>}
                 </Form.Group>
                 <Form.Group className="mb-3" controlId="formSiteStatus">
                   <Form.Label>Status</Form.Label>
