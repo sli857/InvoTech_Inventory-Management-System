@@ -11,6 +11,12 @@ import java.util.stream.Stream;
 import static org.mockito.Mockito.*;
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Unit tests for the UserService class.
+ * Validates the functionality of user management operations, including retrieval,
+ * confirmation, deletion, and updating of user details. Utilizes Mockito to mock
+ * the UserRepository for isolated testing of service logic.
+ */
 public class UserServiceTest {
     @Mock
     private UserRepository userRepository = mock(UserRepository.class);
@@ -20,6 +26,10 @@ public class UserServiceTest {
     void setup() {
     }
 
+    /**
+     * Tests retrieving a user by ID or username.
+     * Verifies correct user retrieval and handling of null input scenarios.
+     */
     @Test
     void testGetUser() {
         User user1 = new User(1L, "user1", "password1", "role1");
@@ -38,15 +48,22 @@ public class UserServiceTest {
         assertTrue(res3.getStatusCode().is4xxClientError());
     }
 
+    /**
+     * Tests user authentication by confirming username and password.
+     * Verifies responses for correct credentials, incorrect password,
+     * nonexistent user, and missing inputs.
+     */
     @Test
     void testConfirm() {
-        User existingUser = new User(1L, "user1", "correctPassword", "role1");
+        User existingUser = new User(1L,
+                "user1", "correctPassword", "role1");
 
         when(userRepository.findByUsername("user1")).thenReturn(existingUser);
         when(userRepository.findByUsername("nonexistent")).thenReturn(null);
 
         // Scenario 1: Correct username and password
-        ResponseEntity<?> response = userService.confirm("user1", "correctPassword");
+        ResponseEntity<?> response = userService.confirm("user1",
+                "correctPassword");
         assertEquals("User exists and password matches", response.getBody());
 
         // Scenario 2: Correct username, incorrect password
@@ -62,6 +79,11 @@ public class UserServiceTest {
         assertEquals("Username and password are required", response.getBody());
     }
 
+
+    /**
+     * Tests the deletion of an existing user.
+     * Verifies successful deletion and proper handling when a user is found.
+     */
     @Test
     void testDeleteUserFound() {
         Long userId = 1L;
@@ -73,6 +95,10 @@ public class UserServiceTest {
         verify(userRepository).deleteById(userId);
     }
 
+    /**
+     * Tests the deletion of an user that do not exist.
+     * Verifies successful deletion and proper handling when a user is not found.
+     */
     @Test
     void testDeleteUserNotFound() {
         Long userId = 2L;
@@ -85,24 +111,35 @@ public class UserServiceTest {
     }
 
 
+    /**
+     * Tests updating user information, handling case where the user is not found
+     */
     @Test
     void testUpdateUserUserNotFound() {
         Long userId = 1L;
         when(userRepository.existsById(userId)).thenReturn(false);
 
-        ResponseEntity<?> response = userService.updateUser(userId, "newUsername", "newPassword", "newPosition");
+        ResponseEntity<?> response = userService.updateUser(userId,
+                "newUsername", "newPassword", "newPosition");
         assertEquals("User not found by user id!", response.getBody());
     }
 
+    /**
+     * Tests updating user information, handling case no update values are specified
+     */
     @Test
     void testUpdateUserNoUpdateValuesSpecified() {
         Long userId = 1L;
         when(userRepository.existsById(userId)).thenReturn(true);
 
-        ResponseEntity<?> response = userService.updateUser(userId, null, null, null);
+        ResponseEntity<?> response = userService.updateUser(userId,
+                null, null, null);
         assertEquals("No value for this update is specified", response.getBody());
     }
 
+    /**
+     * Tests updating user information, handling cases where the user is found and a successful update.
+     */
     @Test
     void testUpdateUserSuccessful() {
         Long userId = 1L;
@@ -111,10 +148,9 @@ public class UserServiceTest {
         when(userRepository.findByUserId(userId)).thenReturn(user);
         when(userRepository.save(any(User.class))).thenReturn(user);
 
-        ResponseEntity<?> response = userService.updateUser(userId, "newUsername", "newPassword", "newPosition");
+        ResponseEntity<?> response = userService.updateUser(userId,
+                "newUsername", "newPassword", "newPosition");
         assertEquals("Successfully updated", response.getBody());
         verify(userRepository).save(user);
     }
-
-
 }

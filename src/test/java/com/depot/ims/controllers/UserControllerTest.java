@@ -24,6 +24,10 @@ import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+/**
+ * Tests for UserController - ensures correct handling of user-related requests.
+ * Mocks the UserRepository and UserService to isolate controller logic and verify interactions.
+ */
 public class UserControllerTest {
     @InjectMocks
     UserController userController;
@@ -34,6 +38,11 @@ public class UserControllerTest {
 
     private MockMvc mockMvc;
 
+    /**
+     * Setup method to initialize Mockito mocks and configure the MockMvc instance for
+     * standalone controller testing.
+     * This setup is performed before each test case.
+     */
     @BeforeEach
     public void setup() {
         MockitoAnnotations.openMocks(this);
@@ -41,23 +50,34 @@ public class UserControllerTest {
     }
 
 
+    /**
+     * Tests retrieval of all users, verifying correct HTTP status and JSON structure.
+     * Mocks UserRepository to return a predefined list of users.
+     * Asserts the size of the returned user list and specific user attributes.
+     */
     @Test
-    public void testUsers() throws Exception {
+    public void testGetUsers() throws Exception {
         // Setup mock users
         List<User> users = Arrays.asList(
                 new User(1L, "user1", "password1", "role1"),
                 new User(2L, "user2", "password2", "role2"));
         when(userRepository.findAll()).thenReturn(users);
 
-        MvcResult result = mockMvc.perform(get("/users")
+        // Perform the test and verify results
+        mockMvc.perform(get("/users")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(2)))
-                .andExpect(jsonPath("$[0].username", org.hamcrest.Matchers.is("user1")))
+                .andExpect(jsonPath("$[0].username",
+                        org.hamcrest.Matchers.is("user1")))
                 .andReturn(); // Capture the response
     }
 
-
+    /**
+     * Tests retrieval of a single user by ID, verifying correct HTTP status and JSON structure.
+     * Mocks UserService to return a specific user for a given ID.
+     * Asserts the attributes of the returned user.
+     */
     @Test
     public void testGetUser() throws Exception {
         // Setup mock user
@@ -84,7 +104,11 @@ public class UserControllerTest {
     }
 
 
-    // test for add an user
+    /**
+     * Tests adding a new user, verifying correct HTTP status and JSON structure of the response.
+     * Mocks UserRepository to simulate saving of the user and return a mock persisted user entity.
+     * Asserts the attributes of the saved user.
+     */
     @Test
     public void testAddUser() throws Exception {
         User user = new User(null, "user1", "password1", "role1");
@@ -95,6 +119,7 @@ public class UserControllerTest {
         ObjectMapper objectMapper = new ObjectMapper();
         String userJson = objectMapper.writeValueAsString(user);
 
+        // Perform the test and verify results
         mockMvc.perform(post("/users/add")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(userJson))
@@ -106,6 +131,10 @@ public class UserControllerTest {
     }
 
 
+    /**
+     * Tests updating an existing user, verifying the correct HTTP status.
+     * Mocks UserService to simulate the update operation and verify the update request's attributes.
+     */
     @Test
     public void testUpdateUser() throws Exception {
         Long userId = 1L;
@@ -114,8 +143,11 @@ public class UserControllerTest {
         ObjectMapper objectMapper = new ObjectMapper();
         String userJson = objectMapper.writeValueAsString(update);
 
-        doReturn(ResponseEntity.ok("Successfully updated")).when(userService).updateUser(userId, "newUsername", "newPassword", "role2");
+        // Mock the service call to return a success response
+        doReturn(ResponseEntity.ok("Successfully updated")).when(userService)
+                .updateUser(userId, "newUsername", "newPassword", "role2");
 
+        // Perform the test and verify results
         mockMvc.perform(post("/users/update")
                         .param("userId", userId.toString())
                         .contentType(MediaType.APPLICATION_JSON)
@@ -123,12 +155,17 @@ public class UserControllerTest {
                 .andExpect(status().isOk());
     }
 
-
+    /**
+     * Tests the deletion of an existing user, verifying the correct HTTP status and success message.
+     * Mocks UserService to confirm deletion operation.
+     */
     @Test
     void deleteUserFound() throws Exception {
         Long userId = 1L;
+        // Mock the service call to return a success response
         doReturn(ResponseEntity.ok("Successfully deleted")).when(userService).delete(1L);
 
+        // Perform the test and verify results
         mockMvc.perform(delete("/users/delete")
                         .param("userId", userId.toString())
                         .accept(MediaType.APPLICATION_JSON))
@@ -139,12 +176,19 @@ public class UserControllerTest {
         verify(userService, times(1)).delete(userId);
     }
 
-
+    /**
+     * Tests the attempt to delete a non-existing user, verifying the correct HTTP status and error message.
+     * Mocks UserService to simulate the case where the user does not exist.
+     */
     @Test
     void deleteUserNotFound() throws Exception {
         Long userId = 2L;
-        doReturn(ResponseEntity.badRequest().body("User not found by user Id")).when(userService).delete(2L);
+        // Mock the service call to return an error response
+        doReturn(ResponseEntity.badRequest().body("User not found by user Id"))
+                .when(userService).delete(2L);
 
+
+        // Perform the test and verify results
         mockMvc.perform(delete("/users/delete")
                         .param("userId", userId.toString())
                         .accept(MediaType.APPLICATION_JSON))

@@ -8,26 +8,32 @@ import java.util.Objects;
 import java.util.stream.Stream;
 
 /**
- * Service class for managing User operations
+ * UserService provides business logic for handling user operations within the
+ * Inventory Management System.
+ * This includes creating, updating, retrieving, and deleting user information.
  */
 @Service
 public class UserService {
     private final UserRepository usersRepository;
 
     /**
-     * Constructor for UserService.
+     * Constructs a UserService with a repository for data access.
      *
-     * @param usersRepository  The UsersRepository instance.
+     * @param usersRepository The repository providing data access operations for users.
      */
     public UserService(UserRepository usersRepository) {
         this.usersRepository = usersRepository;
     }
 
     /**
-     * Update any information for a user.
+     * Updates the details of an existing user using their ID.
+     * Allows for partial updates where only specified fields are updated.
      *
-     * @param Long userID, String newUsername, String newPassword
-     * @return ResponseEntity the returned http status of the code
+     * @param userID       The ID of the user to update.
+     * @param newUsername  The new username for the user (nullable).
+     * @param newPassword  The new password for the user (nullable).
+     * @param newPosition  The new position/title for the user (nullable).
+     * @return ResponseEntity<?> Returns OK if the update was successful, or Bad Request on error.
      */
     public ResponseEntity<?> updateUser( Long userID,
                                          String newUsername,
@@ -52,10 +58,12 @@ public class UserService {
 
 
     /**
-     * Get all the information of a user
+     * Retrieves the details of a user by their ID or username.
      *
-     * @param  Long userId, String username
-     * @return the information of the user
+     * @param userId    The ID of the user to find (nullable).
+     * @param username  The username of the user to find (nullable).
+     * @return ResponseEntity<?> Returns OK with the user details or Bad Request
+     * if neither ID nor username is provided.
      */
     public ResponseEntity<?> getUser( Long userId, String username) {
         // user id has to be unique!!
@@ -71,14 +79,17 @@ public class UserService {
 
 
     /**
-     * Confirm the existence of the user and confirm the correct password is entered
+     * Confirms a user's existence and matches the provided password with the stored password.
      *
-     * @param String username, String password
-     * @return ResponseEntity the returned http status of the code
+     * @param username  The username of the user.
+     * @param password  The password to verify.
+     * @return ResponseEntity<?> Returns OK if the user exists and the password matches,
+     * or Bad Request on error.
      */
     public ResponseEntity<?> confirm(String username, String password) {
         // an unique user id will be provided by the user
-        if (username == null || username.trim().isEmpty() || password == null || password.trim().isEmpty()) {
+        if (username == null || username.trim().isEmpty() || password == null ||
+                password.trim().isEmpty()) {
             return ResponseEntity.badRequest().body("Username and password are required");
         }
 
@@ -94,10 +105,11 @@ public class UserService {
 
 
     /**
-     * This is a function that test if the user provide password match what we have in the database
+     * Compares the provided password with the user's stored password.
      *
-     * @param String hashedPassword, String inputPassword
-     * @return ResponseEntity the returned http status of the code
+     * @param hashedPassword The stored hashed password.
+     * @param inputPassword  The password provided by the user.
+     * @return boolean True if the passwords match, false otherwise.
      */
     private boolean passwordMatches(String hashedPassword, String inputPassword) {
         return hashedPassword.equals(inputPassword);
@@ -105,10 +117,10 @@ public class UserService {
 
 
     /**
-     * Delete the information of a sepcified user.
+     * Deletes a user using their ID.
      *
-     * @param Long userID
-     * @return ResponseEntity the returned http status of the code
+     * @param userID The ID of the user to delete.
+     * @return ResponseEntity<?> Returns OK if the deletion was successful, or Bad Request on error.
      */
     public ResponseEntity<?> delete(Long userID) {
         try {
