@@ -1,8 +1,9 @@
 [![pipeline status](https://git.doit.wisc.edu/cdis/cs/courses/cs506/sp2024/team/tuesdaythursdaylecture/T_35/ims/badges/main/pipeline.svg)](https://git.doit.wisc.edu/cdis/cs/courses/cs506/sp2024/team/tuesdaythursdaylecture/T_35/ims/-/commits/main)
 
 
-[![coverage report](https://git.doit.wisc.edu/cdis/cs/courses/cs506/sp2024/team/tuesdaythursdaylecture/T_35/ims/badges/main/coverage.svg)](https://git.doit.wisc.edu/cdis/cs/courses/cs506/sp2024/team/tuesdaythursdaylecture/T_35/ims/-/commits/main)
+![coverage](https://git.doit.wisc.edu/cdis/cs/courses/cs506/sp2024/team/tuesdaythursdaylecture/T_35/ims/badges/cjk%2Fcode-coverage/coverage.svg?job=test-jdk17)
 
+test coverage report label
 
 ## Testing Documentation
 
