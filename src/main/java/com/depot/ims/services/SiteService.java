@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.sql.Date;
+import java.time.LocalDate;
 import java.util.Objects;
 import java.util.stream.Stream;
 
@@ -54,9 +55,9 @@ public class SiteService {
     }
 
     public ResponseEntity<?> updateSite(Long siteId, String newStatus, String newName,
-                                        String newLocation,String newCeaseDate,
+                                        String newLocation, String newCeaseDate,
                                         Boolean newInternalSite
-                                        ) {
+    ) {
         if (siteId == null) {
             return ResponseEntity.badRequest().body("siteId cannot be null");
         }
@@ -87,16 +88,15 @@ public class SiteService {
 
 
     // TODO: update delete logic, this current fails test.
-    public ResponseEntity<?> deleteSite(Long siteId) {
-        try {
-            boolean isFound = siteRepository.existsById(siteId);
-            if (isFound) {
-                siteRepository.deleteById(siteId);
-                return ResponseEntity.ok().body("Successfully deleted");
-            }
-            return ResponseEntity.badRequest().body("Site not found by siteId");
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().body("siteId cannot be null");
-        }
+    public ResponseEntity<?> deleteSite(Long siteId, String ceaseDate) {
+        if (siteId == null) return ResponseEntity.badRequest().body("siteId cannot be null");
+        if (!siteRepository.existsById(siteId))
+            return ResponseEntity.badRequest().body("Site not " +
+                    "found by siteId");
+        Site site = siteRepository.findBySiteId(siteId);
+        Date date = ceaseDate == null ? Date.valueOf(LocalDate.now()) : Date.valueOf(ceaseDate);
+        site.setCeaseDate(date);
+        site.setSiteStatus("closed");
+        return ResponseEntity.ok(siteRepository.saveAndFlush(site));
     }
 }

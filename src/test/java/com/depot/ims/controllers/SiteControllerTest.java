@@ -9,22 +9,26 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
+import javax.xml.transform.Result;
 import java.sql.Date;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 public class SiteControllerTest {
     @InjectMocks
@@ -116,17 +120,21 @@ public class SiteControllerTest {
 
     }
 
-    // TODO use full test after updating deleteSite() in siteService
     @Test
     void testDelete() throws Exception {
-        Site site = new Site(1L, "site1","location1","closed", Date.valueOf("2024-4-5"),true);
+        Site site1 = new Site(1L, "site1","location1","closed", Date.valueOf("2024-4-5"),true);
+        Site site2 = new Site(2L, "site2","location2","closed", Date.valueOf(LocalDate.now()),true);
 
-        doReturn(ResponseEntity.ok(site)).when(siteServiceMock).deleteSite(1L);
+        doReturn(ResponseEntity.ok(site1)).when(siteServiceMock).deleteSite(1L,"2024-4-5");
+        doReturn(ResponseEntity.ok(site2)).when(siteServiceMock).deleteSite(2L,null);
 
-        mockMvc.perform(delete("/sites/delete?siteId=1"))
+        mockMvc.perform(delete("/sites/delete?siteId=1&ceaseDate=2024-4-5"))
                 .andExpect(status().isOk())
-                //.andExpect(jsonPath("$").value(site))
-        ;
+                .andExpect(jsonPath("$.siteStatus").value("closed"));
+
+        mockMvc.perform(delete("/sites/delete?siteId=2"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.siteStatus").value("closed"));
     }
 }
 
