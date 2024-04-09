@@ -1,0 +1,32 @@
+version: '3.8'
+services:
+  db2:
+    image: mysql/mysql-server:latest
+    hostname: localhost
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: 123123 
+      MYSQL_DATABASE: IMS_test
+      MYSQL_ROOT_HOST: '%'
+    ports:
+      - "3300:3306"
+  backend2:
+    image: registry.doit.wisc.edu/cdis/cs/courses/cs506/sp2024/team/tuesdaythursdaylecture/t_35/ims/backend:latest 
+    hostname: localhost
+    restart: always
+    depends_on:
+      - db2
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://db2:3306/IMS_test?createDatabaseIfNotExist=true
+    ports:
+      - "8080:8080"
+  frontend2:
+    image: registry.doit.wisc.edu/cdis/cs/courses/cs506/sp2024/team/tuesdaythursdaylecture/t_35/ims/frontend:latest 
+    restart: always
+    depends_on:
+      - backend2
+    ports:
+      - '5173:5173'
+    stdin_open: true
+    tty: true
+    
