@@ -1,13 +1,13 @@
-FROM node:10-alpine
+FROM node:21-alpine
 
-RUN mkdir -p web
-RUN chown -R node:node web
-WORKDIR web
-COPY ./web/package*.json ./
-USER node
-
+WORKDIR /web
+COPY ./web/package.json .
+COPY ./web ./
 RUN npm install
 
-COPY --chown=node:node web .
 
-EXPOSE 8080
+COPY ./web .
+
+EXPOSE 5173
+
+CMD ["npm", "run", "dev"]
