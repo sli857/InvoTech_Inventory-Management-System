@@ -22,19 +22,20 @@ public class ItemTest {
     @Autowired
     private ItemRepository itemRepository;
 
-//    @BeforeEach
-//    void setup() {
-//        Item item1 = createItem("item 1", 12.99);
-//        Item item2 = createItem("item 2", 15.99);
-//        Item item3 = createItem("item 3", 15.99);
-//    }
+    @BeforeEach
+    void setup() {
+        Item item1 = createItem("item 1", 12.99);
+        Item item2 = createItem("item 2", 15.99);
+        Item item3 = createItem("item 3", 15.99);
+    }
 //
-//    @Test
-//    void  TestFindByItemName() {
-//        List<Item> list = this.itemRepository.findByItemName("item 2");
-////        assertNotNull(list);
-////        assertEquals(2, list.size());
-//    }
+
+    @Test
+    void  TestFindByItemName() {
+        List<Item> list = this.itemRepository.findByItemName("item 2");
+//        assertNotNull(list);
+//        assertEquals(2, list.size());
+    }
 
 //    @Test
 //    void TestFindByItemId() {
