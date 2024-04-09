@@ -27,9 +27,9 @@ public class AuditController {
         return ResponseEntity.ok(auditRepository.findByAuditId(auditId));
     }
 
-    @GetMapping("/audit")
-    public  ResponseEntity<List<Audit>> getAuditsByUserId(@RequestParam Long userId) {
-        return ResponseEntity.ok(auditRepository.findByUserId(userId));
-    }
+    //@GetMapping("/audit")
+    //public  ResponseEntity<List<Audit>> getAuditsByUserId(@RequestParam Long userId) {
+    //    return ResponseEntity.ok(auditRepository.findByUserId(userId));
+    //}
 
 }
