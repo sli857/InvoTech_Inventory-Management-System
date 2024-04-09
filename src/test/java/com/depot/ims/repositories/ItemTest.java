@@ -37,13 +37,13 @@ public class ItemTest {
         assertEquals(1, list.size());
     }
 
-//    @Test
-//    void TestFindByItemId() {
-//        System.out.println(this.itemRepository.findAll());
-//        Item item = this.itemRepository.findByItemId(5L);
-////        assertNotNull(item);
-//
-//    }
+    @Test
+    void TestFindByItemId() {
+        System.out.println(this.itemRepository.findAll());
+        Item item = this.itemRepository.findByItemId(5L);
+        assertNotNull(item);
+
+    }
 
     private Item createItem( String name, double price) {
         Item item = Item.builder()
