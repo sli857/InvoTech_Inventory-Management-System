@@ -137,7 +137,7 @@ release-build-backend:
   variables:
     IMAGE_TAG: "backend:latest"
     DOCKERFILE_PATH: "./dockerfiles/backend/Dockerfile"
-    DOCKER_OPTS: "--build-arg JAR_FILE=./target/*.jar"
+    DOCKER_BUILD_OPTS: "--build-arg JAR_FILE=./target/*.jar"
   dependencies:
     - build-jar
   script:
