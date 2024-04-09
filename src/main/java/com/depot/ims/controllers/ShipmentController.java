@@ -18,8 +18,10 @@ import java.sql.Timestamp;
  * This controller supports operations such as creating, updating, deleting,
  * and fetching shipment details.
  */
+
 @RestController
-@RequestMapping("/shipments")
+@RequestMapping(value = "/shipments", produces = MediaType.APPLICATION_JSON_VALUE)
+@CrossOrigin(origins = "http://localhost:5173/")
 public class ShipmentController {
 
     // Fields for the shipment repository and shipment service
