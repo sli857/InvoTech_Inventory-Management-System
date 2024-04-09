@@ -3,10 +3,7 @@ package com.depot.ims.controllers;
 import com.depot.ims.models.Audit;
 import com.depot.ims.repositories.AuditRepository;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -25,14 +22,14 @@ public class AuditController {
         return ResponseEntity.ok(auditRepository.findAll());
     }
 
-    @GetMapping("/auditId={auditId}")
-    public Audit getAuditById(@PathVariable Long auditId) {
-        return auditRepository.findByAuditId(auditId);
+    @GetMapping("/audit")
+    public ResponseEntity<Audit> getAuditById(@RequestParam Long auditId) {
+        return ResponseEntity.ok(auditRepository.findByAuditId(auditId));
     }
 
-    @GetMapping("/userId={userId}")
-    public List<Audit> getAuditsByUserId(@PathVariable Long userId) {
-        return auditRepository.findByUserId(userId);
+    @GetMapping("/audit")
+    public  ResponseEntity<List<Audit>> getAuditsByUserId(@RequestParam Long userId) {
+        return ResponseEntity.ok(auditRepository.findByUserId(userId));
     }
 
 }
