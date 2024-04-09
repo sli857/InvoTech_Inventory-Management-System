@@ -38,4 +38,13 @@ public class Site {
     @Column(name = "internal_site")
     private Boolean internalSite;
 
+    // Constructor with parameters
+    public Site(String siteName, String siteLocation, String siteStatus, Date ceaseDate, boolean internalSite) {
+        this.siteName = siteName;
+        this.siteLocation = siteLocation;
+        this.siteStatus = siteStatus;
+        this.ceaseDate = ceaseDate;
+        this.internalSite = internalSite;
+    }
+
 }
