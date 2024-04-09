@@ -24,4 +24,10 @@ public class Item {
 
     @Column(name = "item_price", nullable = false)
     private Double itemPrice;
+
+    public Item(String itemName, double itemPrice) {
+        this.itemName = itemName;
+        this.itemPrice = itemPrice;
+    }
+
 }
