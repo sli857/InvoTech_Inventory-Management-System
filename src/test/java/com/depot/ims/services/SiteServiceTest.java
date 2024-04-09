@@ -14,8 +14,7 @@ import java.util.stream.Stream;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 public class SiteServiceTest {
     @Mock
@@ -81,14 +80,16 @@ public class SiteServiceTest {
     }
 
 
-    // TODO use full test after updating deleteSite() in siteService
     @Test
     void testDelete(){
-        assertTrue(true);
 
-//        Site site1 = new Site(1L, "site1", "location1", "open", null, true);
-//        Site site2 = new Site(1L, "site1","location1","closed", Date.valueOf("2024-4-5"),true);
-//        when(siteRepositoryMock.existsById(1L)).thenReturn(true);
-//        assertEquals(site2,siteService.deleteSite(1L).getBody());
+        Site site1 = new Site(1L, "site1", "location1", "open", null, true);
+        Site site2 = new Site(1L, "site1","location1","closed", Date.valueOf("2024-4-5"),true);
+
+        when(siteRepositoryMock.existsById(1L)).thenReturn(true);
+        when(siteRepositoryMock.findBySiteId(1L)).thenReturn(site1);
+        doReturn(site2).when(siteRepositoryMock).saveAndFlush(any());
+
+        assertEquals(site2,siteService.deleteSite(1L, "2024-4-5").getBody());
     }
 }

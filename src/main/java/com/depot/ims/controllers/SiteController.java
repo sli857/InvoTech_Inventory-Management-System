@@ -69,7 +69,9 @@ public class SiteController {
     }
 
     @DeleteMapping("/delete")
-    public ResponseEntity<?> deleteSite(@RequestParam("siteId") Long siteId) {
-        return siteService.deleteSite(siteId);
+    public ResponseEntity<?> deleteSite(
+            @RequestParam("siteId") Long siteId,
+            @RequestParam(value = "ceaseDate", required = false) String ceaseDate) {
+        return siteService.deleteSite(siteId, ceaseDate);
     }
 }
