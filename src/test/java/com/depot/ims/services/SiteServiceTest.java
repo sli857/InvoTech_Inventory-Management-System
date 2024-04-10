@@ -16,6 +16,9 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
+/**
+ * SiteServiceTest tests the SiteService class, with mocking the siteRepository
+ */
 public class SiteServiceTest {
     @Mock
     private SiteRepository siteRepositoryMock = mock(SiteRepository.class);
@@ -26,6 +29,9 @@ public class SiteServiceTest {
     void setup() {
     }
 
+    /**
+     * Test get a site by siteId or siteName. Test that two parameter cannot be both null
+     */
     @Test
     void testGetSite() {
         Site site1 = new Site(1L, "site1", "location1", "open", null, true);
@@ -44,6 +50,9 @@ public class SiteServiceTest {
         assertTrue(res3.getStatusCode().is4xxClientError());
     }
 
+    /**
+     * test get status by siteId. Test siteId cannot be null
+     */
     @Test
     void testGetStatusBySiteId() {
         Site site1 = new Site(1L, "site1", "location1", "open", null, true);
@@ -56,6 +65,9 @@ public class SiteServiceTest {
 
     }
 
+    /**
+     * test add a site, examine the return responseEntity has the correct site in its body
+     */
     @Test
     void testAdd(){
         Site site1 = new Site(1L, "site1", "location1", "open", null, true);
@@ -64,6 +76,9 @@ public class SiteServiceTest {
         assertEquals(site1, siteService.addSite(site1).getBody());
     }
 
+    /**
+     * test update a site entity on any field of itself
+     */
     @Test
     void testUpdateSite() {
         Site site1 = new Site(1L, "site1", "location1", "open", null, true);
@@ -80,6 +95,10 @@ public class SiteServiceTest {
     }
 
 
+    /**
+     * test delete a site by siteId; test set status to "closed"; test set ceaseDate to current
+     * time if ceaseDate is not provided
+     */
     @Test
     void testDelete(){
 
