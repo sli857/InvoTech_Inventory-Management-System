@@ -1,7 +1,6 @@
-package com.depot.ims.models;
+package com.depot.ims.repositories;
 
 import com.depot.ims.models.Item;
-import com.depot.ims.repositories.ItemRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -11,6 +10,10 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+/**
+ * Integration tests for the Item entity using the H2 in-memory database.
+ * Tests validate the basic CRUD operations provided by ItemRepository.
+ */
 @DataJpaTest
 @TestPropertySource(properties = {
         "spring.jpa.database-platform=org.hibernate.dialect.H2Dialect",
@@ -21,6 +24,11 @@ public class ItemTest {
     @Autowired
     private ItemRepository itemRepository;
 
+    /**
+     * Tests retrieval of a list of item entities by item name
+     * Validates that the findAll operation can successfully retrieve the correct item entities and
+     * number of item entities
+     */
     @Test
     void testFindByItemName() {
         // Populate test data in the database
@@ -35,6 +43,11 @@ public class ItemTest {
         assertEquals("item 2", result.get(0).getItemName());
     }
 
+    /**
+     * Tests retrieval of a list of item entities by item id
+     * Validates that the findAll operation can successfully retrieve the correct item entities and
+     * number of item entities
+     */
     @Test
     void testFindByItemId() {
         // Populate test data in the database

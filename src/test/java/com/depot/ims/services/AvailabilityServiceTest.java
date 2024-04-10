@@ -14,6 +14,12 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.*;
 
+/**
+ * Unit tests for the AvailabilityService class.
+ * Validates the functionality of availability management operations, including retrieval,
+ * and adding of availability details. Utilizes Mockito to mock
+ * the siteRepository, ItemRepository, AvailabilityRepository for isolated testing of service logic.
+ */
 public class AvailabilityServiceTest {
 
     @Mock
@@ -27,14 +33,17 @@ public class AvailabilityServiceTest {
             siteRepository,
             itemRepository,
             availabilityRepository);
-
-
-
+    /**
+     * Tests adding an availability
+     * mock the availability repository
+     * Verifies correct return of the addAvailabilities  method
+     */
     @Test
     public void TestAddAvailabilities() {
         Item item = new Item(20L, "item1", 3.0);
         Item item1 = new Item(30L, "item2", 4.0);
-        Site site = new Site(11L, "HomeDepot 2", "W54 N53", "open", null, true);
+        Site site = new Site(11L, "HomeDepot 2", "W54 N53", "open", null,
+                true);
         Availability availability = new Availability(site, item, 10);
 
         when(availabilityRepository.save(availability)).thenReturn(availability);
@@ -45,12 +54,18 @@ public class AvailabilityServiceTest {
 
     }
 
+    /**
+     * Tests retrieving an availability
+     * mock the availability repository and site repository
+     * Verifies correct return of the addAvailability method
+     */
     @Test
     public void TestGetAvailability() {
 
         Item item = new Item(20L, "item1", 3.0);
         Item item1 = new Item(30L, "item2", 4.0);
-        Site site = new Site(11L, "HomeDepot 2", "W54 N53", "open", null, true);
+        Site site = new Site(11L, "HomeDepot 2", "W54 N53", "open", null,
+                true);
         Availability availability = new Availability(site, item, 10);
         Availability availability1 = new Availability(site, item1, 20);
         List<Availability> list = new ArrayList<>();
@@ -67,12 +82,19 @@ public class AvailabilityServiceTest {
 
     }
 
+    /**
+     * Tests retrieving a list of availability by item id
+     * mock the availability repository and item repository
+     * Verifies correct return of the getAvailabilitiesByItemId method
+     */
     @Test
     public void getAvailabilitiesByItemId() {
         Item item = new Item(20L, "item1", 3.0);
         Item item1 = new Item(30L, "item2", 4.0);
-        Site site = new Site(11L, "HomeDepot 2", "W54 N53", "open", null, true);
-        Site site1 = new Site(12L, "HomeDepot 3", "W54 N53", "open", null, true);
+        Site site = new Site(11L, "HomeDepot 2", "W54 N53", "open", null,
+                true);
+        Site site1 = new Site(12L, "HomeDepot 3", "W54 N53", "open", null,
+                true);
         Availability availability = new Availability(site, item, 10);
         Availability availability1 = new Availability(site1, item, 20);
         List<Site> list = new ArrayList<>();
@@ -89,12 +111,19 @@ public class AvailabilityServiceTest {
 
     }
 
+    /**
+     * Tests retrieving a list of availability by item id and site id
+     * mock the availability repository, item repository, and site repository
+     * Verifies correct return of the getAvailabilityBySiteIdAndItemId method
+     */
     @Test
     public void TestGetAvailabilityBySiteIdAndItemId() {
         Item item = new Item(20L, "item1", 3.0);
         Item item1 = new Item(30L, "item2", 4.0);
-        Site site = new Site(11L, "HomeDepot 2", "W54 N53", "open", null, true);
-        Site site1 = new Site(12L, "HomeDepot 3", "W54 N53", "open", null, true);
+        Site site = new Site(11L, "HomeDepot 2", "W54 N53", "open", null,
+                true);
+        Site site1 = new Site(12L, "HomeDepot 3", "W54 N53", "open", null,
+                true);
         Availability availability = new Availability(site, item, 10);
         Availability availability1 = new Availability(site1, item, 20);
         //mock itemRepository.existsById(itemId)
@@ -108,6 +137,11 @@ public class AvailabilityServiceTest {
 
     }
 
+    /**
+     * Tests retrieving a list of sites by a list of items
+     * mock the availability repository, item repository, and site repository
+     * Verifies correct return of the getSitesByItems method
+     */
     @Test
     public void getSitesByItems() {
         MultiValueMap<String, String> item = new LinkedMultiValueMap<>();
@@ -118,10 +152,14 @@ public class AvailabilityServiceTest {
         Item item3 = new Item(3L, "item3", 1.0);
         Item item4 = new Item(4L, "item4", 1.0);
 
-        Site site = new Site(11L, "HomeDepot 2", "W54 N53", "open", null, true);
-        Site site1 = new Site(12L, "HomeDepot 2", "W54 N53", "open", null, true);
-        Site site2 = new Site(13L, "HomeDepot 2", "W54 N53", "open", null, true);
-        Site site3 = new Site(14L, "HomeDepot 2", "W54 N53", "open", null, true);
+        Site site = new Site(11L, "HomeDepot 2", "W54 N53", "open", null,
+                true);
+        Site site1 = new Site(12L, "HomeDepot 2", "W54 N53", "open", null,
+                true);
+        Site site2 = new Site(13L, "HomeDepot 2", "W54 N53", "open", null,
+                true);
+        Site site3 = new Site(14L, "HomeDepot 2", "W54 N53", "open", null,
+                true);
 
         item.add("item1", "1");
         items.add("item2", "2");

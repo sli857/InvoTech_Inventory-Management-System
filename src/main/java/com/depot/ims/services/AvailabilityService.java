@@ -27,7 +27,7 @@ public class AvailabilityService {
 
 
     /**
-     * Constructor for ShipService.
+     * Constructor for availability Service.
      *
      * @param siteRepository         The ShipRepository instance.
      * @param itemRepository         The ItemRepository instance.
@@ -42,7 +42,7 @@ public class AvailabilityService {
     }
 
     /**
-     * Adds a new Ship.
+     * Adds a new Availability
      *
      * @param availability The availability object to be added.
      * @return ResponseEntity containing the result of the availability addition operation.

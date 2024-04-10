@@ -1,6 +1,6 @@
-package com.depot.ims.models;
+package com.depot.ims.repositories;
 
-import com.depot.ims.repositories.ShipmentRepository;
+import com.depot.ims.models.Shipment;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

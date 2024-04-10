@@ -10,6 +10,11 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.*;
 
+/**
+ * Unit tests for the ItemService class.
+ * Validates the functionality of availability management operations, including retrieval,
+ * item details. Utilizes Mockito to mock ItemRepository for isolated testing of service logic.
+ */
 public class ItemServiceTest {
 
     @Mock
@@ -17,7 +22,11 @@ public class ItemServiceTest {
 
     private final ItemService itemsService = new ItemService(itemsRepository);
 
-    //test 1: test the getItem method inside the controller
+    /**
+     * Tests retrieving an availability
+     * mock the item repository
+     * Verifies correct return of the getItem method
+     */
     @Test
     public void testGetItem() {
         //mock the repository class
@@ -33,7 +42,11 @@ public class ItemServiceTest {
         assertEquals(true, response.getBody().equals(item));
 
     }
-
+    /**
+     * Tests adding an item
+     * mock the item repository
+     * Verifies correct return of the addItem method
+     */
     @Test
     public void testAddItem() {
         //test2.1: test the addItem method inside the item with valid item
@@ -44,6 +57,11 @@ public class ItemServiceTest {
         assertEquals( true, response5.getBody().equals(newItem));
     }
 
+    /**
+     * Tests updating an item
+     * mock the item repository
+     * Verifies correct return of the updateItem method
+     */
     @Test
     public void testUpdateItem() {
 
