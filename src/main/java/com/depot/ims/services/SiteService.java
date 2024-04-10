@@ -27,6 +27,14 @@ public class SiteService {
         this.itemRepository = itemRepository;
     }
 
+    /**
+     * Try to find a single site based on siteId first. If siteId is not provided, find a single
+     * site by siteName.
+     * @param siteId siteId
+     * @param siteName siteName
+     * @return ResponseEntity that contains the site in its body, or BadRequest if site cannot
+     * be found.
+     */
     public ResponseEntity<?> getSite(Long siteId, String siteName) {
         if (siteId != null) {
             return ResponseEntity.ok(siteRepository.findBySiteId(siteId));
@@ -37,6 +45,12 @@ public class SiteService {
         }
     }
 
+    /**
+     * get the status of a site
+     * @param siteId primary key to find the site
+     * @return ResponseEntity that contains the status of the site in its body, or BadRequest if
+     * site cannot be found.
+     */
     public ResponseEntity<?> getStatusBySiteId(Long siteId) {
         String status = siteRepository.findSiteStatusBySiteId(siteId);
         if (status == null) {
@@ -46,6 +60,12 @@ public class SiteService {
         }
     }
 
+    /**
+     * add a site to table Sites
+     * @param site site entity
+     * @return ResponseEntity that contains the successfully added site in its body, or BadRequest
+     * if site cannot be added to database
+     */
     public ResponseEntity<?> addSite(Site site) {
         try {
             return ResponseEntity.ok(siteRepository.save(site));
@@ -54,6 +74,17 @@ public class SiteService {
         }
     }
 
+    /**
+     * update any of the fields of a site entity found by siteId in table Site
+     * @param siteId siteId
+     * @param newStatus newStatus
+     * @param newName newName
+     * @param newLocation newLocation
+     * @param newCeaseDate newCeaseDate
+     * @param newInternalSite newInternalSite
+     * @return ResponseEntity that contains the modified site entity in its body; return
+     * corresponding error code and message necessarily
+     */
     public ResponseEntity<?> updateSite(Long siteId, String newStatus, String newName,
                                         String newLocation, String newCeaseDate,
                                         Boolean newInternalSite
@@ -87,7 +118,14 @@ public class SiteService {
     }
 
 
-    // TODO: update delete logic, this current fails test.
+    /**
+     * invalidate a site, set status to "closed" and set ceaseDate accordingly if ceaseDate is
+     * provided, otherwise set ceaseDate to current moment.
+     * @param siteId siteId
+     * @param ceaseDate ceaseDate
+     * @return ResponseEntity that contains the deleted site entity in its body; return
+     * corresponding error code and message necessarily
+     */
     public ResponseEntity<?> deleteSite(Long siteId, String ceaseDate) {
         if (siteId == null) return ResponseEntity.badRequest().body("siteId cannot be null");
         if (!siteRepository.existsById(siteId))

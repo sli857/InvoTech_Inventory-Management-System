@@ -30,6 +30,9 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+/**
+ * Junit tests for siteController, siteRepository and siteService are mocked
+ */
 public class SiteControllerTest {
     @InjectMocks
     SiteController siteControllerMock;
@@ -40,12 +43,19 @@ public class SiteControllerTest {
 
     private MockMvc mockMvc;
 
+    /**
+     * before each test, instantiate mockMvc
+     */
     @BeforeEach
     public void setup() {
         MockitoAnnotations.openMocks(this);
         mockMvc = MockMvcBuilders.standaloneSetup(siteControllerMock).build();
     }
 
+    /**
+     * test findAll() by mocking the return value of siteRepository
+     * @throws Exception
+     */
     @Test
     void testGetAllSites() throws Exception {
         // Given
@@ -62,6 +72,9 @@ public class SiteControllerTest {
                 .andExpect(jsonPath("$.length()").value(2));
     }
 
+    /**
+     * test getStatusBySiteId
+     */
     @Test
     void testGetSiteStatus() throws Exception {
 
@@ -76,6 +89,9 @@ public class SiteControllerTest {
                 .andExpect(jsonPath("$").value("open"));
     }
 
+    /**
+     * test get a site by siteId and get a site by siteName
+     */
     @Test
     void testGetSiteBySiteId() throws Exception {
         Long site1Id = 1L;
@@ -120,6 +136,9 @@ public class SiteControllerTest {
 
     }
 
+    /**
+     * test delete a site
+     */
     @Test
     void testDelete() throws Exception {
         Site site1 = new Site(1L, "site1","location1","closed", Date.valueOf("2024-4-5"),true);
