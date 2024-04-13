@@ -23,7 +23,7 @@ public class Audit implements AuditorAware<Long> {
     @Column(name = "PK_audits", updatable = false, nullable = false)
     private Long auditId;
 
-    @OneToOne /*(cascade = CascadeType.ALL)*/
+    @ManyToOne /*(cascade = CascadeType.ALL)*/
     @JoinColumn(name = "FK_audits_users", referencedColumnName = "PK_users", nullable = false)
     private User userId;
 

@@ -8,6 +8,7 @@ import java.util.List;
 
 public interface AuditRepository extends JpaRepository<Audit, Long> {
 
+    List<Audit> findAll();
     @Query("SELECT a FROM Audit a WHERE a.auditId=?1")
     Audit findByAuditId(Long auditId);
 

@@ -1,7 +1,9 @@
 package com.depot.ims.controllers;
 
+import com.depot.ims.dto.AuditResponse;
 import com.depot.ims.models.Audit;
 import com.depot.ims.repositories.AuditRepository;
+import com.depot.ims.services.AuditService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,20 +14,24 @@ import java.util.List;
 public class AuditController {
 
     private final AuditRepository auditRepository;
+    private final AuditService auditService;
 
-    public AuditController(AuditRepository auditRepository) {
+    public AuditController(AuditRepository auditRepository, AuditService auditService) {
         this.auditRepository = auditRepository;
+        this.auditService = auditService;
     }
 
     @GetMapping
-    public ResponseEntity<List<Audit>> getAllAudits() {
-        return ResponseEntity.ok(auditRepository.findAll());
+    public ResponseEntity<?> getAllAudits() {
+        return auditService.findAll();
     }
 
     @GetMapping("/audit")
     public ResponseEntity<Audit> getAuditById(@RequestParam Long auditId) {
         return ResponseEntity.ok(auditRepository.findByAuditId(auditId));
     }
+
+
 
     //@GetMapping("/audit")
     //public  ResponseEntity<List<Audit>> getAuditsByUserId(@RequestParam Long userId) {
