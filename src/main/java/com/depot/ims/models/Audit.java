@@ -33,7 +33,7 @@ public class Audit implements AuditorAware<Long> {
     @Column(name = "field_name")
     private String fieldName;
 
-    @Column(name = "row_key")
+    @Column(name = "row_key", nullable = false)
     private Integer rowKey;
 
     @Column(name = "old_value")
