@@ -30,16 +30,16 @@ public class Audit implements AuditorAware<Long> {
     @Column(name = "table_name", nullable = false)
     private String tableName;
 
-    @Column(name = "field_name", nullable = false)
+    @Column(name = "field_name")
     private String fieldName;
 
-    @Column(name = "row_key", nullable = false)
+    @Column(name = "row_key")
     private Integer rowKey;
 
-    @Column(name = "old_value", nullable = false)
+    @Column(name = "old_value")
     private String oldValue;
 
-    @Column(name = "new_value", nullable = false)
+    @Column(name = "new_value")
     private String newValue;
 
     @Column(name = "action", nullable = false)

@@ -7,6 +7,7 @@ import com.depot.ims.services.AuditService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 @RestController
@@ -25,17 +26,21 @@ public class AuditController {
     public ResponseEntity<?> getAllAudits() {
         return auditService.findAll();
     }
-
-    @GetMapping("/audit")
-    public ResponseEntity<Audit> getAuditById(@RequestParam Long auditId) {
-        return ResponseEntity.ok(auditRepository.findByAuditId(auditId));
+    @GetMapping("/byUser")
+    public ResponseEntity<?> getAuditByUser(@RequestParam Long userId) {
+        return auditService.findAuditsByUser(userId);
+    }
+    @GetMapping("/onTable")
+    public ResponseEntity<?> getAuditOnTable(@RequestParam String tableName) {
+        return auditService.findAuditsOnTable(tableName);
     }
 
+    @GetMapping("/betweenPeriod")
+    public ResponseEntity<?> getAuditsBetweenPeriod(@RequestParam String start,
+                                                    @RequestParam String end){
+        return auditService.findAuditsBetweenPeriod(start,end);
 
+    }
 
-    //@GetMapping("/audit")
-    //public  ResponseEntity<List<Audit>> getAuditsByUserId(@RequestParam Long userId) {
-    //    return ResponseEntity.ok(auditRepository.findByUserId(userId));
-    //}
 
 }

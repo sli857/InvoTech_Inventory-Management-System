@@ -6,9 +6,9 @@ import com.depot.ims.repositories.AuditRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
+import java.sql.Timestamp;
+import java.time.LocalDate;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class AuditService {
@@ -23,6 +23,28 @@ public class AuditService {
         List<AuditResponse> responses =result.stream().map(AuditService::convertToAuditResponse).toList();
         return ResponseEntity.ok(responses);
     }
+
+    public ResponseEntity<?> findAuditsByUser(Long userId){
+        List<Audit> result = auditRepository.findByUserId(userId);
+        List<AuditResponse> responses =result.stream().map(AuditService::convertToAuditResponse).toList();
+        return ResponseEntity.ok(responses);
+    }
+
+    public ResponseEntity<?> findAuditsOnTable(String tableName){
+        List<Audit> result = auditRepository.findByTableName(tableName);
+        List<AuditResponse> responses =result.stream().map(AuditService::convertToAuditResponse).toList();
+        return ResponseEntity.ok(responses);
+    }
+
+    public ResponseEntity<?> findAuditsBetweenPeriod(String start, String end){
+        LocalDate startTmp = LocalDate.parse(start);
+        LocalDate endTmp = LocalDate.parse(end);
+        List<Audit> result = auditRepository.findBetweenPeriod(Timestamp.valueOf(startTmp.atStartOfDay()),
+                Timestamp.valueOf(endTmp.atStartOfDay()));
+        List<AuditResponse> responses =result.stream().map(AuditService::convertToAuditResponse).toList();
+        return ResponseEntity.ok(responses);
+    }
+
     private static AuditResponse convertToAuditResponse(Audit audit){
         return AuditResponse.builder()
                 .auditId(audit.getAuditId())
