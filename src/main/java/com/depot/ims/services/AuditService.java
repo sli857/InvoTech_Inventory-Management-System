@@ -19,30 +19,50 @@ public class AuditService {
     }
 
     public ResponseEntity<?> findAll(){
-        List<Audit> result = auditRepository.findAll();
-        List<AuditResponse> responses =result.stream().map(AuditService::convertToAuditResponse).toList();
-        return ResponseEntity.ok(responses);
+        try {
+            List<Audit> result = auditRepository.findAll();
+            List<AuditResponse> responses = result.stream().map(AuditService::convertToAuditResponse).toList();
+            return ResponseEntity.ok(responses);
+        }
+        catch (Exception e){
+            return ResponseEntity.internalServerError().body(e.getMessage());
+        }
     }
 
     public ResponseEntity<?> findAuditsByUser(Long userId){
-        List<Audit> result = auditRepository.findByUserId(userId);
-        List<AuditResponse> responses =result.stream().map(AuditService::convertToAuditResponse).toList();
-        return ResponseEntity.ok(responses);
+        try{
+            List<Audit> result = auditRepository.findByUserId(userId);
+            List<AuditResponse> responses = result.stream().map(AuditService::convertToAuditResponse).toList();
+            return ResponseEntity.ok(responses);
+        }
+        catch (Exception e){
+            return ResponseEntity.internalServerError().body(e.getMessage());
+        }
     }
 
     public ResponseEntity<?> findAuditsOnTable(String tableName){
-        List<Audit> result = auditRepository.findByTableName(tableName);
-        List<AuditResponse> responses =result.stream().map(AuditService::convertToAuditResponse).toList();
-        return ResponseEntity.ok(responses);
+        try{
+            List<Audit> result = auditRepository.findByTableName(tableName);
+            List<AuditResponse> responses = result.stream().map(AuditService::convertToAuditResponse).toList();
+            return ResponseEntity.ok(responses);
+        }
+        catch (Exception e){
+            return ResponseEntity.internalServerError().body(e.getMessage());
+        }
     }
 
     public ResponseEntity<?> findAuditsBetweenPeriod(String start, String end){
-        LocalDate startTmp = LocalDate.parse(start);
-        LocalDate endTmp = LocalDate.parse(end);
-        List<Audit> result = auditRepository.findBetweenPeriod(Timestamp.valueOf(startTmp.atStartOfDay()),
-                Timestamp.valueOf(endTmp.atStartOfDay()));
-        List<AuditResponse> responses =result.stream().map(AuditService::convertToAuditResponse).toList();
-        return ResponseEntity.ok(responses);
+        try{
+            LocalDate startTmp = LocalDate.parse(start);
+            LocalDate endTmp = LocalDate.parse(end);
+            List<Audit> result = auditRepository.findBetweenPeriod(Timestamp.valueOf(startTmp.atStartOfDay()),
+                    Timestamp.valueOf(endTmp.atStartOfDay()));
+            List<AuditResponse> responses = result.stream().map(AuditService::convertToAuditResponse).toList();
+            return ResponseEntity.ok(responses);
+        }
+        catch (Exception e){
+            return ResponseEntity.internalServerError().body(e.getMessage());
+        }
     }
 
     private static AuditResponse convertToAuditResponse(Audit audit){
