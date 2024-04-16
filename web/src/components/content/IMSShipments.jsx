@@ -17,7 +17,7 @@ function IMSShipments() {
 
   const fetchShipments = useCallback(async () => {
     try {
-      const response = await fetch("https://930ca83e-ce9f-4adc-bb48-3e7f2cf4773b.mock.pstmn.io/shipments")
+      const response = await fetch("http://localhost:8080/shipments")
       if (!response.ok) {
         throw new Error("Network response was not ok");
       }
@@ -70,22 +70,31 @@ function IMSShipments() {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          sourceId: event.target.formSource.value,
-          destinationId: event.target.formDestination.value,
-          currentLocationId: null,
+          source: event.target.formSource.value,
+          destination: event.target.formDestination.value,
+          currentLocation: null,
           departureTime: null,
           estimatedArrivalTime: null,
           actualArrivalTime: null,
           shipmentStatus: "PENDING",
         }),
       });
+      console.log(JSON.stringify({
+        sourceId: event.target.formSource.value,
+        destinationId: event.target.formDestination.value,
+        currentLocationId: null,
+        departureTime: null,
+        estimatedArrivalTime: null,
+        actualArrivalTime: null,
+        shipmentStatus: "PENDING",
+      }), shipmentReponse);
       if (!shipmentReponse.ok) {
         console.error("There was a problem adding the shipment.");
         return;
       }
       const newShipmentData = await shipmentReponse.json();
 
-      const shipResponse = await fetch("http://localhost:8080/ship/add", {
+      const shipResponse = await fetch("http://localhost:8080/ships/add", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -102,7 +111,7 @@ function IMSShipments() {
       }
       fetchShipments();
     } catch (error) {
-      console.error("Error occurred during shipment submission:", error);
+      console.error("Error occurred during submission:", error);
     }
   }
 
@@ -126,14 +135,14 @@ function IMSShipments() {
             </thead>
             <tbody>
               {shipments.map(shipment => (
-                <tr key={shipment.id}>
-                  <td>{shipment.id}</td>
-                  <td>{shipment.source}</td>
-                  <td>{shipment.destination}</td>
+                <tr key={shipment.shipmentId}>
+                  <td>{shipment.shipmentId}</td>
+                  <td>{sites.find(site => site.siteId === shipment.source)?.siteName}</td>
+                  <td>{sites.find(site => site.siteId === shipment.destination)?.siteName}</td>
                   <td>{shipment.currentLocation}</td>
-                  <td>{shipment.departureTime || 'N/A'}</td>
-                  <td>{shipment.estimatedArrivalTime}</td>
-                  <td>{shipment.actualArrivalTime || 'N/A'}</td>
+                  <td>{shipment.departureTime ? new Date(shipment.departureTime).toLocaleDateString("en-US", { year: 'numeric', month: 'long', day: 'numeric' }) : 'Null'}</td>
+                  <td>{shipment.estimatedArrivalTime ? new Date(shipment.estimatedArrivalTime).toLocaleDateString("en-US", { year: 'numeric', month: 'long', day: 'numeric' }) : 'Null'}</td>
+                  <td>{shipment.actualArrivalTime ? new Date(shipment.actualArrivalTime).toLocaleDateString("en-US", { year: 'numeric', month: 'long', day: 'numeric' }) : 'Null'}</td>
                   <td>{shipment.shipmentStatus}</td>
                 </tr>
               ))}
@@ -149,25 +158,31 @@ function IMSShipments() {
               <Form.Group controlId="formSource">
                 <Form.Label>From Site</Form.Label>
                 <Form.Control as="select">
-                  {sites.map(site => <option key={site.id} value={site.id}>{site.name}</option>)}
+                  {sites.map(site => <option key={site.siteId} value={site.siteId}>{site.siteName}</option>)}
                 </Form.Control>
               </Form.Group>
               <Form.Group controlId="formDestination">
                 <Form.Label>To Site</Form.Label>
                 <Form.Control as="select">
-                  {sites.map(site => <option key={site.id} value={site.id}>{site.name}</option>)}
+                  {sites.map(site => <option key={site.siteId} value={site.siteId}>{site.siteName}</option>)}
                 </Form.Control>
               </Form.Group>
-              <Form.Group controlId="formItem">
-                <Form.Label>Item</Form.Label>
-                <Form.Control as="select">
-                  {items.map(item => <option key={item.id} value={item.id}>{item.name}</option>)}
-                </Form.Control>
-              </Form.Group>
-              <Form.Group controlId="formQuantity">
-                <Form.Label>Quantity</Form.Label>
-                <Form.Control type="number" placeholder="Enter quantity" />
-              </Form.Group>
+              <Row>
+                <Col>
+                  <Form.Group controlId="formItem">
+                    <Form.Label>Item</Form.Label>
+                    <Form.Control as="select">
+                      {items.map(item => <option key={item.itemId} value={item.itemId}>{item.itemName}</option>)}
+                    </Form.Control>
+                  </Form.Group>
+                </Col>
+                <Col>
+                  <Form.Group controlId="formQuantity">
+                    <Form.Label>Quantity</Form.Label>
+                    <Form.Control type="number" placeholder="Enter quantity" />
+                  </Form.Group>
+                </Col>
+              </Row>
               <Button variant="primary" type="submit">
                 Submit
               </Button>
