@@ -19,7 +19,9 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-// For more information, please refer to the documentation in the README under Testing Documentation
+/**
+ * This class tests the ShipController class.
+ */
 class ShipControllerTest {
     @InjectMocks
     ShipController shipController;
@@ -28,12 +30,26 @@ class ShipControllerTest {
 
     private MockMvc mockMvc;
 
+    /**
+     * Prepares the test environment by initializing any mocks
+     * and creating a MockMvc instance for testing the shipController in isolation
+     */
     @BeforeEach
     public void setup() {
         MockitoAnnotations.openMocks(this);
         mockMvc = MockMvcBuilders.standaloneSetup(shipController).build();
     }
 
+    /**
+     * Test method to verify the functionality of retrieving all ships.
+     *
+     * <p>This test ensures that the controller's endpoint for retrieving all ships ("/ships") behaves as expected.
+     * It sets up a mock repository to return a list of ships, and then performs an HTTP GET request to the endpoint.
+     * The test verifies that the response status is OK (200), the response body is an array, and the length of the
+     * array matches the number of ships returned by the mock repository.
+     *
+     * @throws Exception if an error occurs during the test execution
+     */
     @Test
     void testGetAllShips() throws Exception {
         // Given
@@ -51,6 +67,18 @@ class ShipControllerTest {
                 .andExpect(jsonPath("$.length()").value(2));
     }
 
+    /**
+     * Test method to verify the functionality of retrieving ships by item ID.
+     *
+     * <p>This test ensures that the controller's endpoint for retrieving ships by item ID ("/ships/item={itemId}")
+     * behaves as expected.
+     * It sets up a mock repository to return a list of ships for a given item ID,
+     * and then performs an HTTP GET request to the endpoint.
+     * The test verifies that the response status is OK (200), the response body is an array,
+     * and the length of the array matches the number of ships returned by the mock repository.
+     *
+     * @throws Exception if an error occurs during the test execution
+     */
     @Test
     void testGetShipsByItemId() throws Exception {
         // Given
@@ -68,6 +96,18 @@ class ShipControllerTest {
                 .andExpect(jsonPath("$.length()").value(1));
     }
 
+    /**
+     * Test method to verify the functionality of retrieving ships by shipment ID.
+     *
+     * <p>This test ensures that the controller's endpoint for retrieving ships by shipment ID
+     * ("/ships/shipment={shipmentId}") behaves as expected.
+     * It sets up a mock repository to return a list of ships for a given shipment ID,
+     * and then performs an HTTP GET request to the endpoint.
+     * The test verifies that the response status is OK (200), the response body is an array,
+     * and the length of the array matches the number of ships returned by the mock repository.
+     *
+     * @throws Exception if an error occurs during the test execution
+     */
     @Test
     void testGetShipsByShipmentId() throws Exception {
         // Given
@@ -85,6 +125,18 @@ class ShipControllerTest {
                 .andExpect(jsonPath("$.length()").value(1));
     }
 
+    /**
+     * Test method to verify the functionality of retrieving ships by item ID and shipment ID.
+     *
+     * <p>This test ensures that the controller's endpoint for retrieving ships by both item ID and shipment ID
+     * ("/ships/item={itemId}/shipment={shipmentId}") behaves as expected.
+     * It sets up a mock repository to return a list of ships for given item and shipment IDs,
+     * and then performs an HTTP GET request to the endpoint.
+     * The test verifies that the response status is OK (200), the response body is an array,
+     * and the length of the array matches the number of ships returned by the mock repository.
+     *
+     * @throws Exception if an error occurs during the test execution
+     */
     @Test
     void testGetShipsByItemIdAndShipmentId() throws Exception {
         // Given

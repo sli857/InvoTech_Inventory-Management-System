@@ -15,6 +15,9 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+/**
+ * Test class for ShipRepository
+ */
 @DataJpaTest
 // Annotation to specify property sources for the test
 @TestPropertySource(properties = {
@@ -32,6 +35,9 @@ class ShipTest {
     @Autowired
     private ShipmentRepository shipmentRepository;
 
+    /**
+     * Creation of entities before each test
+     */
     @BeforeEach
     void setUp() {
         Item item1 = createItem("item 1", 12.99);
@@ -44,6 +50,11 @@ class ShipTest {
         createShip(shipment2, item2, 20);
     }
 
+    /**
+     * Tests the findAll() method of ShipRepository
+     *
+     * <p>Checks if the method returns all the entities in the database.
+     */
     @Test
     void findAllTest() {
         // Given
@@ -57,6 +68,11 @@ class ShipTest {
         assertEquals(2, res.size());
     }
 
+    /**
+     * Tests the findByItemId() method of ShipRepository
+     *
+     * <p>Checks if the method returns the entities with the given item id.
+     */
     @Test
     void findByItemIdTest() {
         // Given
@@ -70,6 +86,11 @@ class ShipTest {
         assertEquals(1, res.size());
     }
 
+    /**
+     * Tests the findByShipmentId() method of ShipRepository
+     *
+     * <p>Checks if the method returns the entities with the given shipment id.
+     */
     @Test
     void findByShipmentIdTest() {
         // Given
@@ -83,6 +104,11 @@ class ShipTest {
         assertEquals(1, res.size());
     }
 
+    /**
+     * Tests the findByItemIdAndShipmentId() method of ShipRepository
+     *
+     * <p>Checks if the method returns the entities with the given item id and shipment id.
+     */
     @Test
     void findByItemIdAndShipmentIdTest() {
         // Given
@@ -102,6 +128,13 @@ class ShipTest {
 
     // Helper methods to create entities
 
+    /**
+     * Creates a Ship entity
+     *
+     * @param shipment Shipment entity
+     * @param item Item entity
+     * @param quantity Quantity of the item
+     */
     private void createShip(Shipment shipment, Item item, int quantity) {
         Ship ship = Ship.builder()
                 .shipmentId(shipment)
@@ -111,6 +144,13 @@ class ShipTest {
         shipRepository.saveAndFlush(ship);
     }
 
+    /**
+     * Creates an Item entity
+     *
+     * @param name Name of the item
+     * @param price Price of the item
+     * @return Item entity
+     */
     private Item createItem(String name, double price) {
         Item item = Item.builder()
                 .itemName(name)
@@ -119,6 +159,16 @@ class ShipTest {
         return itemRepository.saveAndFlush(item);
     }
 
+    /**
+     * Creates a Shipment entity
+     *
+     * @param source Source of the shipment
+     * @param destination Destination of the shipment
+     * @param currentLocation Current location of the shipment
+     * @param departureTimeMillis Departure time in milliseconds
+     * @param estimatedArrivalTimeMillis Estimated arrival time in milliseconds
+     * @return Shipment entity
+     */
     private Shipment createShipment(long source, long destination, String currentLocation, long departureTimeMillis, long estimatedArrivalTimeMillis) {
         Shipment shipment = Shipment.builder()
                 .source(source)
