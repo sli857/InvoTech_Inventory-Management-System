@@ -100,7 +100,7 @@ public class ShipService {
         );
 
         // Save the changes
-        return ResponseEntity.ok(shipRepository.save(ship));
+        return ResponseEntity.ok().body(shipRepository.save(ship));
     }
 
 }
