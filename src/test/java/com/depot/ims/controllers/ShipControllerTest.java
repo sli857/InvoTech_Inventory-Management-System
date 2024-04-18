@@ -2,11 +2,16 @@ package com.depot.ims.controllers;
 
 import com.depot.ims.models.Ship;
 import com.depot.ims.repositories.ShipRepository;
+import com.depot.ims.requests.ShipRequest;
+import com.depot.ims.services.ShipService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
@@ -16,6 +21,7 @@ import java.util.List;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -25,6 +31,8 @@ class ShipControllerTest {
     ShipController shipController;
     @Mock
     ShipRepository shipRepository;
+    @Mock
+    ShipService shipService;
 
     private MockMvc mockMvc;
 
@@ -102,4 +110,20 @@ class ShipControllerTest {
                 .andExpect(jsonPath("$").isArray())
                 .andExpect(jsonPath("$.length()").value(1));
     }
+
+    @Test
+    void testAddShip() throws Exception {
+        // Given
+        ShipRequest shipRequest = new ShipRequest();
+
+        // When
+        when(shipService.addShip(any(ShipRequest.class))).thenReturn(ResponseEntity.ok().build());
+
+        // Then
+        mockMvc.perform(post("/ships/add")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(new ObjectMapper().writeValueAsString(shipRequest)))
+                .andExpect(status().isOk());
+    }
+
 }
