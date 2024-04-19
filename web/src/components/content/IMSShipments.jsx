@@ -63,8 +63,9 @@ function IMSShipments() {
 
   async function handleSubmit(event) {
     event.preventDefault();
+
     try {
-      const shipmentReponse = await fetch("http://localhost:8080/shipments/add", {
+      const shipmentResponse = await fetch("http://localhost:8080/shipments/add", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -79,37 +80,31 @@ function IMSShipments() {
           shipmentStatus: "PENDING",
         }),
       });
-      console.log(JSON.stringify({
-        sourceId: event.target.formSource.value,
-        destinationId: event.target.formDestination.value,
-        currentLocationId: null,
-        departureTime: null,
-        estimatedArrivalTime: null,
-        actualArrivalTime: null,
-        shipmentStatus: "PENDING",
-      }), shipmentReponse);
-      if (!shipmentReponse.ok) {
-        console.error("There was a problem adding the shipment.");
-        return;
-      }
-      const newShipmentData = await shipmentReponse.json();
 
-      const shipResponse = await fetch("http://localhost:8080/ships/add", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          itemId: event.target.formItem.value,
-          shipmentId: newShipmentData.id,
-          quantity: event.target.formQuantity.value,
-        }),
-      });
-      if (!shipResponse.ok) {
-        console.error("There was a problem adding the site.");
-        return;
+      if (!shipmentResponse.ok) {
+        console.error("There was a problem adding the shipment.", shipmentResponse);
+      } else {
+        await fetchShipments();
+
+        const shipResponse = await fetch("http://localhost:8080/ships/add", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            itemId: event.target.formItem.value,
+            shipmentId: 16,
+            quantity: event.target.formQuantity.value,
+          }),
+        });
+
+        if (!shipResponse.ok) {
+          console.error("There was a problem adding the ship.", shipResponse);
+        } else {
+          await fetchShipments();
+        }
       }
-      fetchShipments();
+
     } catch (error) {
       console.error("Error occurred during submission:", error);
     }

@@ -1,12 +1,7 @@
 package com.depot.ims.services;
 
-import com.depot.ims.models.Item;
-import com.depot.ims.models.Ship;
-import com.depot.ims.models.Shipment;
-import com.depot.ims.repositories.AvailabilityRepository;
-import com.depot.ims.repositories.ItemRepository;
-import com.depot.ims.repositories.ShipRepository;
-import com.depot.ims.repositories.ShipmentRepository;
+import com.depot.ims.models.*;
+import com.depot.ims.repositories.*;
 import com.depot.ims.requests.ShipRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -20,6 +15,7 @@ public class ShipService {
     private final ShipmentRepository shipmentRepository;
     private final ItemRepository itemRepository;
     private final AvailabilityRepository availabilityRepository;
+    private final SiteRepository siteRepository;
 
     /**
      * Constructor for ShipService.
@@ -32,11 +28,12 @@ public class ShipService {
     public ShipService(ShipRepository shipRepository,
                        ShipmentRepository shipmentRepository,
                        ItemRepository itemRepository,
-                       AvailabilityRepository availabilityRepository) {
+                       AvailabilityRepository availabilityRepository, SiteRepository siteRepository) {
         this.shipRepository = shipRepository;
         this.shipmentRepository = shipmentRepository;
         this.itemRepository = itemRepository;
         this.availabilityRepository = availabilityRepository;
+        this.siteRepository = siteRepository;
     }
 
     /**
@@ -89,15 +86,30 @@ public class ShipService {
         );
 
         // Update the quantity of the item in the destination site
-        availabilityRepository.findBySiteIdAndItemId(
+        // If the item is not available in the destination site, add it
+        if (availabilityRepository.findBySiteIdAndItemId(
                 ship.getShipmentId().getDestination(),
                 ship.getItemId().getItemId()
-        ).setQuantity(
-                availabilityRepository.findBySiteIdAndItemId(
-                        ship.getShipmentId().getDestination(),
-                        ship.getItemId().getItemId()
-                ).getQuantity() + ship.getQuantity()
-        );
+        ) == null) {
+            Site destination = siteRepository.findBySiteId(ship.getShipmentId().getDestination());
+            availabilityRepository.save(
+                    new Availability(
+                            destination,
+                            ship.getItemId(),
+                            ship.getQuantity()
+                    )
+            );
+        } else {
+            availabilityRepository.findBySiteIdAndItemId(
+                    ship.getShipmentId().getDestination(),
+                    ship.getItemId().getItemId()
+            ).setQuantity(
+                    availabilityRepository.findBySiteIdAndItemId(
+                            ship.getShipmentId().getDestination(),
+                            ship.getItemId().getItemId()
+                    ).getQuantity() + ship.getQuantity()
+            );
+        }
 
         // Save the changes
         return ResponseEntity.ok().body(shipRepository.save(ship));

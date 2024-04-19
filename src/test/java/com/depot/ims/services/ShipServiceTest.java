@@ -1,10 +1,7 @@
 package com.depot.ims.services;
 
 import com.depot.ims.models.*;
-import com.depot.ims.repositories.AvailabilityRepository;
-import com.depot.ims.repositories.ItemRepository;
-import com.depot.ims.repositories.ShipRepository;
-import com.depot.ims.repositories.ShipmentRepository;
+import com.depot.ims.repositories.*;
 import com.depot.ims.requests.ShipRequest;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -26,10 +23,17 @@ class ShipServiceTest {
     private ShipRepository shipRepositoryMock = mock(ShipRepository.class);
     @Mock
     private AvailabilityRepository availabilityRepositoryMock = mock(AvailabilityRepository.class);
-    private final ShipService shipService = new ShipService(shipRepositoryMock,
+    @Mock
+    private SiteRepository siteRepositoryMock = mock(SiteRepository.class);
+    private final ShipService shipService = new ShipService(
+            shipRepositoryMock,
             shipmentRepositoryMock,
             itemRepositoryMock,
-            availabilityRepositoryMock);
+            availabilityRepositoryMock,
+            siteRepositoryMock
+    );
+
+    // TODO fix tests based on new check if item exists in the source site and the new siteRepository use
 
     @Test
     void addShipQuantityUpdateTest() {
