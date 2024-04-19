@@ -1,4 +1,4 @@
-import {Route, Routes } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 
 // Import layout and page components
 import IMSLayout from "./IMSLayout";
