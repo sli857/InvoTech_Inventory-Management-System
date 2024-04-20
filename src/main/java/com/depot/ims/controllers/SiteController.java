@@ -2,6 +2,7 @@ package com.depot.ims.controllers;
 
 import com.depot.ims.models.Site;
 import com.depot.ims.repositories.SiteRepository;
+import com.depot.ims.services.AuditService;
 import com.depot.ims.services.SiteService;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -21,7 +22,7 @@ public class SiteController {
     private final SiteRepository siteRepository;
     private final SiteService siteService;
 
-    public SiteController(SiteRepository siteRepository, SiteService siteService) {
+    public SiteController(SiteRepository siteRepository, SiteService siteService, AuditService auditService) {
         this.siteRepository = siteRepository;
         this.siteService = siteService;
     }

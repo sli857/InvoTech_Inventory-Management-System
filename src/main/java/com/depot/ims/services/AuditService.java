@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -21,17 +22,6 @@ public class AuditService {
     public ResponseEntity<?> findAll(){
         try {
             List<Audit> result = auditRepository.findAll();
-            List<AuditResponse> responses = result.stream().map(AuditService::convertToAuditResponse).toList();
-            return ResponseEntity.ok(responses);
-        }
-        catch (Exception e){
-            return ResponseEntity.internalServerError().body(e.getMessage());
-        }
-    }
-
-    public ResponseEntity<?> findAuditsByUser(Long userId){
-        try{
-            List<Audit> result = auditRepository.findByUserId(userId);
             List<AuditResponse> responses = result.stream().map(AuditService::convertToAuditResponse).toList();
             return ResponseEntity.ok(responses);
         }
@@ -65,12 +55,24 @@ public class AuditService {
         }
     }
 
+    public void saveAudit(String tableName, String fieldName, Long rowKey,
+                          String oldValue, String newValue, String action){
+        auditRepository.save(
+                Audit.builder()
+                        .tableName(tableName)
+                        .fieldName(fieldName)
+                        .rowKey(rowKey)
+                        .oldValue(oldValue)
+                        .newValue(newValue)
+                        .action(action)
+                        .actionTimestamp(Timestamp.from(Instant.now()))
+                        .build()
+        );
+    }
+
     private static AuditResponse convertToAuditResponse(Audit audit){
         return AuditResponse.builder()
                 .auditId(audit.getAuditId())
-                .userId(audit.getUserId().getUserId())
-                .userName(audit.getUserId().getUsername())
-                .userPosition(audit.getUserId().getPosition())
                 .tableName(audit.getTableName())
                 .fieldName(audit.getFieldName())
                 .rowKey(audit.getRowKey())

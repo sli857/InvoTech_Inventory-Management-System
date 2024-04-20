@@ -12,6 +12,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/audits")
+@CrossOrigin(origins = "http://localhost:5173/")
 public class AuditController {
 
     private final AuditRepository auditRepository;
@@ -26,10 +27,7 @@ public class AuditController {
     public ResponseEntity<?> getAllAudits() {
         return auditService.findAll();
     }
-    @GetMapping("/byUser")
-    public ResponseEntity<?> getAuditByUser(@RequestParam Long userId) {
-        return auditService.findAuditsByUser(userId);
-    }
+
     @GetMapping("/onTable")
     public ResponseEntity<?> getAuditOnTable(@RequestParam String tableName) {
         return auditService.findAuditsOnTable(tableName);

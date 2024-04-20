@@ -11,15 +11,11 @@ import java.sql.Timestamp;
 @Builder
 public class AuditResponse {
     Long auditId;
-    Long userId;
-    String userName;
-    String userPosition;
     String tableName;
     String fieldName;
-    Integer rowKey;
+    Long rowKey;
     String oldValue;
     String newValue;
     String action;
     Timestamp actionTimestamp;
-
 }

@@ -16,16 +16,12 @@ import java.util.Optional;
 @Builder
 @Entity
 @Table(name = "Audits")
-public class Audit implements AuditorAware<Long> {
+public class Audit {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "PK_audits", updatable = false, nullable = false)
     private Long auditId;
-
-    @ManyToOne /*(cascade = CascadeType.ALL)*/
-    @JoinColumn(name = "FK_audits_users", referencedColumnName = "PK_users", nullable = false)
-    private User userId;
 
     @Column(name = "table_name", nullable = false)
     private String tableName;
@@ -34,7 +30,7 @@ public class Audit implements AuditorAware<Long> {
     private String fieldName;
 
     @Column(name = "row_key", nullable = false)
-    private Integer rowKey;
+    private Long rowKey;
 
     @Column(name = "old_value")
     private String oldValue;
@@ -48,9 +44,5 @@ public class Audit implements AuditorAware<Long> {
     @Column(name = "action_timestamp", nullable = false)
     private Timestamp actionTimestamp;
 
-    @Override
-    public Optional<Long> getCurrentAuditor() {
-        // Authentication
-        return Optional.empty();
-    }
 }
+

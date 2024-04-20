@@ -22,7 +22,7 @@ import static org.mockito.Mockito.*;
 public class SiteServiceTest {
     @Mock
     private SiteRepository siteRepositoryMock = mock(SiteRepository.class);
-    private final SiteService siteService = new SiteService(siteRepositoryMock, null, null);
+    private final SiteService siteService = new SiteService(siteRepositoryMock, null);
 
 
     @BeforeEach

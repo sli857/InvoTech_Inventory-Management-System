@@ -13,9 +13,6 @@ public interface AuditRepository extends JpaRepository<Audit, Long> {
     @Query("SELECT a FROM Audit a WHERE a.auditId=?1")
     Audit findByAuditId(Long auditId);
 
-    @Query("SELECT a from Audit a WHERE a.userId.userId=?1")
-    List<Audit> findByUserId(Long userId);
-
     @Query("SELECT a from Audit a WHERE a.tableName=?1")
     List<Audit> findByTableName(String tableName);
 
