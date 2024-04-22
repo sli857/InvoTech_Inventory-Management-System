@@ -28,7 +28,7 @@ public class Item {
     private Long itemId;
 
     // Specifies the itemName column
-    @Column(name = "item_name", nullable = false)
+    @Column(name = "item_name", unique = true, nullable = false)
     private String itemName;
 
     // Specifies the itemPrice column

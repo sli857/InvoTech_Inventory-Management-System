@@ -69,4 +69,6 @@ public interface AvailabilityRepository extends JpaRepository<Availability, Long
     @Query("SELECT a.siteId from Availability a where a.itemId = :item")
     List<Site> findSitesByOneItem(@Param("item") Item item);
 
+
+
 }
