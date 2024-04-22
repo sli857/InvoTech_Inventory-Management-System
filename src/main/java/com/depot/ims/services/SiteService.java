@@ -157,8 +157,14 @@ public class SiteService {
                     "found by siteId");
         Site site = siteRepository.findBySiteId(siteId);
         Date date = ceaseDate == null ? Date.valueOf(LocalDate.now()) : Date.valueOf(ceaseDate);
+        auditService.saveAudit("Sites","internalSite",site.getSiteId().toString(),"open","closed"
+                ,"UPDATE");
+        auditService.saveAudit("Sites","ceaseDate",site.getSiteId().toString(),
+                site.getCeaseDate()==null?null:site.getCeaseDate().toString(),date.toString()
+                ,"UPDATE");
         site.setCeaseDate(date);
         site.setSiteStatus("closed");
+
         return ResponseEntity.ok(siteRepository.saveAndFlush(site));
     }
 }

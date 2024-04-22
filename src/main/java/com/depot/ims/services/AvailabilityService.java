@@ -54,10 +54,7 @@ public class AvailabilityService {
         try {
             var res = availabilityRepository.save(availability);
             this.auditService.saveAudit("Availabilities",null,
-                    AvailabilityKey.builder()
-                            .itemId(res.getItemId().getItemId())
-                            .siteId(res.getSiteId().getSiteId())
-                            .build().toString()
+                    String.join(res.getItemId().toString(),res.getSiteId().toString())
                     ,null,
                     res.toString(),"INSERT");
             return ResponseEntity.ok(res);

@@ -43,13 +43,7 @@ public class AvailabilityTest {
         Site site = siteRepository.save(new Site("Site 1", "Location 1", "Open",
                 null, true));
         Item item = itemRepository.save(new Item("Item 1", 12.99));
-        //availabilityRepository.save(new Availability(site, item, 10));
-        availabilityRepository.save(Availability.builder()
-                .siteId(site)
-                .itemId(item)
-                .quantity(10)
-                .build());
-
+        availabilityRepository.save(new Availability(site, item, 10));
         List<Availability> result = availabilityRepository.findBySiteId(site.getSiteId());
 
         assertNotNull(result);
@@ -67,11 +61,7 @@ public class AvailabilityTest {
         Site site = siteRepository.save(new Site("Site 1", "Location 1", "Open",
                 null, true));
         Item item = itemRepository.save(new Item("Item 1", 12.99));
-        availabilityRepository.save(Availability.builder()
-                .siteId(site)
-                .itemId(item)
-                .quantity(10)
-                .build());
+        availabilityRepository.save(new Availability(site, item, 10));
         List<Availability> result = availabilityRepository.findByItemId(item.getItemId());
 
         assertNotNull(result);

@@ -73,6 +73,7 @@ public class ShipmentServiceTest {
     void testDeleteShipmentFound() {
         Long shipmentId = 1L;
         when(shipmentRepository.existsById(shipmentId)).thenReturn(true);
+        doNothing().when(auditService).saveAudit(any(),any(),any(),any(),any(),any());
 
         ResponseEntity<?> response = shipmentService.deleteShipment(shipmentId);
 

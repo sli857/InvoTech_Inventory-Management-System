@@ -13,8 +13,6 @@ import java.util.Objects;
 
 @Data
 @ToString
-@AllArgsConstructor
-@Builder
 public class AvailabilityKey implements Serializable {
 
     @Reference(to = Site.class)

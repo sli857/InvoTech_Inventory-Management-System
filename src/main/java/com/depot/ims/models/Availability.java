@@ -4,6 +4,7 @@ import com.depot.ims.models.compositeKeys.AvailabilityKey;
 import jakarta.persistence.*;
 import lombok.*;
 
+
 /**
  * Represents a availability entity in the system.
  * Encapsulates user details and credentials for access control and identification.
