@@ -63,6 +63,7 @@ function IMSSites() {
     } catch (error) {
       console.error("There was a problem with fetching sites:", error);
     }
+    
   };
 
   /**
@@ -137,9 +138,12 @@ function IMSSites() {
         internalSite: internalSite,
       }),
     });
+
+
     if (response.status === 200) {
       fetchSites(); // Re-fetch sites to update the list
     }
+
     // Assuming the form submission is successful, reset form fields here
     setSiteName('');
     setLocation('');
@@ -213,8 +217,6 @@ function IMSSites() {
     return "";
   }
 
-
-
   
 
   /**
@@ -225,9 +227,10 @@ function IMSSites() {
       {/* Filter sites based on item */}
       <Row className="mb-3">
         <Col>
+
           <Typeahead
             id="items-typeahead"
-            labelKey="itemName"
+            labelKey={(option) => `${option.itemName} - Id: ${option.itemId}`}
             multiple
             onChange={(selected) => {
               // Update the state component with each new selection
@@ -239,6 +242,7 @@ function IMSSites() {
             placeholder="Select items..."
             selected={selectedItems}
           />
+          
         </Col>
       </Row>
       {/* Table of sites */}
