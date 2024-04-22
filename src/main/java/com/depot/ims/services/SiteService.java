@@ -1,15 +1,11 @@
 package com.depot.ims.services;
 
-import com.depot.ims.models.Audit;
 import com.depot.ims.models.Site;
-import com.depot.ims.repositories.AuditRepository;
 import com.depot.ims.repositories.SiteRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.sql.Date;
-import java.sql.Timestamp;
-import java.time.Instant;
 import java.time.LocalDate;
 import java.util.Objects;
 import java.util.stream.Stream;
@@ -70,8 +66,8 @@ public class SiteService {
     public ResponseEntity<?> addSite(Site site) {
         try {
             var res = siteRepository.save(site);
-            System.out.println(site.toString());
-            auditService.saveAudit("sites", null,res.getSiteId().toString(),null,res.toString(),"INSERT");
+            System.out.println(site);
+            auditService.saveAudit("sites", null, res.getSiteId().toString(), null, res.toString(), "INSERT");
             return ResponseEntity.ok(res);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
@@ -106,31 +102,31 @@ public class SiteService {
 
         Site site = siteRepository.findBySiteId(siteId);
         if (newStatus != null) {
-            auditService.saveAudit("sites","siteStatus",siteId.toString(),site.getSiteStatus(),newStatus,
+            auditService.saveAudit("sites", "siteStatus", siteId.toString(), site.getSiteStatus(), newStatus,
                     "UPDATE");
             site.setSiteStatus(newStatus);
         }
         if (newName != null) {
-            auditService.saveAudit("sites","siteName",siteId.toString(),site.getSiteName(),newName,
+            auditService.saveAudit("sites", "siteName", siteId.toString(), site.getSiteName(), newName,
                     "UPDATE");
             site.setSiteName(newName);
         }
         if (newLocation != null) {
-            auditService.saveAudit("sites","siteLocation",siteId.toString(),site.getSiteLocation(),
-                    newLocation,"UPDATE");
+            auditService.saveAudit("sites", "siteLocation", siteId.toString(), site.getSiteLocation(),
+                    newLocation, "UPDATE");
             site.setSiteLocation(newLocation);
         }
         if (newInternalSite != null) {
-            auditService.saveAudit("sites","internalSite",siteId.toString(),
+            auditService.saveAudit("sites", "internalSite", siteId.toString(),
                     site.getInternalSite().toString(),
-                    newInternalSite.toString(),"UPDATE");
+                    newInternalSite.toString(), "UPDATE");
             site.setInternalSite(newInternalSite);
         }
         if (newCeaseDate != null) {
             try {
                 Date date = Date.valueOf(newCeaseDate);
-                auditService.saveAudit("sites","ceaseDate",siteId.toString(),site.getCeaseDate().toString(),
-                        newCeaseDate,"UPDATE");
+                auditService.saveAudit("sites", "ceaseDate", siteId.toString(), site.getCeaseDate().toString(),
+                        newCeaseDate, "UPDATE");
                 site.setCeaseDate(date);
             } catch (IllegalArgumentException e) {
                 return ResponseEntity.badRequest().body("Date format is illegal.");
@@ -157,11 +153,11 @@ public class SiteService {
                     "found by siteId");
         Site site = siteRepository.findBySiteId(siteId);
         Date date = ceaseDate == null ? Date.valueOf(LocalDate.now()) : Date.valueOf(ceaseDate);
-        auditService.saveAudit("Sites","internalSite",site.getSiteId().toString(),"open","closed"
-                ,"UPDATE");
-        auditService.saveAudit("Sites","ceaseDate",site.getSiteId().toString(),
-                site.getCeaseDate()==null?null:site.getCeaseDate().toString(),date.toString()
-                ,"UPDATE");
+        auditService.saveAudit("Sites", "internalSite", site.getSiteId().toString(), "open", "closed"
+                , "UPDATE");
+        auditService.saveAudit("Sites", "ceaseDate", site.getSiteId().toString(),
+                site.getCeaseDate() == null ? null : site.getCeaseDate().toString(), date.toString()
+                , "UPDATE");
         site.setCeaseDate(date);
         site.setSiteStatus("closed");
 

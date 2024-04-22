@@ -1,10 +1,7 @@
 package com.depot.ims.services;
 
 import com.depot.ims.models.Item;
-import com.depot.ims.repositories.AvailabilityRepository;
 import com.depot.ims.repositories.ItemRepository;
-import com.depot.ims.repositories.ShipRepository;
-import com.depot.ims.repositories.ShipmentRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -25,7 +22,7 @@ public class ItemService {
     /**
      * Constructor for itemService.
      *
-     * @param itemRepository         The ItemRepository instance.
+     * @param itemRepository The ItemRepository instance.
      */
     public ItemService(ItemRepository itemRepository, AuditService auditService) {
         this.itemRepository = itemRepository;
@@ -38,10 +35,10 @@ public class ItemService {
      * @param item The Item object to be added.
      * @return ResponseEntity containing the result of the item addition operation.
      */
-    public  ResponseEntity<?> addItem(@RequestBody Item item) {
-        try{
+    public ResponseEntity<?> addItem(@RequestBody Item item) {
+        try {
             var res = this.itemRepository.save(item);
-            this.auditService.saveAudit("Items",null,res.getItemId().toString(),null,res.toString(),
+            this.auditService.saveAudit("Items", null, res.getItemId().toString(), null, res.toString(),
                     "INSERT");
             return ResponseEntity.ok(item);
 
@@ -54,8 +51,8 @@ public class ItemService {
     /**
      * Gets an item with the given id or name
      *
-     * @Param item name or item id
      * @return ResponseEntity containing the result of the item with the given id or name.
+     * @Param item name or item id
      */
     public ResponseEntity<?> getItem(
             @RequestParam(value = "itemId", required = false) Long itemID,
@@ -72,8 +69,8 @@ public class ItemService {
     /**
      * Updates an item with the given attributes
      *
-     * @Param item name or item id
      * @return ResponseEntity containing the result of the item with the given id or name.
+     * @Param item name or item id
      */
     public ResponseEntity<?> updateItem(
             @RequestParam(value = "itemId")
@@ -91,14 +88,14 @@ public class ItemService {
         }
         Item item = itemRepository.findByItemId(itemID);
         if (newName != null) {
-            auditService.saveAudit("Items","itemName",item.getItemId().toString(),item.getItemName(),newName
-                    ,"UPDATE");
+            auditService.saveAudit("Items", "itemName", item.getItemId().toString(), item.getItemName(), newName
+                    , "UPDATE");
             item.setItemName(newName);
         }
         if (newPrice != null) {
-            auditService.saveAudit("Items","itemPrice",item.getItemId().toString(),
+            auditService.saveAudit("Items", "itemPrice", item.getItemId().toString(),
                     item.getItemPrice().toString(),
-                    newPrice.toString(),"UPDATE");
+                    newPrice.toString(), "UPDATE");
             item.setItemPrice(newPrice);
         }
 
@@ -106,9 +103,6 @@ public class ItemService {
         return ResponseEntity.ok(updatedItem);
 
     }
-
-
-
 
 
 }

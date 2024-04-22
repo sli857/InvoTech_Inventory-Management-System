@@ -19,44 +19,54 @@ public class AuditService {
         this.auditRepository = auditRepository;
     }
 
-    public ResponseEntity<?> findAll(){
+    private static AuditResponse convertToAuditResponse(Audit audit) {
+        return AuditResponse.builder()
+                .auditId(audit.getAuditId())
+                .tableName(audit.getTableName())
+                .fieldName(audit.getFieldName())
+                .rowKey(audit.getRowKey())
+                .oldValue(audit.getOldValue())
+                .newValue(audit.getNewValue())
+                .action(audit.getAction())
+                .actionTimestamp(audit.getActionTimestamp())
+                .build();
+    }
+
+    public ResponseEntity<?> findAll() {
         try {
             List<Audit> result = auditRepository.findAll();
             List<AuditResponse> responses = result.stream().map(AuditService::convertToAuditResponse).toList();
             return ResponseEntity.ok(responses);
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             return ResponseEntity.internalServerError().body(e.getMessage());
         }
     }
 
-    public ResponseEntity<?> findAuditsOnTable(String tableName){
-        try{
+    public ResponseEntity<?> findAuditsOnTable(String tableName) {
+        try {
             List<Audit> result = auditRepository.findByTableName(tableName);
             List<AuditResponse> responses = result.stream().map(AuditService::convertToAuditResponse).toList();
             return ResponseEntity.ok(responses);
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             return ResponseEntity.internalServerError().body(e.getMessage());
         }
     }
 
-    public ResponseEntity<?> findAuditsBetweenPeriod(String start, String end){
-        try{
+    public ResponseEntity<?> findAuditsBetweenPeriod(String start, String end) {
+        try {
             LocalDate startTmp = LocalDate.parse(start);
             LocalDate endTmp = LocalDate.parse(end);
             List<Audit> result = auditRepository.findBetweenPeriod(Timestamp.valueOf(startTmp.atStartOfDay()),
                     Timestamp.valueOf(endTmp.atStartOfDay()));
             List<AuditResponse> responses = result.stream().map(AuditService::convertToAuditResponse).toList();
             return ResponseEntity.ok(responses);
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             return ResponseEntity.internalServerError().body(e.getMessage());
         }
     }
 
     public void saveAudit(String tableName, String fieldName, String rowKey,
-                          String oldValue, String newValue, String action){
+                          String oldValue, String newValue, String action) {
         auditRepository.save(
                 Audit.builder()
                         .tableName(tableName)
@@ -68,19 +78,6 @@ public class AuditService {
                         .actionTimestamp(Timestamp.from(Instant.now()))
                         .build()
         );
-    }
-
-    private static AuditResponse convertToAuditResponse(Audit audit){
-        return AuditResponse.builder()
-                .auditId(audit.getAuditId())
-                .tableName(audit.getTableName())
-                .fieldName(audit.getFieldName())
-                .rowKey(audit.getRowKey())
-                .oldValue(audit.getOldValue())
-                .newValue(audit.getNewValue())
-                .action(audit.getAction())
-                .actionTimestamp(audit.getActionTimestamp())
-                .build();
     }
 
 }

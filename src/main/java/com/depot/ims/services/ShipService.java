@@ -97,7 +97,7 @@ public class ShipService {
         // record audit
         auditService.saveAudit("Ships",
                 null,
-                        ShipKey.builder()
+                ShipKey.builder()
                         .itemId(res.getItemId().getItemId())
                         .shipmentId(res.getShipmentId().getShipmentId())
                         .build().toString(),

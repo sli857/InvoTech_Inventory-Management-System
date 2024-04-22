@@ -18,9 +18,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.doReturn;
-import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -33,11 +31,13 @@ public class AuditControllerTest {
     @Mock
     AuditRepository auditRepositoryMock;
     private MockMvc mockMvc;
+
     @BeforeEach
     public void setup() {
         MockitoAnnotations.openMocks(this);
         mockMvc = MockMvcBuilders.standaloneSetup(auditControllerMock).build();
     }
+
     @Test
     void testGetAllAudits() throws Exception {
         User user1 = User.builder()
@@ -90,7 +90,7 @@ public class AuditControllerTest {
 
 
     @Test
-    void testFindAuditsOnTable() throws Exception{
+    void testFindAuditsOnTable() throws Exception {
         User user1 = User.builder()
                 .username("user1")
                 .password("pass")
@@ -138,7 +138,7 @@ public class AuditControllerTest {
     }
 
     @Test
-    void testFindAuditsBetweenDates() throws Exception{
+    void testFindAuditsBetweenDates() throws Exception {
         User user1 = User.builder()
                 .username("user1")
                 .password("pass")
@@ -179,7 +179,7 @@ public class AuditControllerTest {
                 .build();
         List<Audit> result = new ArrayList<>(Arrays.asList(audit2, audit3));
         doReturn(ResponseEntity.ok(result)).when(auditServiceMock)
-                .findAuditsBetweenPeriod("2024-02-01","2024-04-01");
+                .findAuditsBetweenPeriod("2024-02-01", "2024-04-01");
         mockMvc.perform(get("/audits/betweenPeriod?start=2024-02-01&end=2024-04-01"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").isArray())

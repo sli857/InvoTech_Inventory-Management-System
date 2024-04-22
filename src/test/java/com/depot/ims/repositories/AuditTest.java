@@ -1,23 +1,17 @@
 package com.depot.ims.repositories;
 
 import com.depot.ims.models.Audit;
-import com.depot.ims.models.User;
-import org.aspectj.lang.annotation.Before;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.TestPropertySource;
 
-import java.sql.Time;
 import java.sql.Timestamp;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
-import java.util.stream.Stream;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @DataJpaTest
 @TestPropertySource(properties = {
@@ -33,7 +27,7 @@ public class AuditTest {
 
 
     @BeforeEach
-    void testSaveAudit(){
+    void testSaveAudit() {
         auditRepository.deleteAll();
         Audit audit1 = Audit.builder()
                 //.auditId(1L)
@@ -72,27 +66,27 @@ public class AuditTest {
     }
 
     @Test
-    void testFindAll(){
+    void testFindAll() {
         List<Audit> result = auditRepository.findAll();
         assertNotNull(result);
         assertEquals(3, result.size());
     }
 
     @Test
-    void testFindByTableName(){
+    void testFindByTableName() {
         List<Audit> result = auditRepository.findByTableName("sites");
         assertNotNull(result);
         assertEquals(2, result.size());
-        result.forEach(x->assertEquals("sites", x.getTableName()));
+        result.forEach(x -> assertEquals("sites", x.getTableName()));
     }
 
     @Test
-    void testFindBetweenPeriod(){
+    void testFindBetweenPeriod() {
         Timestamp start = Timestamp.valueOf("2024-2-28 11:22:33");
         Timestamp end = Timestamp.valueOf("2024-3-28 11:22:33");
-        List<Audit> result = auditRepository.findBetweenPeriod(start,end);
+        List<Audit> result = auditRepository.findBetweenPeriod(start, end);
         assertNotNull(result);
-        assertEquals(1,result.size());
+        assertEquals(1, result.size());
         assertEquals("2024-03-16 11:22:33.0", result.get(0).getActionTimestamp().toString());
     }
 }

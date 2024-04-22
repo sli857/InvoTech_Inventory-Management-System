@@ -13,12 +13,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+
 import java.sql.Timestamp;
 import java.util.Arrays;
 import java.util.List;
-import static org.hamcrest.Matchers.*;
+
+import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -58,14 +60,14 @@ public class ShipmentControllerTest {
     public void testGetShipments() throws Exception {
         // Setup mock shipments
         List<Shipment> shipments = Arrays.asList(
-                new Shipment(1L,12L, // source
+                new Shipment(1L, 12L, // source
                         32L, // destination
                         "Warehouse Y", // currentLocation
                         Timestamp.valueOf("2024-01-01 08:00:00"), // departureTime
                         Timestamp.valueOf("2024-01-03 08:00:00"), // estimatedArrivalTime
                         Timestamp.valueOf("2024-01-03 07:45:00"), // actualArrivalTime
                         "Delivered"),
-                new Shipment(2L,11L, // source
+                new Shipment(2L, 11L, // source
                         12L, // destination
                         "Warehouse Y", // currentLocation
                         Timestamp.valueOf("2024-01-01 08:00:00"), // departureTime
@@ -90,7 +92,7 @@ public class ShipmentControllerTest {
     @Test
     public void testGetShipment() throws Exception {
         // Setup mock shipment
-        Shipment shipment = new Shipment(1L,12L, // source
+        Shipment shipment = new Shipment(1L, 12L, // source
                 32L, // destination
                 "Warehouse W", // currentLocation
                 Timestamp.valueOf("2024-01-01 08:00:00"), // departureTime
@@ -126,14 +128,14 @@ public class ShipmentControllerTest {
     @Test
     public void testAddShipment() throws Exception {
         // Setup mock shipment to be added and the expected result
-        Shipment shipment = new Shipment(null,12L, // source
+        Shipment shipment = new Shipment(null, 12L, // source
                 32L, // destination
                 "Warehouse Y", // currentLocation
                 Timestamp.valueOf("2024-01-01 08:00:00"), // departureTime
                 Timestamp.valueOf("2024-01-03 08:00:00"), // estimatedArrivalTime
                 Timestamp.valueOf("2024-01-03 07:45:00"), // actualArrivalTime
                 "Delivered");
-        Shipment savedShipment = new Shipment(2L,11L, // source
+        Shipment savedShipment = new Shipment(2L, 11L, // source
                 22L, // destination
                 "Warehouse W", // currentLocation
                 Timestamp.valueOf("2024-02-01 08:00:00"), // departureTime
@@ -163,7 +165,7 @@ public class ShipmentControllerTest {
      */
     @Test
     public void testUpdateShipment() throws Exception {
-        Shipment update = new Shipment(1L,12L, // source
+        Shipment update = new Shipment(1L, 12L, // source
                 32L, // destination
                 "Warehouse Y", // currentLocation
                 Timestamp.valueOf("2024-01-01 08:00:00"), // departureTime

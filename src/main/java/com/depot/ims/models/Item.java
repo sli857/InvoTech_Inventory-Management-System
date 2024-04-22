@@ -37,7 +37,7 @@ public class Item {
      * Constructor for Item.
      *
      * @param itemPrice Item price
-     * @param itemName Item name
+     * @param itemName  Item name
      */
     public Item(String itemName, double itemPrice) {
         this.itemName = itemName;

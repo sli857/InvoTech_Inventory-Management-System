@@ -1,14 +1,9 @@
 package com.depot.ims.controllers;
 
-import com.depot.ims.dto.AuditResponse;
-import com.depot.ims.models.Audit;
 import com.depot.ims.repositories.AuditRepository;
 import com.depot.ims.services.AuditService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.sql.Timestamp;
-import java.util.List;
 
 @RestController
 @RequestMapping("/audits")
@@ -35,8 +30,8 @@ public class AuditController {
 
     @GetMapping("/betweenPeriod")
     public ResponseEntity<?> getAuditsBetweenPeriod(@RequestParam String start,
-                                                    @RequestParam String end){
-        return auditService.findAuditsBetweenPeriod(start,end);
+                                                    @RequestParam String end) {
+        return auditService.findAuditsBetweenPeriod(start, end);
 
     }
 

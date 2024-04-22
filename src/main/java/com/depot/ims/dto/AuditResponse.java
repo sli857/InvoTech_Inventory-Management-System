@@ -1,11 +1,11 @@
 package com.depot.ims.dto;
 
-import com.depot.ims.models.Audit;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 
 import java.sql.Timestamp;
+
 @Data
 @AllArgsConstructor
 @Builder

@@ -1,18 +1,24 @@
 package com.depot.ims.services;
 
-import com.depot.ims.models.*;
-import com.depot.ims.repositories.*;
+import com.depot.ims.models.Availability;
+import com.depot.ims.models.Item;
+import com.depot.ims.models.Site;
+import com.depot.ims.repositories.AvailabilityRepository;
+import com.depot.ims.repositories.ItemRepository;
+import com.depot.ims.repositories.SiteRepository;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
+
 import java.util.ArrayList;
 import java.util.List;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.mockito.Mockito.*;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 /**
  * Unit tests for the AvailabilityService class.
@@ -35,6 +41,7 @@ public class AvailabilityServiceTest {
             itemRepository,
             availabilityRepository,
             auditService);
+
     /**
      * Tests adding an availability
      * mock the availability repository
@@ -52,7 +59,7 @@ public class AvailabilityServiceTest {
         ResponseEntity<?> response1 = this.availabilityService.addAvailabilities(availability);
         assertEquals(HttpStatus.OK, response1.getStatusCode());
         assertNotNull(response1.getBody());
-        assertEquals( true, response1.getBody().equals(availability));
+        assertTrue(response1.getBody().equals(availability));
 
     }
 
@@ -80,7 +87,7 @@ public class AvailabilityServiceTest {
         assertEquals(HttpStatus.OK, response3.getStatusCode());
         assertNotNull(response3.getBody());
         System.out.println(response3.getBody());
-        assertEquals( true, response3.getBody().equals(list));
+        assertTrue(response3.getBody().equals(list));
 
     }
 
@@ -106,10 +113,10 @@ public class AvailabilityServiceTest {
         when(this.itemRepository.existsById(20L)).thenReturn(true);
         when(this.itemRepository.findByItemId(20L)).thenReturn(item);
         when(this.availabilityRepository.findSitesByOneItem(item)).thenReturn(list);
-        ResponseEntity<?> response4= this.availabilityService.getAvailabilitiesByItemId(20L);
+        ResponseEntity<?> response4 = this.availabilityService.getAvailabilitiesByItemId(20L);
         assertEquals(HttpStatus.OK, response4.getStatusCode());
         assertNotNull(response4.getBody());
-        assertEquals( true, response4.getBody().equals(list));
+        assertTrue(response4.getBody().equals(list));
 
     }
 
@@ -132,10 +139,10 @@ public class AvailabilityServiceTest {
         when(this.itemRepository.existsById(20L)).thenReturn(true);
         when(this.siteRepository.existsById(11L)).thenReturn(true);
         when(this.availabilityRepository.findBySiteIdAndItemId(11L, 20L)).thenReturn(availability);
-        ResponseEntity<?> response5= this.availabilityService.getAvailabilityBySiteIdAndItemId(11L, 20L);
+        ResponseEntity<?> response5 = this.availabilityService.getAvailabilityBySiteIdAndItemId(11L, 20L);
         assertEquals(HttpStatus.OK, response5.getStatusCode());
         assertNotNull(response5.getBody());
-        assertEquals( true, response5.getBody().equals(availability));
+        assertTrue(response5.getBody().equals(availability));
 
     }
 
@@ -198,7 +205,7 @@ public class AvailabilityServiceTest {
         ResponseEntity<?> response6 = this.availabilityService.getSitesByItems(items);
         assertEquals(HttpStatus.OK, response6.getStatusCode());
         assertNotNull(response6.getBody());
-        assertEquals( true, response6.getBody().equals(expectedList));
+        assertTrue(response6.getBody().equals(expectedList));
 
 
         //Test2: when only has one item
@@ -212,7 +219,7 @@ public class AvailabilityServiceTest {
         ResponseEntity<?> response7 = this.availabilityService.getSitesByItems(item);
         assertEquals(HttpStatus.OK, response7.getStatusCode());
         assertNotNull(response7.getBody());
-        assertEquals( true, response7.getBody().equals(siteList));
+        assertTrue(response7.getBody().equals(siteList));
 
     }
 

@@ -1,17 +1,19 @@
 package com.depot.ims.services;
 
 import com.depot.ims.models.Shipment;
-import com.depot.ims.models.User;
 import com.depot.ims.repositories.ShipmentRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.springframework.http.ResponseEntity;
+
 import java.sql.Timestamp;
 import java.util.stream.Stream;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.*;
-import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Unit tests for the ShipmentService class.
@@ -23,7 +25,7 @@ public class ShipmentServiceTest {
     private ShipmentRepository shipmentRepository = mock(ShipmentRepository.class);
     @Mock
     private AuditService auditService = mock(AuditService.class);
-    private final ShipmentService shipmentService = new ShipmentService(shipmentRepository,auditService);
+    private final ShipmentService shipmentService = new ShipmentService(shipmentRepository, auditService);
 
     @BeforeEach
     void setup() {
@@ -72,8 +74,16 @@ public class ShipmentServiceTest {
     @Test
     void testDeleteShipmentFound() {
         Long shipmentId = 1L;
+        Shipment shipment1 = new Shipment(1L, 2L, // source
+                3L, // destination
+                "Warehouse A", // currentLocation
+                Timestamp.valueOf("2024-04-01 08:00:00"), // departureTime
+                Timestamp.valueOf("2024-04-03 08:00:00"), // estimatedArrivalTime
+                Timestamp.valueOf("2024-04-03 07:45:00"), // actualArrivalTime
+                "Delivered");
         when(shipmentRepository.existsById(shipmentId)).thenReturn(true);
-        doNothing().when(auditService).saveAudit(any(),any(),any(),any(),any(),any());
+        when(shipmentRepository.findByShipmentId(shipmentId)).thenReturn(shipment1);
+        doNothing().when(auditService).saveAudit(any(), any(), any(), any(), any(), any());
 
         ResponseEntity<?> response = shipmentService.deleteShipment(shipmentId);
 
@@ -140,7 +150,7 @@ public class ShipmentServiceTest {
     @Test
     void testUpdateShipmentSuccessful() {
         Long shipmentId = 1L;
-        Shipment shipment = new Shipment(shipmentId,12L, // source
+        Shipment shipment = new Shipment(shipmentId, 12L, // source
                 32L, // destination
                 "Warehouse Y", // currentLocation
                 Timestamp.valueOf("2024-01-01 08:00:00"), // departureTime

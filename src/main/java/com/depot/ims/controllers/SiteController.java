@@ -29,6 +29,7 @@ public class SiteController {
 
     /**
      * get all sites in table Sites
+     *
      * @return ResponseEntity that contains a list of sites in its body
      */
     @GetMapping
@@ -38,7 +39,8 @@ public class SiteController {
 
     /**
      * find a site either by siteId or siteName
-     * @param siteId siteId
+     *
+     * @param siteId   siteId
      * @param siteName siteName
      * @return the result of SiteService.getSite()
      */
@@ -51,6 +53,7 @@ public class SiteController {
 
     /**
      * get status of a site by siteId
+     *
      * @param siteId siteId
      * @return the result of SiteService.getStatusBySiteId()
      */
@@ -62,6 +65,7 @@ public class SiteController {
 
     /**
      * add a site to table Sites
+     *
      * @param site a site entity
      * @return result of siteService.addSite()
      */
@@ -72,12 +76,13 @@ public class SiteController {
 
     /**
      * update the fields a particular site that has the provided siteId
-     * @param siteId primary key to find the site to modify
-     * @param newStatus newStatus
-     * @param newName newName
-     * @param newLocation newLocation
+     *
+     * @param siteId          primary key to find the site to modify
+     * @param newStatus       newStatus
+     * @param newName         newName
+     * @param newLocation     newLocation
      * @param newInternalSite newInternalSite
-     * @param newCeaseDate newCeaseDate
+     * @param newCeaseDate    newCeaseDate
      * @return result of SiteService.updateSite()
      */
     @Modifying
@@ -103,7 +108,8 @@ public class SiteController {
 
     /**
      * delete a site that has the provided siteId
-     * @param siteId primary key to find the site to delete
+     *
+     * @param siteId    primary key to find the site to delete
      * @param ceaseDate date when the site was ceased if provided; set to current date if not
      *                  provided
      * @return result of SiteService.deleteSite()

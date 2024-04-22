@@ -151,7 +151,7 @@ public class ShipmentService {
             boolean isFound = shipmentRepository.existsById(shipmentId);
             if (isFound) {
                 var res = shipmentRepository.findByShipmentId(shipmentId);
-                auditService.saveAudit("Shipments",null,shipmentId.toString(),res.toString(),null,"DELETE");
+                auditService.saveAudit("Shipments", null, shipmentId.toString(), res.toString(), null, "DELETE");
                 shipmentRepository.deleteById(shipmentId);
                 return ResponseEntity.ok().body("Successfully deleted");
             }
