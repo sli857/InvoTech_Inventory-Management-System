@@ -20,14 +20,16 @@ import java.util.stream.Stream;
 public class ItemService {
 
     private final ItemRepository itemRepository;
+    private final AuditService auditService;
 
     /**
      * Constructor for itemService.
      *
      * @param itemRepository         The ItemRepository instance.
      */
-    public ItemService(ItemRepository itemRepository) {
+    public ItemService(ItemRepository itemRepository, AuditService auditService) {
         this.itemRepository = itemRepository;
+        this.auditService = auditService;
     }
 
     /**
@@ -38,7 +40,9 @@ public class ItemService {
      */
     public  ResponseEntity<?> addItem(@RequestBody Item item) {
         try{
-            this.itemRepository.save(item);
+            var res = this.itemRepository.save(item);
+            this.auditService.saveAudit("Items",null,res.getItemId().toString(),null,res.toString(),
+                    "INSERT");
             return ResponseEntity.ok(item);
 
         } catch (Exception e) {
@@ -86,8 +90,17 @@ public class ItemService {
             return ResponseEntity.badRequest().body("No value for this update is specified.");
         }
         Item item = itemRepository.findByItemId(itemID);
-        if (newName != null) item.setItemName(newName);
-        if (newPrice != null) item.setItemPrice(newPrice);
+        if (newName != null) {
+            auditService.saveAudit("Items","itemName",item.getItemId().toString(),item.getItemName(),newName
+                    ,"UPDATE");
+            item.setItemName(newName);
+        }
+        if (newPrice != null) {
+            auditService.saveAudit("Items","itemPrice",item.getItemId().toString(),
+                    item.getItemPrice().toString(),
+                    newPrice.toString(),"UPDATE");
+            item.setItemPrice(newPrice);
+        }
 
         Item updatedItem = itemRepository.save(item);
         return ResponseEntity.ok(updatedItem);

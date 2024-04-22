@@ -30,7 +30,7 @@ public class Audit {
     private String fieldName;
 
     @Column(name = "row_key", nullable = false)
-    private Long rowKey;
+    private String rowKey;
 
     @Column(name = "old_value")
     private String oldValue;

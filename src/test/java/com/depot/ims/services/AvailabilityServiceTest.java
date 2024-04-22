@@ -28,11 +28,13 @@ public class AvailabilityServiceTest {
     private ItemRepository itemRepository = mock(ItemRepository.class);
     @Mock
     private AvailabilityRepository availabilityRepository = mock(AvailabilityRepository.class);
-
+    @Mock
+    private AuditService auditService = mock(AuditService.class);
     private final AvailabilityService availabilityService = new AvailabilityService(
             siteRepository,
             itemRepository,
-            availabilityRepository);
+            availabilityRepository,
+            auditService);
     /**
      * Tests adding an availability
      * mock the availability repository

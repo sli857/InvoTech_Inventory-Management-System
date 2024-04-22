@@ -55,7 +55,7 @@ public class AuditService {
         }
     }
 
-    public void saveAudit(String tableName, String fieldName, Long rowKey,
+    public void saveAudit(String tableName, String fieldName, String rowKey,
                           String oldValue, String newValue, String action){
         auditRepository.save(
                 Audit.builder()

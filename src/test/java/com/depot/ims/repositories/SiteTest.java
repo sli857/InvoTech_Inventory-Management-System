@@ -17,7 +17,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 // Annotation to specify property sources for the test
 @TestPropertySource(properties = {
         "spring.jpa.database-platform=org.hibernate.dialect.H2Dialect",
-        "spring.jpa.hibernate.ddl-auto=update"
+        "spring.jpa.hibernate.ddl-auto=create-drop"
 })
 
 public class SiteTest {
@@ -26,20 +26,27 @@ public class SiteTest {
 
     @BeforeEach
     void setup() {
+        siteRepository.deleteAll();
         Site site1 = createSite("site1", "location1", "open", null, true);
-        Site site2 = createSite("site2", "location2", "open", null, true);
+        Site site2 = createSite("site2", "location2", "closed", null, true);
     }
 
     @Test
-    void findAllTest() {
+    void testFindAll() {
         List<Site> res = siteRepository.findAll();
+        System.out.println(res);
         assertNotNull(res);
         assertEquals(2, res.size());
     }
-
     @Test
-    void findSiteByIdTest() {
-        Site res = siteRepository.findBySiteId(3L);
+    void testFindStatusBySiteId(){
+        String res = siteRepository.findSiteStatusBySiteId(4L);
+        assertNotNull(res);
+        assertEquals("closed",res);
+    }
+    @Test
+    void testFindSiteById() {
+        Site res = siteRepository.findBySiteId(5L);
         assertNotNull(res);
         assertEquals("site1", res.getSiteName());
     }
@@ -55,6 +62,6 @@ public class SiteTest {
                 .internalSite(internalSite)
                 .build();
         if (ceaseDate != null) site.setCeaseDate(Date.valueOf(ceaseDate));
-        return siteRepository.saveAndFlush(site);
+        return siteRepository.save(site);
     }
 }

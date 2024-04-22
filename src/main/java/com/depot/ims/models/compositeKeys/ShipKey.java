@@ -2,13 +2,19 @@ package com.depot.ims.models.compositeKeys;
 
 import com.depot.ims.models.Item;
 import com.depot.ims.models.Shipment;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.ToString;
 import org.springframework.data.annotation.Reference;
 
 import java.io.Serializable;
 import java.util.Objects;
 
 @Data
+@ToString
+@AllArgsConstructor
+@Builder
 public class ShipKey implements Serializable {
 
     @Reference(to = Item.class)

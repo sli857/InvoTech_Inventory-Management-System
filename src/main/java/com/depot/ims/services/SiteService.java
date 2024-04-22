@@ -71,7 +71,7 @@ public class SiteService {
         try {
             var res = siteRepository.save(site);
             System.out.println(site.toString());
-            auditService.saveAudit("sites", null,res.getSiteId(),null,res.toString(),"INSERT");
+            auditService.saveAudit("sites", null,res.getSiteId().toString(),null,res.toString(),"INSERT");
             return ResponseEntity.ok(res);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
@@ -106,28 +106,30 @@ public class SiteService {
 
         Site site = siteRepository.findBySiteId(siteId);
         if (newStatus != null) {
-            auditService.saveAudit("sites","siteStatus",siteId,site.getSiteStatus(),newStatus,
+            auditService.saveAudit("sites","siteStatus",siteId.toString(),site.getSiteStatus(),newStatus,
                     "UPDATE");
             site.setSiteStatus(newStatus);
         }
         if (newName != null) {
-            auditService.saveAudit("sites","siteName",siteId,site.getSiteName(),newName,"UPDATE");
+            auditService.saveAudit("sites","siteName",siteId.toString(),site.getSiteName(),newName,
+                    "UPDATE");
             site.setSiteName(newName);
         }
         if (newLocation != null) {
-            auditService.saveAudit("sites","siteLocation",siteId,site.getSiteLocation(),
+            auditService.saveAudit("sites","siteLocation",siteId.toString(),site.getSiteLocation(),
                     newLocation,"UPDATE");
             site.setSiteLocation(newLocation);
         }
         if (newInternalSite != null) {
-            auditService.saveAudit("sites","internalSite",siteId,site.getInternalSite().toString(),
+            auditService.saveAudit("sites","internalSite",siteId.toString(),
+                    site.getInternalSite().toString(),
                     newInternalSite.toString(),"UPDATE");
             site.setInternalSite(newInternalSite);
         }
         if (newCeaseDate != null) {
             try {
                 Date date = Date.valueOf(newCeaseDate);
-                auditService.saveAudit("sites","ceaseDate",siteId,site.getCeaseDate().toString(),
+                auditService.saveAudit("sites","ceaseDate",siteId.toString(),site.getCeaseDate().toString(),
                         newCeaseDate,"UPDATE");
                 site.setCeaseDate(date);
             } catch (IllegalArgumentException e) {

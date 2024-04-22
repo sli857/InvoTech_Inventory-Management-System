@@ -13,7 +13,7 @@ public class AuditResponse {
     Long auditId;
     String tableName;
     String fieldName;
-    Long rowKey;
+    String rowKey;
     String oldValue;
     String newValue;
     String action;

@@ -3,6 +3,7 @@ package com.depot.ims.services;
 import com.depot.ims.models.Item;
 import com.depot.ims.models.Site;
 import com.depot.ims.models.Availability;
+import com.depot.ims.models.compositeKeys.AvailabilityKey;
 import com.depot.ims.repositories.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -24,6 +25,7 @@ public class AvailabilityService {
     private final SiteRepository siteRepository;
     private final ItemRepository itemRepository;
     private final AvailabilityRepository availabilityRepository;
+    private final AuditService auditService;
 
 
     /**
@@ -35,10 +37,11 @@ public class AvailabilityService {
      */
     public AvailabilityService(SiteRepository siteRepository,
                                ItemRepository itemRepository,
-                               AvailabilityRepository availabilityRepository) {
+                               AvailabilityRepository availabilityRepository, AuditService auditService) {
         this.siteRepository = siteRepository;
         this.itemRepository = itemRepository;
         this.availabilityRepository = availabilityRepository;
+        this.auditService = auditService;
     }
 
     /**
@@ -49,8 +52,15 @@ public class AvailabilityService {
      */
     public ResponseEntity<?> addAvailabilities(@RequestBody Availability availability) {
         try {
-            this.availabilityRepository.save(availability);
-            return ResponseEntity.ok(availability);
+            var res = availabilityRepository.save(availability);
+            this.auditService.saveAudit("Availabilities",null,
+                    AvailabilityKey.builder()
+                            .itemId(res.getItemId().getItemId())
+                            .siteId(res.getSiteId().getSiteId())
+                            .build().toString()
+                    ,null,
+                    res.toString(),"INSERT");
+            return ResponseEntity.ok(res);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }

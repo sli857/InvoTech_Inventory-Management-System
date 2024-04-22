@@ -21,7 +21,9 @@ import static org.junit.jupiter.api.Assertions.*;
 public class ShipmentServiceTest {
     @Mock
     private ShipmentRepository shipmentRepository = mock(ShipmentRepository.class);
-    private final ShipmentService shipmentService = new ShipmentService(shipmentRepository);
+    @Mock
+    private AuditService auditService = mock(AuditService.class);
+    private final ShipmentService shipmentService = new ShipmentService(shipmentRepository,auditService);
 
     @BeforeEach
     void setup() {

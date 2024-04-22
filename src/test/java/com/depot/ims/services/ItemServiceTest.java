@@ -19,8 +19,10 @@ public class ItemServiceTest {
 
     @Mock
     private ItemRepository itemsRepository = mock(ItemRepository.class);
+    @Mock
+    private AuditService auditService = mock(AuditService.class);
 
-    private final ItemService itemsService = new ItemService(itemsRepository);
+    private final ItemService itemsService = new ItemService(itemsRepository,auditService);
 
     /**
      * Tests retrieving an availability

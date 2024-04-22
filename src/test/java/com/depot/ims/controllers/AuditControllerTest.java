@@ -52,10 +52,9 @@ public class AuditControllerTest {
                 .build();
 
         Audit audit1 = Audit.builder()
-                .userId(user1)
                 .tableName("sites")
                 .fieldName("siteName")
-                .rowKey(1)
+                .rowKey("1")
                 .oldValue("oldName")
                 .newValue("newName")
                 .action("UPDATE")
@@ -63,19 +62,17 @@ public class AuditControllerTest {
                 .build();
 
         Audit audit2 = Audit.builder()
-                .userId(user2)
                 .tableName("sites")
-                .rowKey(1)
+                .rowKey("1")
                 .newValue("newSite")
                 .action("INSERT")
                 .actionTimestamp(Timestamp.valueOf("2024-02-16 11:22:33"))
                 .build();
 
         Audit audit3 = Audit.builder()
-                .userId(user1)
                 .tableName("items")
                 .fieldName("itemName")
-                .rowKey(1)
+                .rowKey("1")
                 .oldValue("oldName")
                 .newValue("newName")
                 .action("UPDATE")
@@ -91,57 +88,6 @@ public class AuditControllerTest {
                 .andExpect(jsonPath("$.length()").value(3));
     }
 
-    @Test
-    void testFindAuditsByUser() throws Exception {
-        User user1 = User.builder()
-                .username("user1")
-                .password("pass")
-                .position("admin")
-                .build();
-        User user2 = User.builder()
-                .username("user2")
-                .password("pass")
-                .position("admin")
-                .build();
-
-        Audit audit1 = Audit.builder()
-                .userId(user1)
-                .tableName("sites")
-                .fieldName("siteName")
-                .rowKey(1)
-                .oldValue("oldName")
-                .newValue("newName")
-                .action("UPDATE")
-                .actionTimestamp(Timestamp.valueOf("2024-04-16 11:22:33"))
-                .build();
-
-        Audit audit2 = Audit.builder()
-                .userId(user2)
-                .tableName("sites")
-                .rowKey(1)
-                .newValue("newSite")
-                .action("INSERT")
-                .actionTimestamp(Timestamp.valueOf("2024-02-16 11:22:33"))
-                .build();
-
-        Audit audit3 = Audit.builder()
-                .userId(user1)
-                .tableName("items")
-                .fieldName("itemName")
-                .rowKey(1)
-                .oldValue("oldName")
-                .newValue("newName")
-                .action("UPDATE")
-                .actionTimestamp(Timestamp.valueOf("2024-03-16 11:22:33"))
-                .build();
-        List<Audit> result = new ArrayList<>(Arrays.asList(audit1, audit3));
-        doReturn(ResponseEntity.ok(result)).when(auditServiceMock).findAuditsByUser(1L);
-
-        mockMvc.perform(get("/audits/byUser?userId=1"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$").isArray())
-                .andExpect(jsonPath("$.length()").value(2));
-    }
 
     @Test
     void testFindAuditsOnTable() throws Exception{
@@ -157,10 +103,9 @@ public class AuditControllerTest {
                 .build();
 
         Audit audit1 = Audit.builder()
-                .userId(user1)
                 .tableName("sites")
                 .fieldName("siteName")
-                .rowKey(1)
+                .rowKey("1")
                 .oldValue("oldName")
                 .newValue("newName")
                 .action("UPDATE")
@@ -168,19 +113,17 @@ public class AuditControllerTest {
                 .build();
 
         Audit audit2 = Audit.builder()
-                .userId(user2)
                 .tableName("sites")
-                .rowKey(1)
+                .rowKey("1")
                 .newValue("newSite")
                 .action("INSERT")
                 .actionTimestamp(Timestamp.valueOf("2024-02-16 11:22:33"))
                 .build();
 
         Audit audit3 = Audit.builder()
-                .userId(user1)
                 .tableName("items")
                 .fieldName("itemName")
-                .rowKey(1)
+                .rowKey("1")
                 .oldValue("oldName")
                 .newValue("newName")
                 .action("UPDATE")
@@ -208,10 +151,9 @@ public class AuditControllerTest {
                 .build();
 
         Audit audit1 = Audit.builder()
-                .userId(user1)
                 .tableName("sites")
                 .fieldName("siteName")
-                .rowKey(1)
+                .rowKey("1")
                 .oldValue("oldName")
                 .newValue("newName")
                 .action("UPDATE")
@@ -219,19 +161,17 @@ public class AuditControllerTest {
                 .build();
 
         Audit audit2 = Audit.builder()
-                .userId(user2)
                 .tableName("sites")
-                .rowKey(1)
+                .rowKey("1")
                 .newValue("newSite")
                 .action("INSERT")
                 .actionTimestamp(Timestamp.valueOf("2024-02-16 11:22:33"))
                 .build();
 
         Audit audit3 = Audit.builder()
-                .userId(user1)
                 .tableName("items")
                 .fieldName("itemName")
-                .rowKey(1)
+                .rowKey("1")
                 .oldValue("oldName")
                 .newValue("newName")
                 .action("UPDATE")

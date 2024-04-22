@@ -3,6 +3,7 @@ package com.depot.ims.services;
 import com.depot.ims.models.Item;
 import com.depot.ims.models.Ship;
 import com.depot.ims.models.Shipment;
+import com.depot.ims.models.compositeKeys.ShipKey;
 import com.depot.ims.repositories.AvailabilityRepository;
 import com.depot.ims.repositories.ItemRepository;
 import com.depot.ims.repositories.ShipRepository;
@@ -19,6 +20,7 @@ public class ShipService {
     private final ShipmentRepository shipmentRepository;
     private final ItemRepository itemRepository;
     private final AvailabilityRepository availabilityRepository;
+    private final AuditService auditService;
 
     /**
      * Constructor for ShipService.
@@ -31,11 +33,12 @@ public class ShipService {
     public ShipService(ShipRepository shipRepository,
                        ShipmentRepository shipmentRepository,
                        ItemRepository itemRepository,
-                       AvailabilityRepository availabilityRepository) {
+                       AvailabilityRepository availabilityRepository, AuditService auditService) {
         this.shipRepository = shipRepository;
         this.shipmentRepository = shipmentRepository;
         this.itemRepository = itemRepository;
         this.availabilityRepository = availabilityRepository;
+        this.auditService = auditService;
     }
 
     /**
@@ -89,7 +92,20 @@ public class ShipService {
         );
 
         // Save the changes
-        return ResponseEntity.ok(shipRepository.save(ship));
+        var res = shipRepository.save(ship);
+
+        // record audit
+        auditService.saveAudit("Ships",
+                null,
+                        ShipKey.builder()
+                        .itemId(res.getItemId().getItemId())
+                        .shipmentId(res.getShipmentId().getShipmentId())
+                        .build().toString(),
+                null,
+                res.toString(),
+                "INSERT");
+
+        return ResponseEntity.ok(res);
     }
 
 }
