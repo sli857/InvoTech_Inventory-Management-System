@@ -10,9 +10,16 @@ import {Button, Card, Col, Container, Form, Row, Table} from 'react-bootstrap';
  * @returns {JSX.Element} A container with a table displaying the shipment data.
  */
 function IMSShipments() {
+    // State for managing site data
     const [sites, setSites] = useState([]);
     const [items, setItems] = useState([]);
     const [shipments, setShipments] = useState([]);
+
+    // State for form validation
+    const [sourceValid, setSourceValid] = useState(true);
+    const [destinationValid, setDestinationValid] = useState(true);
+    const [itemValid, setItemValid] = useState(true);
+    const [quantityValid, setQuantityValid] = useState(true);
 
     /**
      * Fetches the list of shipments from the mock API endpoint and sets the shipments state to the fetched data.
@@ -78,6 +85,48 @@ function IMSShipments() {
     }
 
     /**
+     * Validates the form inputs.
+     *
+     * @param source The source site value.
+     * @param destination The destination site value.
+     * @param item The item value.
+     * @param quantity The quantity value.
+     * @returns {boolean} True if all inputs are valid, otherwise false.
+     */
+    function validateInputs(source, destination, item, quantity) {
+        let isValid = true;
+
+        // Reset validation states
+        setSourceValid(true);
+        setDestinationValid(true);
+        setItemValid(true);
+        setQuantityValid(true);
+
+        if (!source || !destination || !item) {
+            console.error("Please fill out all fields");
+            setSourceValid(false);
+            setDestinationValid(false);
+            setItemValid(false);
+            isValid = false;
+        }
+
+        if (source === destination) {
+            console.error("Source and destination cannot be the same.");
+            setSourceValid(false);
+            setDestinationValid(false);
+            isValid = false;
+        }
+
+        if (!quantity || quantity <= 0) {
+            console.error("Quantity must be a positive number.");
+            setQuantityValid(false);
+            isValid = false;
+        }
+
+        return isValid;
+    }
+
+    /**
      * Handles the form submission for adding a new shipment.
      *
      * @param event The form submission event.
@@ -86,9 +135,17 @@ function IMSShipments() {
     async function handleSubmit(event) {
         event.preventDefault();
 
-        // Verify the form fields
-        // TODO: Add form validation
+        const source = event.target.formSource.value;
+        const destination = event.target.formDestination.value;
+        const item = event.target.formItem.value;
+        const quantity = parseInt(event.target.formQuantity.value);
 
+        // Validate inputs
+        if (!validateInputs(source, destination, item, quantity)) {
+            return;
+        }
+
+        // Start of submitting the form
         try {
             // API call to add a new shipment
             const shipmentResponse = await fetch("http://localhost:8080/shipments/add", {
@@ -97,9 +154,9 @@ function IMSShipments() {
                     "Content-Type": "application/json",
                 },
                 body: JSON.stringify({
-                    source: event.target.formSource.value,
-                    destination: event.target.formDestination.value,
-                    currentLocation: "Site " + event.target.formSource.value,
+                    source: source,
+                    destination: destination,
+                    currentLocation: "Site " + source,
                     departureTime: new Date().toISOString(),
                     estimatedArrivalTime: null,
                     actualArrivalTime: null,
@@ -111,9 +168,6 @@ function IMSShipments() {
             if (!shipmentResponse.ok) {
                 console.error("There was a problem adding the shipment.", shipmentResponse);
             } else {
-                // After adding the shipment, fetch the updated list of shipments
-                await fetchShipments();
-
                 // API call to add a new ship
                 const shipResponse = await fetch("http://localhost:8080/ships/add", {
                     method: "POST",
@@ -121,9 +175,9 @@ function IMSShipments() {
                         "Content-Type": "application/json",
                     },
                     body: JSON.stringify({
-                        itemId: event.target.formItem.value,
+                        itemId: item,
                         shipmentId: shipments.length + 1,
-                        quantity: event.target.formQuantity.value,
+                        quantity: quantity,
                     }),
                 });
 
@@ -131,6 +185,7 @@ function IMSShipments() {
                     console.error("There was a problem adding the ship.", shipResponse);
                 } else {
                     await fetchShipments();
+                    event.target.reset();
                 }
             }
 
@@ -199,32 +254,45 @@ function IMSShipments() {
                         <Form onSubmit={handleSubmit}>
                             <Form.Group controlId="formSource">
                                 <Form.Label>From Site</Form.Label>
-                                <Form.Control as="select">
+                                <Form.Control as="select" isInvalid={!sourceValid}>
                                     {sites.map(site => <option key={site.siteId}
                                                                value={site.siteId}>{site.siteName}</option>)}
                                 </Form.Control>
+                                <Form.Control.Feedback type="invalid">
+                                    Source and destination cannot be the same.
+                                </Form.Control.Feedback>
                             </Form.Group>
                             <Form.Group controlId="formDestination">
                                 <Form.Label>To Site</Form.Label>
-                                <Form.Control as="select">
+                                <Form.Control as="select" isInvalid={!destinationValid}>
                                     {sites.map(site => <option key={site.siteId}
                                                                value={site.siteId}>{site.siteName}</option>)}
                                 </Form.Control>
+                                <Form.Control.Feedback type="invalid">
+                                    Source and destination cannot be the same.
+                                </Form.Control.Feedback>
                             </Form.Group>
                             <Row>
                                 <Col>
                                     <Form.Group controlId="formItem">
                                         <Form.Label>Item</Form.Label>
-                                        <Form.Control as="select">
+                                        <Form.Control as="select" isInvalid={!itemValid}>
                                             {items.map(item => <option key={item.itemId}
                                                                        value={item.itemId}>{item.itemName}</option>)}
                                         </Form.Control>
+                                        <Form.Control.Feedback type="invalid">
+                                            Input valid item.
+                                        </Form.Control.Feedback>
                                     </Form.Group>
                                 </Col>
                                 <Col>
                                     <Form.Group controlId="formQuantity">
                                         <Form.Label>Quantity</Form.Label>
-                                        <Form.Control type="number" placeholder="Enter quantity"/>
+                                        <Form.Control type="number" placeholder="Enter quantity"
+                                                      isInvalid={!quantityValid}/>
+                                        <Form.Control.Feedback type="invalid">
+                                            Please enter a valid quantity.
+                                        </Form.Control.Feedback>
                                     </Form.Group>
                                 </Col>
                             </Row>
