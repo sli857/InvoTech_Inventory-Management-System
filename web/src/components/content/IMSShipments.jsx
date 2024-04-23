@@ -13,8 +13,12 @@ function IMSShipments() {
   const [sites, setSites] = useState([]);
   const [items, setItems] = useState([]);
   const [shipments, setShipments] = useState([]);
-  const [quantity, setQuantity] = useState(0);
 
+  /**
+   * Fetches the list of shipments from the mock API endpoint and sets the shipments state to the fetched data.
+   *
+   * @type {(function(): Promise<void>)|*}
+   */
   const fetchShipments = useCallback(async () => {
     try {
       const response = await fetch("http://localhost:8080/shipments")
@@ -23,18 +27,25 @@ function IMSShipments() {
       }
       const data = await response.json();
       setShipments(data);
-      setQuantity(data.length);
     } catch (error) {
       console.error("There was a problem with fetching shipments:", error);
     }
   }, []);
 
+  /**
+   * Fetches the list of sites, items, and shipments from the mock API endpoint when the component mounts.
+   */
   useEffect(() => {
     fetchShipments();
     fetchSites();
     fetchItems();
   }, [fetchShipments]);
 
+  /**
+   * Fetches the list of sites from the mock API endpoint and sets the sites state to the fetched data.
+   *
+   * @returns {Promise<void>}
+   */
   const fetchSites = async () => {
     try {
       const response = await fetch("http://localhost:8080/sites");
@@ -48,6 +59,11 @@ function IMSShipments() {
     }
   };
 
+  /**
+   * Fetches the list of items from the mock API endpoint and sets the items state to the fetched data.
+   *
+   * @returns {Promise<void>}
+   */
   const fetchItems = async () => {
     try {
       const response = await fetch("http://localhost:8080/items");
@@ -61,10 +77,20 @@ function IMSShipments() {
     }
   }
 
+  /**
+   * Handles the form submission for adding a new shipment.
+   *
+   * @param event The form submission event.
+   * @returns {Promise<void>} A promise that resolves after the shipment is added.
+   */
   async function handleSubmit(event) {
     event.preventDefault();
 
+    // Verify the form fields
+    // TODO: Add form validation
+
     try {
+      // API call to add a new shipment
       const shipmentResponse = await fetch("http://localhost:8080/shipments/add", {
         method: "POST",
         headers: {
@@ -73,19 +99,22 @@ function IMSShipments() {
         body: JSON.stringify({
           source: event.target.formSource.value,
           destination: event.target.formDestination.value,
-          currentLocation: null,
-          departureTime: null,
+          currentLocation: "Site " + event.target.formSource.value,
+          departureTime: new Date().toISOString(),
           estimatedArrivalTime: null,
           actualArrivalTime: null,
-          shipmentStatus: "PENDING",
+          shipmentStatus: "Pending",
         }),
       });
 
+      // If the shipment was added successfully, add the ship
       if (!shipmentResponse.ok) {
         console.error("There was a problem adding the shipment.", shipmentResponse);
       } else {
+        // After adding the shipment, fetch the updated list of shipments
         await fetchShipments();
 
+        // API call to add a new ship
         const shipResponse = await fetch("http://localhost:8080/ships/add", {
           method: "POST",
           headers: {
@@ -93,7 +122,7 @@ function IMSShipments() {
           },
           body: JSON.stringify({
             itemId: event.target.formItem.value,
-            shipmentId: 16,
+            shipmentId: shipments.length + 1,
             quantity: event.target.formQuantity.value,
           }),
         });
@@ -112,7 +141,7 @@ function IMSShipments() {
 
   return (
     <Container fluid="md" style={{ padding: '20px', paddingBottom: "200px", marginTop: '20px', background: "#f7f7f7", boxShadow: "0 2px 4px rgba(0,0,0,.1)" }}>
-      <h2 style={{ marginBottom: '20px', textAlign: 'center' }}>Shipments: {quantity} Active</h2>
+      <h2 style={{ marginBottom: '20px', textAlign: 'center' }}>Shipments: {shipments.length} Active</h2>
       <Row className="mb-4">
         <Col>
           <Table striped bordered hover size="sm">
