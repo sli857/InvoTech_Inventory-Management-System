@@ -4,6 +4,8 @@ import { Button, Card, Col, Form, Row, Table, Dropdown, DropdownButton, Containe
 import 'leaflet/dist/leaflet.css';
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 
+const backend_baseurl = 'http://cs506-team-35.cs.wisc.edu:8080'
+
 /**
  * The IMSSite component is responsible for displaying detailed information about a specific site.
  * It includes a table listing items available at the site and a map with a marker showing the site's location.
@@ -34,7 +36,7 @@ function IMSSite() {
   // Fetches site data including items and location when the component mounts or `siteId` changes
   useEffect(() => {
 
-    fetch(`http://localhost:8080/availabilities/site?siteId=${siteId}`)
+    fetch(`${backend_baseurl}/availabilities/site?siteId=${siteId}`)
       .then(response => response.json())
       .then(data => {
         // Assumes the first item contains site information including location
@@ -44,7 +46,7 @@ function IMSSite() {
       })
       .catch(error => console.error("Failed to fetch items", error));
 
-    fetch(`http://localhost:8080/sites/site?siteId=${siteId}`)
+    fetch(`${backend_baseurl}/sites/site?siteId=${siteId}`)
       .then(response => response.json())
       .then(data => {
         setSite(data);
@@ -58,7 +60,7 @@ function IMSSite() {
       }).catch(error => console.error("Failed to fetch site", error));
 
     //fetch all the items from the database
-    fetch("http://localhost:8080/items")
+    fetch(`${backend_baseurl}/items`)
       .then(res => res.json())
       .then(data => {
         if (data != null) {
@@ -75,7 +77,7 @@ function IMSSite() {
    */
   function loadItems() {
 
-    fetch(`http://localhost:8080/availabilities/site?siteId=${siteId}`)
+    fetch(`${backend_baseurl}/availabilities/site?siteId=${siteId}`)
       .then(response => response.json())
       .then(data => {
         // Assumes the first item contains site information including location
@@ -114,7 +116,7 @@ function IMSSite() {
 
 
   
-    const res = await fetch("http://localhost:8080/availabilities/quantity", {
+    const res = await fetch(`${backend_baseurl}/availabilities/quantity`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -141,7 +143,7 @@ function IMSSite() {
     event.preventDefault();
 
     if (addItem === "new item") {
-      await fetch("http://localhost:8080/items/add", {
+      await fetch(`${backend_baseurl}items/add`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -177,7 +179,7 @@ function IMSSite() {
 
           
 
-          fetch("http://localhost:8080/availabilities/add", {
+          fetch(`${backend_baseurl}/availabilities/add`, {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
@@ -191,7 +193,7 @@ function IMSSite() {
         });
 
     } else {
-      fetch(`http://localhost:8080/items/item?itemId=${addItem}`)
+      fetch(`${backend_baseurl}/items/item?itemId=${addItem}`)
         .then((res) => {
           if (res.status === 200) {
             return res.json();
@@ -203,7 +205,7 @@ function IMSSite() {
             quantity: addQuantity
           }
 
-          fetch("http://localhost:8080/availabilities/add", {
+          fetch(`${backend_baseurl}/availabilities/add`, {
             method: "POST",
             headers: {
               "Content-Type": "application/json",

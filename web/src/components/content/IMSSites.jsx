@@ -5,6 +5,8 @@ import removeIcon from '../../assets/remove_icon.png';
 import { Typeahead } from 'react-bootstrap-typeahead';
 import 'react-bootstrap-typeahead/css/Typeahead.css';
 
+const backend_baseurl = 'http://cs506-team-35.cs.wisc.edu:8080'
+
 /**
  * The IMSSites component displays a list of sites, allows for filtering, adding, and removing sites.
  * It fetches site data from a backend service on load and provides an interface for site management.
@@ -54,7 +56,7 @@ function IMSSites() {
    */
   const fetchSites = async () => {
     try {
-      const response = await fetch("http://localhost:8080/sites");
+      const response = await fetch(`${backend_baseurl}/sites`);
       if (!response.ok) {
         throw new Error("Network response was not ok");
       }
@@ -71,7 +73,7 @@ function IMSSites() {
    */
   const fetchItems = async () => {
     try {
-      const response = await fetch("http://localhost:8080/items");
+      const response = await fetch(`${backend_baseurl}/items`);
       if (!response.ok) {
         throw new Error("Network response was not ok");
       }
@@ -89,7 +91,7 @@ function IMSSites() {
     let counter = 0;
     // for each item selected: generate an url extension by combining them with an & for api request
     const queryParams = currentSelection.map(item => `item${counter++}=${item.itemId}`).join(`&`); 
-    const url = `http://localhost:8080/availabilities/searchByItems?${queryParams}`;
+    const url = `${backend_baseurl}/availabilities/searchByItems?${queryParams}`;
     try {
       const response = await fetch(url);
       if (!response.ok) {
@@ -125,7 +127,7 @@ function IMSSites() {
       return;
     }
     // Add the site to the database 
-    const response = await fetch("http://localhost:8080/sites/add", {
+    const response = await fetch(`${backend_baseurl}/sites/add`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -163,7 +165,7 @@ function IMSSites() {
    */
   const removeSite = async (siteId) => {
     try {
-      const response = await fetch(`http://localhost:8080/sites/delete?siteId=${siteId}`, {
+      const response = await fetch(`${backend_baseurl}/sites/delete?siteId=${siteId}`, {
         method: 'DELETE',
       });
       if (response.status === 200) {
