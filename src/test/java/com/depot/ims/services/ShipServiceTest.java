@@ -33,8 +33,6 @@ class ShipServiceTest {
             siteRepositoryMock
     );
 
-    // TODO fix tests based on new check if item exists in the source site and the new siteRepository use
-
     @Test
     void addShipQuantityUpdateTest() {
         // Given
@@ -74,18 +72,12 @@ class ShipServiceTest {
     void addShipInvalidShipmentTest() {
         // Given
         Item item = new Item(1L, "TestItem", 10.0);
-        Shipment shipment = new Shipment(1L, 1L, 2L, null, null, null, null, null);
-        Ship ship = Ship.builder()
-                .shipmentId(shipment)
-                .itemId(item)
-                .quantity(50)
-                .build();
         ShipRequest shipRequest = ShipRequest.builder()
                 .shipmentId(1L)
                 .itemId(1L)
                 .quantity(50)
                 .build();
-        when(shipmentRepositoryMock.findByShipmentId(1L)).thenReturn(null);
+        when(shipmentRepositoryMock.findByShipmentId(1L)).thenReturn(null); // Shipment does not exist
         when(itemRepositoryMock.findByItemId(1L)).thenReturn(item);
 
         // When
@@ -103,11 +95,6 @@ class ShipServiceTest {
         Site site1 = new Site(1L, "TestSite1", "TestAddress1", "Open", null, true);
         Site site2 = new Site(2L, "TestSite2", "TestAddress2", "Open", null, true);
         Shipment shipment = new Shipment(1L, 1L, 2L, null, null, null, null, null);
-        Ship ship = Ship.builder()
-                .shipmentId(shipment)
-                .itemId(item)
-                .quantity(50)
-                .build();
         ShipRequest shipRequest = ShipRequest.builder()
                 .shipmentId(1L)
                 .itemId(1L)
@@ -117,7 +104,7 @@ class ShipServiceTest {
         Availability availability2 = new Availability(site2, item, 20);
 
         when(shipmentRepositoryMock.findByShipmentId(1L)).thenReturn(shipment);
-        when(itemRepositoryMock.findByItemId(1L)).thenReturn(null);
+        when(itemRepositoryMock.findByItemId(1L)).thenReturn(null); // Item does not exist
         when(availabilityRepositoryMock.findBySiteIdAndItemId(1L, 1L)).thenReturn(availability1);
         when(availabilityRepositoryMock.findBySiteIdAndItemId(2L, 1L)).thenReturn(availability2);
 
@@ -131,7 +118,7 @@ class ShipServiceTest {
     }
 
     @Test
-    void addShipInsufficientQuantityTest() {
+    void addShipItemNotAlreadyInAvailability() {
         // Given
         Item item = new Item(1L, "TestItem", 10.0);
         Site site1 = new Site(1L, "TestSite1", "TestAddress1", "Open", null, true);
@@ -146,6 +133,37 @@ class ShipServiceTest {
                 .shipmentId(1L)
                 .itemId(1L)
                 .quantity(50)
+                .build();
+        Availability availability1 = new Availability(site1, item, 50);
+        Availability availability2 = new Availability(site2, item, 50);
+
+        when(shipmentRepositoryMock.findByShipmentId(1L)).thenReturn(shipment);
+        when(itemRepositoryMock.findByItemId(1L)).thenReturn(item);
+        when(availabilityRepositoryMock.findBySiteIdAndItemId(1L, 1L)).thenReturn(availability1);
+        when(availabilityRepositoryMock.findBySiteIdAndItemId(2L, 1L)).thenReturn(null); // Item not in destination site
+        when(siteRepositoryMock.findBySiteId(2L)).thenReturn(site2);
+        when(shipRepositoryMock.save(any(Ship.class))).thenReturn(ship);
+
+        // When
+        ResponseEntity<?> result = shipService.addShip(shipRequest);
+
+        // Then
+        assertNotNull(result);
+        assertEquals(0, availability1.getQuantity());
+        assertEquals(50, availability2.getQuantity());
+    }
+
+    @Test
+    void addShipInsufficientQuantityTest() {
+        // Given
+        Item item = new Item(1L, "TestItem", 10.0);
+        Site site1 = new Site(1L, "TestSite1", "TestAddress1", "Open", null, true);
+        Site site2 = new Site(2L, "TestSite2", "TestAddress2", "Open", null, true);
+        Shipment shipment = new Shipment(1L, 1L, 2L, null, null, null, null, null);
+        ShipRequest shipRequest = ShipRequest.builder()
+                .shipmentId(1L)
+                .itemId(1L)
+                .quantity(50) // Quantity is more than available
                 .build();
         Availability availability1 = new Availability(site1, item, 20);
         Availability availability2 = new Availability(site2, item, 20);
