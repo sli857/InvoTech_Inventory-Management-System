@@ -57,6 +57,46 @@ public class AvailabilityService {
     }
 
     /**
+     * Change the quantity of the item of the site
+     *
+     * @param itemId the id of item
+     * @param siteId the id of site
+     * @param operation one of the three operation(+,- or direct modification)
+     * @param quantity quantity to change
+     * @return ResponseEntity containing the result of the updated availability
+     */
+    public ResponseEntity<?> changeQuantity(Long siteId, Long itemId, String operation, Integer quantity) {
+
+        if(!this.siteRepository.existsById(siteId)) {
+            return ResponseEntity.badRequest().body("Site not found by siteId");
+        }
+        if(!this.itemRepository.existsById(itemId)) {
+            return ResponseEntity.badRequest().body("Item not found by item Id");
+        }
+
+        Availability availability = this.availabilityRepository.findBySiteIdAndItemId(siteId, itemId);
+        //modify the quantity depending on the operation
+        Integer current_quantity = availability.getQuantity();
+        Integer new_quantity = current_quantity;
+
+        if (operation.equals("+")) {
+            new_quantity = current_quantity + quantity;
+        } else if (operation.equals("-")) {
+            if (quantity >= current_quantity) {
+                new_quantity = 0;
+            } else {
+                new_quantity = current_quantity - quantity;
+            }
+        } else {
+            new_quantity = quantity;
+        }
+        availability.setQuantity(new_quantity);
+        Availability updatedAvailability = this.availabilityRepository.save(availability);
+
+        return ResponseEntity.ok(updatedAvailability);
+    }
+
+    /**
      * Gets all availabilities of the site with the given siteID
      *
      * @param siteID id of site.
@@ -79,7 +119,6 @@ public class AvailabilityService {
 
         return ResponseEntity.badRequest().body("please provide a valid siteID");
     }
-
 
     /**
      * Get sites that contains all the items with the given item id
