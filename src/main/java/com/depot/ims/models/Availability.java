@@ -2,9 +2,8 @@ package com.depot.ims.models;
 
 import com.depot.ims.models.compositeKeys.AvailabilityKey;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+
 
 /**
  * Represents a availability entity in the system.
@@ -15,6 +14,8 @@ import lombok.NoArgsConstructor;
 @Data // Lombok annotation to generate getters, setters, equals, hashCode, and toString methods.
 @NoArgsConstructor  // Generates a no-argument constructor.
 @AllArgsConstructor // Generates a constructor initializing all fields.
+@ToString
+@Builder
 @Entity // Indicates that this class is a JPA entity.
 @IdClass(AvailabilityKey.class)
 @Table(name = "Availabilities") // Maps this entity to the "Availabilities" table in the database.

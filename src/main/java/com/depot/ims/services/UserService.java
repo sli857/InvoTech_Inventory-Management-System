@@ -4,6 +4,7 @@ import com.depot.ims.models.User;
 import com.depot.ims.repositories.UserRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+
 import java.util.Objects;
 import java.util.stream.Stream;
 
@@ -29,16 +30,16 @@ public class UserService {
      * Updates the details of an existing user using their ID.
      * Allows for partial updates where only specified fields are updated.
      *
-     * @param userID       The ID of the user to update.
-     * @param newUsername  The new username for the user (nullable).
-     * @param newPassword  The new password for the user (nullable).
-     * @param newPosition  The new position/title for the user (nullable).
+     * @param userID      The ID of the user to update.
+     * @param newUsername The new username for the user (nullable).
+     * @param newPassword The new password for the user (nullable).
+     * @param newPosition The new position/title for the user (nullable).
      * @return ResponseEntity<?> Returns OK if the update was successful, or Bad Request on error.
      */
-    public ResponseEntity<?> updateUser( Long userID,
-                                         String newUsername,
-                                         String newPassword,
-                                         String newPosition) {
+    public ResponseEntity<?> updateUser(Long userID,
+                                        String newUsername,
+                                        String newPassword,
+                                        String newPosition) {
         if (!usersRepository.existsById(userID)) {
             return ResponseEntity.badRequest().body("User not found by user id!");
         }
@@ -60,12 +61,12 @@ public class UserService {
     /**
      * Retrieves the details of a user by their ID or username.
      *
-     * @param userId    The ID of the user to find (nullable).
-     * @param username  The username of the user to find (nullable).
+     * @param userId   The ID of the user to find (nullable).
+     * @param username The username of the user to find (nullable).
      * @return ResponseEntity<?> Returns OK with the user details or Bad Request
      * if neither ID nor username is provided.
      */
-    public ResponseEntity<?> getUser( Long userId, String username) {
+    public ResponseEntity<?> getUser(Long userId, String username) {
         // user id has to be unique!!
         if (userId != null) {
             return ResponseEntity.ok(usersRepository.findByUserId(userId));
@@ -81,8 +82,8 @@ public class UserService {
     /**
      * Confirms a user's existence and matches the provided password with the stored password.
      *
-     * @param username  The username of the user.
-     * @param password  The password to verify.
+     * @param username The username of the user.
+     * @param password The password to verify.
      * @return ResponseEntity<?> Returns OK if the user exists and the password matches,
      * or Bad Request on error.
      */

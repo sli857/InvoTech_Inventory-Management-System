@@ -1,13 +1,14 @@
 package com.depot.ims.services;
 
+import com.depot.ims.models.Availability;
 import com.depot.ims.models.Item;
 import com.depot.ims.models.Site;
-import com.depot.ims.models.Availability;
-import com.depot.ims.repositories.*;
+import com.depot.ims.repositories.AvailabilityRepository;
+import com.depot.ims.repositories.ItemRepository;
+import com.depot.ims.repositories.SiteRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.util.MultiValueMap;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -24,6 +25,7 @@ public class AvailabilityService {
     private final SiteRepository siteRepository;
     private final ItemRepository itemRepository;
     private final AvailabilityRepository availabilityRepository;
+    private final AuditService auditService;
 
 
     /**
@@ -35,10 +37,11 @@ public class AvailabilityService {
      */
     public AvailabilityService(SiteRepository siteRepository,
                                ItemRepository itemRepository,
-                               AvailabilityRepository availabilityRepository) {
+                               AvailabilityRepository availabilityRepository, AuditService auditService) {
         this.siteRepository = siteRepository;
         this.itemRepository = itemRepository;
         this.availabilityRepository = availabilityRepository;
+        this.auditService = auditService;
     }
 
     /**
@@ -49,8 +52,12 @@ public class AvailabilityService {
      */
     public ResponseEntity<?> addAvailabilities(@RequestBody Availability availability) {
         try {
-            this.availabilityRepository.save(availability);
-            return ResponseEntity.ok(availability);
+            var res = availabilityRepository.save(availability);
+            this.auditService.saveAudit("Availabilities", null,
+                    String.join(res.getItemId().toString(), res.getSiteId().toString())
+                    , null,
+                    res.toString(), "INSERT");
+            return ResponseEntity.ok(res);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
@@ -103,14 +110,14 @@ public class AvailabilityService {
      * @return ResponseEntity containing all availabilities of the site with the given siteID.
      */
     public ResponseEntity<?> getAvailability(
-            @RequestParam(value = "siteId",required = false) Long siteID) {
+            @RequestParam(value = "siteId", required = false) Long siteID) {
         //make sure the given ID is valid
         if (siteID != null) {
             //make sure the given ID exist in our inventory
-            if(!siteRepository.existsById(siteID)){
+            if (!siteRepository.existsById(siteID)) {
                 return ResponseEntity.badRequest().body("Site not found by siteId");
             }
-            try{
+            try {
                 return ResponseEntity.ok(availabilityRepository.findBySiteId(siteID));
             } catch (Exception e) {
                 return ResponseEntity.badRequest().body(e);
@@ -147,8 +154,8 @@ public class AvailabilityService {
             List<Site> results = new ArrayList<>();
             List<Site> sitesWithItem1 = this.availabilityRepository.findSitesByOneItem(itemList.get(0));
             List<Site> sitesWithItem2 = this.availabilityRepository.findSitesByOneItem(itemList.get(1));
-            for (Site site: sitesWithItem1) {
-                if(sitesWithItem2.contains(site)) {
+            for (Site site : sitesWithItem1) {
+                if (sitesWithItem2.contains(site)) {
                     results.add(site);
                 }
             }
@@ -176,14 +183,14 @@ public class AvailabilityService {
      * @param itemId id of item
      * @return ResponseEntity containing sites that contains the item with the given item id.
      */
-    public  ResponseEntity<?>  getAvailabilitiesByItemId(@RequestParam(value = "itemId") Long itemId) {
+    public ResponseEntity<?> getAvailabilitiesByItemId(@RequestParam(value = "itemId") Long itemId) {
         if (itemId != null) {
-            if(!itemRepository.existsById(itemId)){
+            if (!itemRepository.existsById(itemId)) {
                 return ResponseEntity.badRequest().body("item not found by itemId");
             }
             Item item = this.itemRepository.findByItemId(itemId);
             List<Site> sites = this.availabilityRepository.findSitesByOneItem(item);
-            return  ResponseEntity.ok(sites);
+            return ResponseEntity.ok(sites);
         } else {
             return ResponseEntity.badRequest().body("expecting JSON array");
         }
@@ -199,16 +206,15 @@ public class AvailabilityService {
     public ResponseEntity<?> getAvailabilityBySiteIdAndItemId(
             @RequestParam(value = "siteId") Long siteId,
             @RequestParam(value = "itemId") Long itemId) {
-        if(!itemRepository.existsById(itemId)){
+        if (!itemRepository.existsById(itemId)) {
             return ResponseEntity.badRequest().body("item not found by itemId");
         }
-        if(!siteRepository.existsById(siteId)){
+        if (!siteRepository.existsById(siteId)) {
             return ResponseEntity.badRequest().body("Site not found by siteId");
         }
 
-        return  ResponseEntity.ok(availabilityRepository.findBySiteIdAndItemId(siteId, itemId));
+        return ResponseEntity.ok(availabilityRepository.findBySiteIdAndItemId(siteId, itemId));
     }
-
 
 
 }

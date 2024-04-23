@@ -4,6 +4,7 @@ import com.depot.ims.models.Shipment;
 import com.depot.ims.repositories.ShipmentRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+
 import java.sql.Timestamp;
 import java.util.Objects;
 import java.util.stream.Stream;
@@ -16,29 +17,31 @@ import java.util.stream.Stream;
 @Service
 public class ShipmentService {
     private final ShipmentRepository shipmentRepository;
+    private final AuditService auditService;
 
     /**
      * Constructs a ShipmentService with a repository for data access.
      *
      * @param shipmentRepository The repository providing data access operations for shipments.
      */
-    public ShipmentService(ShipmentRepository shipmentRepository) {
+    public ShipmentService(ShipmentRepository shipmentRepository, AuditService auditService) {
 
         this.shipmentRepository = shipmentRepository;
+        this.auditService = auditService;
     }
 
     /**
      * Updates the details of an existing shipment using its ID.
      * Allows for partial updates where only specified fields are updated.
      *
-     * @param shipmentId            The ID of the shipment to update.
-     * @param newSource             The new source location ID (nullable).
-     * @param newDestination        The new destination location ID (nullable).
-     * @param newCurrentLocation    The new current location (nullable).
-     * @param newDepartureTime      The new departure time (nullable).
+     * @param shipmentId              The ID of the shipment to update.
+     * @param newSource               The new source location ID (nullable).
+     * @param newDestination          The new destination location ID (nullable).
+     * @param newCurrentLocation      The new current location (nullable).
+     * @param newDepartureTime        The new departure time (nullable).
      * @param newEstimatedArrivalTime The new estimated arrival time (nullable).
-     * @param newActualArrivalTime  The new actual arrival time (nullable).
-     * @param newShipmentStatus     The new shipment status (nullable).
+     * @param newActualArrivalTime    The new actual arrival time (nullable).
+     * @param newShipmentStatus       The new shipment status (nullable).
      * @return ResponseEntity<?>    Returns OK with the updated shipment or Bad Request on error.
      */
     public ResponseEntity<?> updateShipment(Long shipmentId,
@@ -63,13 +66,58 @@ public class ShipmentService {
 
         // Apply non-null updates to the shipment
         Shipment shipment = shipmentRepository.findByShipmentId(shipmentId);
-        if (newSource != null) shipment.setSource(newSource);
-        if (newDestination != null) shipment.setDestination(newDestination);
-        if (newCurrentLocation != null) shipment.setCurrentLocation(newCurrentLocation);
-        if (newDepartureTime != null) shipment.setDepartureTime(newDepartureTime);
-        if (newEstimatedArrivalTime != null) shipment.setEstimatedArrivalTime(newEstimatedArrivalTime);
-        if (newActualArrivalTime != null) shipment.setActualArrivalTime(newActualArrivalTime);
-        if (newShipmentStatus != null) shipment.setShipmentStatus(newShipmentStatus);
+        if (newSource != null) {
+            auditService.saveAudit("Shipments", "source", shipment.getShipmentId().toString(),
+                    shipment.getSource().toString(), newSource.toString(), "UPDATE");
+            shipment.setSource(newSource);
+        }
+        if (newDestination != null) {
+            auditService.saveAudit("Shipments", "destination", shipment.getShipmentId().toString(),
+                    shipment.getDestination().toString(), newDestination.toString(), "UPDATE");
+            shipment.setDestination(newDestination);
+        }
+        if (newCurrentLocation != null) {
+            auditService.saveAudit("Shipments", "currentLocation",
+                    shipment.getShipmentId().toString(),
+                    shipment.getCurrentLocation(), newCurrentLocation, "UPDATE");
+
+            shipment.setCurrentLocation(newCurrentLocation);
+        }
+        if (newDepartureTime != null) {
+            auditService.saveAudit("Shipments", "departureTime",
+                    shipment.getShipmentId().toString(),
+                    shipment.getDepartureTime() == null ? null : shipment.getDepartureTime().toString(),
+                    newDepartureTime.toString(),
+                    "UPDATE");
+            shipment.setDepartureTime(newDepartureTime);
+        }
+        if (newEstimatedArrivalTime != null) {
+            auditService.saveAudit("Shipments", "estimatedArrivalTime",
+                    shipment.getShipmentId().toString(),
+                    shipment.getEstimatedArrivalTime() == null ? null :
+                            shipment.getEstimatedArrivalTime().toString(),
+                    newEstimatedArrivalTime.toString(),
+                    "UPDATE");
+            shipment.setEstimatedArrivalTime(newEstimatedArrivalTime);
+        }
+        if (newActualArrivalTime != null) {
+            auditService.saveAudit("Shipments", "actualArrivalTime",
+                    shipment.getShipmentId().toString(),
+                    shipment.getActualArrivalTime() == null ? null : shipment.getActualArrivalTime().toString(),
+                    newActualArrivalTime.toString(),
+                    "UPDATE");
+
+            shipment.setActualArrivalTime(newActualArrivalTime);
+        }
+        if (newShipmentStatus != null) {
+            auditService.saveAudit("Shipments", "shipmentStatus",
+                    shipment.getShipmentId().toString(),
+                    shipment.getShipmentStatus(),
+                    newDestination.toString(), "UPDATE");
+
+            shipment.setShipmentStatus(newShipmentStatus);
+        }
+
 
         Shipment updatedShipment = shipmentRepository.save(shipment);
         return ResponseEntity.ok(updatedShipment);
@@ -102,6 +150,8 @@ public class ShipmentService {
         try {
             boolean isFound = shipmentRepository.existsById(shipmentId);
             if (isFound) {
+                var res = shipmentRepository.findByShipmentId(shipmentId);
+                auditService.saveAudit("Shipments", null, shipmentId.toString(), res.toString(), null, "DELETE");
                 shipmentRepository.deleteById(shipmentId);
                 return ResponseEntity.ok().body("Successfully deleted");
             }

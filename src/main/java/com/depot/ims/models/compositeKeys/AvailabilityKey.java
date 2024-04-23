@@ -3,12 +3,14 @@ package com.depot.ims.models.compositeKeys;
 import com.depot.ims.models.Item;
 import com.depot.ims.models.Site;
 import lombok.Data;
+import lombok.ToString;
 import org.springframework.data.annotation.Reference;
 
 import java.io.Serializable;
 import java.util.Objects;
 
 @Data
+@ToString
 public class AvailabilityKey implements Serializable {
 
     @Reference(to = Site.class)
