@@ -6,8 +6,10 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.TestPropertySource;
+
 import java.sql.Timestamp;
 import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
@@ -77,13 +79,13 @@ public class ShipmentTest {
     /**
      * Helper method to create and persist a Shipment entity for testing.
      *
-     * @param newSource The source location ID of the new shipment.
-     * @param newDestination The destination location ID of the new shipment.
-     * @param newCurrentLocation The current location description of the new shipment.
-     * @param newDepartureTime The departure time of the new shipment.
+     * @param newSource               The source location ID of the new shipment.
+     * @param newDestination          The destination location ID of the new shipment.
+     * @param newCurrentLocation      The current location description of the new shipment.
+     * @param newDepartureTime        The departure time of the new shipment.
      * @param newEstimatedArrivalTime The estimated arrival time of the new shipment.
-     * @param newActualArrivalTime The actual arrival time of the new shipment (can be null).
-     * @param newShipmentStatus The status of the new shipment.
+     * @param newActualArrivalTime    The actual arrival time of the new shipment (can be null).
+     * @param newShipmentStatus       The status of the new shipment.
      * @return The saved Shipment entity.
      */
     private Shipment createShipment(Long newSource,

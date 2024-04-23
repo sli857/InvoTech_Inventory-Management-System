@@ -13,13 +13,13 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-@DataJpaTest
+
 // Annotation to specify property sources for the test
+@DataJpaTest
 @TestPropertySource(properties = {
         "spring.jpa.database-platform=org.hibernate.dialect.H2Dialect",
         "spring.jpa.hibernate.ddl-auto=update"
 })
-
 public class SiteTest {
     @Autowired
     private SiteRepository siteRepository;
@@ -27,21 +27,39 @@ public class SiteTest {
     @BeforeEach
     void setup() {
         Site site1 = createSite("site1", "location1", "open", null, true);
-        Site site2 = createSite("site2", "location2", "open", null, true);
+        Site site2 = createSite("site2", "location2", "closed", null, true);
     }
 
     @Test
-    void findAllTest() {
+    void testFindAll() {
         List<Site> res = siteRepository.findAll();
+        System.out.println(res);
         assertNotNull(res);
         assertEquals(2, res.size());
     }
 
     @Test
-    void findSiteByIdTest() {
-        Site res = siteRepository.findBySiteId(3L);
+    void testFindSiteById() {
+        System.out.println(siteRepository.findAll());
+        Site res = siteRepository.findBySiteId(7L);
         assertNotNull(res);
-        assertEquals("site1", res.getSiteName());
+        assertEquals(7L, res.getSiteId());
+    }
+
+    @Test
+    void testFindSiteByName() {
+        System.out.println(siteRepository.findAll());
+        Site res = siteRepository.findBySiteName("site2");
+        assertNotNull(res);
+        assertEquals("site2", res.getSiteName());
+    }
+
+    @Test
+    void testFindStatusBySiteId() {
+        System.out.println(siteRepository.findAll());
+        String res = siteRepository.findSiteStatusBySiteId(4L);
+        assertNotNull(res);
+        assertEquals("closed", res);
     }
 
     private Site createSite(String siteName,
@@ -55,6 +73,6 @@ public class SiteTest {
                 .internalSite(internalSite)
                 .build();
         if (ceaseDate != null) site.setCeaseDate(Date.valueOf(ceaseDate));
-        return siteRepository.saveAndFlush(site);
+        return siteRepository.save(site);
     }
 }

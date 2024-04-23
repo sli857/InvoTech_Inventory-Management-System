@@ -1,10 +1,8 @@
 package com.depot.ims.models;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+
 import java.sql.Timestamp;
 
 /**
@@ -15,6 +13,7 @@ import java.sql.Timestamp;
 @Data // Generates getters, setters, toString, equals, and hashCode methods.
 @NoArgsConstructor // Generates a no-argument constructor.
 @AllArgsConstructor // Generates an all-argument constructor.
+@ToString
 @Entity // Specifies that this class is an entity and is mapped to a database table.
 @Builder // Provides a builder pattern for object creation.
 @Table(name = "Shipments")

@@ -1,7 +1,9 @@
 package com.depot.ims.controllers;
 
-import com.depot.ims.models.*;
-import com.depot.ims.repositories.*;
+import com.depot.ims.models.Availability;
+import com.depot.ims.models.Item;
+import com.depot.ims.models.Site;
+import com.depot.ims.repositories.AvailabilityRepository;
 import com.depot.ims.services.AvailabilityService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
@@ -18,6 +20,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
+
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
@@ -44,7 +47,7 @@ public class AvailabilityControllerTest {
 
     @Mock
     AvailabilityService availabilityService;
-    private ObjectMapper objectMapper = new ObjectMapper();
+    private final ObjectMapper objectMapper = new ObjectMapper();
     private MockMvc mockMvc;
 
     /**

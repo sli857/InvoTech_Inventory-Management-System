@@ -1,13 +1,13 @@
 package com.depot.ims.services;
 
 import com.depot.ims.models.Item;
-import com.depot.ims.repositories.*;
+import com.depot.ims.repositories.ItemRepository;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 /**
@@ -19,8 +19,10 @@ public class ItemServiceTest {
 
     @Mock
     private ItemRepository itemsRepository = mock(ItemRepository.class);
+    @Mock
+    private AuditService auditService = mock(AuditService.class);
 
-    private final ItemService itemsService = new ItemService(itemsRepository);
+    private final ItemService itemsService = new ItemService(itemsRepository, auditService);
 
     /**
      * Tests retrieving an availability
@@ -39,9 +41,10 @@ public class ItemServiceTest {
         ResponseEntity<?> response = this.itemsService.getItem(11L, "name");
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertNotNull(response.getBody());
-        assertEquals(true, response.getBody().equals(item));
+        assertTrue(response.getBody().equals(item));
 
     }
+
     /**
      * Tests adding an item
      * mock the item repository
@@ -51,10 +54,12 @@ public class ItemServiceTest {
     public void testAddItem() {
         //test2.1: test the addItem method inside the item with valid item
         Item newItem = new Item(20L, "new", 3.0);
-        ResponseEntity<?> response5= this.itemsService.addItem(newItem);
+        when(itemsRepository.save(newItem)).thenReturn(newItem);
+        ResponseEntity<?> response5 = this.itemsService.addItem(newItem);
+        doNothing().when(auditService).saveAudit(any(), any(), any(), any(), any(), any());
         assertEquals(HttpStatus.OK, response5.getStatusCode());
         assertNotNull(response5.getBody());
-        assertEquals( true, response5.getBody().equals(newItem));
+        assertTrue(response5.getBody().equals(newItem));
     }
 
     /**
@@ -74,13 +79,13 @@ public class ItemServiceTest {
         ResponseEntity<?> response3 = this.itemsService.updateItem(11L, "newName", 2.1);
         assertEquals(HttpStatus.OK, response3.getStatusCode());
         assertNotNull(response3.getBody());
-        assertEquals(true, response3.getBody().equals(updateItem));
+        assertTrue(response3.getBody().equals(updateItem));
 
         //test3.2: test the updateItem method inside the item with invalid inputs
         ResponseEntity<?> response4 = this.itemsService.updateItem(11L, null, null);
         assertEquals(HttpStatus.BAD_REQUEST, response4.getStatusCode());
         assertNotNull(response4.getBody());
-        assertEquals( true, response4.getBody().equals("No value for this update is specified."));
+        assertTrue(response4.getBody().equals("No value for this update is specified."));
 
     }
 
