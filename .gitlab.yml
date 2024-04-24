@@ -118,7 +118,7 @@ build-jar:
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH || $CI_PIPELINE_SOURCE == 'merge_request_event'
   retry: !reference [.config, retry]
 
-mr-build-backend:
+mr-backend:
   extends: .build-image
   variables:
     IMAGE_TAG: "backend:dev-$CI_MERGE_REQUEST_IID"
@@ -132,7 +132,7 @@ mr-build-backend:
     - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
   retry: !reference [.config, retry]
 
-release-build-backend:
+latest-backend-release:
   extends: .build-image
   variables:
     IMAGE_TAG: "backend:latest"
@@ -146,10 +146,24 @@ release-build-backend:
     - main 
   retry: !reference [.config, retry]
 
+tag-backend-release:
+  extends: .build-image
+  variables:
+    IMAGE_TAG: "backend:$CI_COMMIT_TAG"
+    DOCKERFILE_PATH: "./dockerfiles/backend/Dockerfile"
+    DOCKER_BUILD_OPTS: "--build-arg JAR_FILE=./target/*.jar"
+  dependencies:
+    - build-jar
+  script:
+    - !reference [.build-image, script]
+  rules:
+    - if: $CI_COMMIT_TAG && $CI_COMMIT_REF_PROTECTED
+  retry: !reference [.config, retry]
+
 #####################################
 ###### Build & Release Frontend #####
 #####################################
-mr-build-frontend:
+mr-frontend:
   extends: .build-image
   variables:
     IMAGE_TAG: "frontend:dev-$CI_MERGE_REQUEST_IID"
@@ -160,7 +174,7 @@ mr-build-frontend:
     - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
   retry: !reference [.config, retry]
 
-release-build-frontend:
+latest-frontend-release:
   extends: .build-image
   variables:
     IMAGE_TAG: "frontend:latest"
@@ -169,6 +183,17 @@ release-build-frontend:
     - !reference [.build-image, script]
   only:
     - main 
+  retry: !reference [.config, retry]
+
+tag-frontend-release:
+  extends: .build-image
+  variables:
+    IMAGE_TAG: "frontend:$CI_COMMIT_TAG"
+    DOCKERFILE_PATH: "./dockerfiles/frontend/Dockerfile"
+  script:
+    - !reference [.build-image, script]
+  rules:
+    - if: $CI_COMMIT_TAG && $CI_COMMIT_REF_PROTECTED
   retry: !reference [.config, retry]
 
 #####################################
