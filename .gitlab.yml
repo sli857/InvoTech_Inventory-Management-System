@@ -170,3 +170,19 @@ release-build-frontend:
   only:
     - main 
   retry: !reference [.config, retry]
+
+#####################################
+############### Docs ################
+#####################################
+
+pages:
+  image: maven:3-eclipse-temurin-17-alpine
+  stage: release 
+  script:
+    - mvn javadoc:javadoc && exit 0
+    - mkdir public && mv target/site/apidocs/* public
+  only:
+    - main
+  artifacts:
+    paths:
+      - public
