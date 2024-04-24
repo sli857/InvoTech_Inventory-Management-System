@@ -1,5 +1,17 @@
 import {useCallback, useEffect, useState} from 'react';
-import {Button, Card, Col, Container, Form, Row, Table} from 'react-bootstrap';
+import {
+    Button,
+    Card,
+    Col,
+    Container,
+    Dropdown,
+    DropdownButton,
+    Form,
+    OverlayTrigger,
+    Row,
+    Table,
+    Tooltip
+} from 'react-bootstrap';
 
 /**
  * IMSShipments Component
@@ -20,6 +32,25 @@ function IMSShipments() {
     const [destinationValid, setDestinationValid] = useState(true);
     const [itemValid, setItemValid] = useState(true);
     const [quantityValid, setQuantityValid] = useState(true);
+
+    // State for filter queries
+    const [selectedSource, setSelectedSource] = useState('Select Source');
+    const [selectedDestination, setSelectedDestination] = useState('Select Destination');
+    const [selectedStatus, setSelectedStatus] = useState('Select Status');
+
+    // Filter shipment based on selected filters
+    const filteredShipments = shipments.filter(shipment => {
+        return (selectedSource === 'Select Source' || shipment.source === selectedSource) &&
+            (selectedDestination === 'Select Destination' || shipment.destination === selectedDestination) &&
+            (selectedStatus === 'Select Status' || shipment.shipmentStatus === selectedStatus);
+    });
+
+    // Helper function to reset filter fields
+    const resetFilters = () => {
+        setSelectedSource('Select Source');
+        setSelectedDestination('Select Destination');
+        setSelectedStatus('Select Status');
+    };
 
     /**
      * Fetches the list of shipments from the mock API endpoint and sets the shipments state to the fetched data.
@@ -198,6 +229,7 @@ function IMSShipments() {
 
     return (
         <Container fluid="md" className="mt-3">
+
             {/* Table of shipments */}
             <Row className="mb-4">
                 <Col>
@@ -216,90 +248,144 @@ function IMSShipments() {
                         </tr>
                         </thead>
                         <tbody>
-                        {shipments.map(shipment => (
-                            <tr key={shipment.shipmentId}>
-                                <td>{shipment.shipmentId}</td>
-                                <td>{sites.find(site => site.siteId === shipment.source)?.siteName}</td>
-                                <td>{sites.find(site => site.siteId === shipment.destination)?.siteName}</td>
-                                <td>{shipment.currentLocation}</td>
-                                <td>{shipment.departureTime ? new Date(shipment.departureTime).toLocaleDateString("en-US", {
-                                    year: 'numeric',
-                                    month: 'long',
-                                    day: 'numeric'
-                                }) : 'Null'}</td>
-                                <td>{shipment.estimatedArrivalTime ? new Date(shipment.estimatedArrivalTime).toLocaleDateString("en-US", {
-                                    year: 'numeric',
-                                    month: 'long',
-                                    day: 'numeric'
-                                }) : 'Null'}</td>
-                                <td>{shipment.actualArrivalTime ? new Date(shipment.actualArrivalTime).toLocaleDateString("en-US", {
-                                    year: 'numeric',
-                                    month: 'long',
-                                    day: 'numeric'
-                                }) : 'Null'}</td>
-                                <td>{shipment.shipmentStatus}</td>
-                            </tr>
+                        {filteredShipments.map(shipment => (
+                            <OverlayTrigger
+                                key={shipment.shipmentId}
+                                overlay={<Tooltip id={`tooltip-${shipment.shipmentId}`}>Press this site to see its
+                                    inventory contents.</Tooltip>}
+                                placement={'top'}
+                            >
+                                <tr key={shipment.shipmentId} style={{cursor: 'pointer'}}>
+                                    <td>{shipment.shipmentId}</td>
+                                    <td>{sites.find(site => site.siteId === shipment.source)?.siteName}</td>
+                                    <td>{sites.find(site => site.siteId === shipment.destination)?.siteName}</td>
+                                    <td>{shipment.currentLocation}</td>
+                                    <td>{shipment.departureTime ? new Date(shipment.departureTime).toLocaleDateString("en-US", {
+                                        year: 'numeric',
+                                        month: 'long',
+                                        day: 'numeric'
+                                    }) : 'Null'}</td>
+                                    <td>{shipment.estimatedArrivalTime ? new Date(shipment.estimatedArrivalTime).toLocaleDateString("en-US", {
+                                        year: 'numeric',
+                                        month: 'long',
+                                        day: 'numeric'
+                                    }) : 'Null'}</td>
+                                    <td>{shipment.actualArrivalTime ? new Date(shipment.actualArrivalTime).toLocaleDateString("en-US", {
+                                        year: 'numeric',
+                                        month: 'long',
+                                        day: 'numeric'
+                                    }) : 'Null'}</td>
+                                    <td>{shipment.shipmentStatus}</td>
+                                </tr>
+                            </OverlayTrigger>
                         ))}
                         </tbody>
                     </Table>
                 </Col>
             </Row>
             <Row>
+
                 {/* Form for adding a new shipment */}
-                <Card>
-                    <Card.Body>
-                        <Card.Title>Add Shipment</Card.Title>
-                        <Form onSubmit={handleSubmit}>
-                            <Form.Group controlId="formSource">
-                                <Form.Label>From Site</Form.Label>
-                                <Form.Control as="select" isInvalid={!sourceValid}>
-                                    {sites.map(site => <option key={site.siteId}
-                                                               value={site.siteId}>{site.siteName}</option>)}
-                                </Form.Control>
-                                <Form.Control.Feedback type="invalid">
-                                    Source and destination cannot be the same.
-                                </Form.Control.Feedback>
-                            </Form.Group>
-                            <Form.Group controlId="formDestination">
-                                <Form.Label>To Site</Form.Label>
-                                <Form.Control as="select" isInvalid={!destinationValid}>
-                                    {sites.map(site => <option key={site.siteId}
-                                                               value={site.siteId}>{site.siteName}</option>)}
-                                </Form.Control>
-                                <Form.Control.Feedback type="invalid">
-                                    Source and destination cannot be the same.
-                                </Form.Control.Feedback>
-                            </Form.Group>
-                            <Row>
-                                <Col>
-                                    <Form.Group controlId="formItem">
-                                        <Form.Label>Item</Form.Label>
-                                        <Form.Control as="select" isInvalid={!itemValid}>
-                                            {items.map(item => <option key={item.itemId}
-                                                                       value={item.itemId}>{item.itemName}</option>)}
-                                        </Form.Control>
-                                        <Form.Control.Feedback type="invalid">
-                                            Input valid item.
-                                        </Form.Control.Feedback>
-                                    </Form.Group>
-                                </Col>
-                                <Col>
-                                    <Form.Group controlId="formQuantity">
-                                        <Form.Label>Quantity</Form.Label>
-                                        <Form.Control type="number" placeholder="Enter quantity"
-                                                      isInvalid={!quantityValid}/>
-                                        <Form.Control.Feedback type="invalid">
-                                            Please enter a valid quantity.
-                                        </Form.Control.Feedback>
-                                    </Form.Group>
-                                </Col>
-                            </Row>
-                            <Button variant="primary" type="submit">
-                                Submit
-                            </Button>
-                        </Form>
-                    </Card.Body>
-                </Card>
+                <Col md={6} className="mb-4">
+                    <Card>
+                        <Card.Body>
+                            <Card.Title>Add Shipment</Card.Title>
+                            <Form onSubmit={handleSubmit}>
+                                <Form.Group className="mb-3" controlId="formSource">
+                                    <Form.Label>From Site</Form.Label>
+                                    <Form.Control as="select" isInvalid={!sourceValid}>
+                                        {sites.map(site => <option key={site.siteId}
+                                                                   value={site.siteId}>{site.siteName}</option>)}
+                                    </Form.Control>
+                                    <Form.Control.Feedback type="invalid">
+                                        Source and destination cannot be the same.
+                                    </Form.Control.Feedback>
+                                </Form.Group>
+                                <Form.Group className="mb-3" controlId="formDestination">
+                                    <Form.Label>To Site</Form.Label>
+                                    <Form.Control as="select" isInvalid={!destinationValid}>
+                                        {sites.map(site => <option key={site.siteId}
+                                                                   value={site.siteId}>{site.siteName}</option>)}
+                                    </Form.Control>
+                                    <Form.Control.Feedback type="invalid">
+                                        Source and destination cannot be the same.
+                                    </Form.Control.Feedback>
+                                </Form.Group>
+                                <Form.Group className="mb-3" controlId="formItem">
+                                    <Form.Label>Item</Form.Label>
+                                    <Form.Control as="select" isInvalid={!itemValid}>
+                                        {items.map(item => <option key={item.itemId}
+                                                                   value={item.itemId}>{item.itemName}</option>)}
+                                    </Form.Control>
+                                    <Form.Control.Feedback type="invalid">
+                                        Input valid item.
+                                    </Form.Control.Feedback>
+                                </Form.Group>
+                                <Form.Group className="mb-3" controlId="formQuantity">
+                                    <Form.Label>Quantity</Form.Label>
+                                    <Form.Control type="number" placeholder="Enter quantity"
+                                                  isInvalid={!quantityValid}/>
+                                    <Form.Control.Feedback type="invalid">
+                                        Please enter a valid quantity.
+                                    </Form.Control.Feedback>
+                                </Form.Group>
+                                <Button variant="success" type="submit">
+                                    Submit
+                                </Button>
+                            </Form>
+                        </Card.Body>
+                    </Card>
+                </Col>
+
+                {/* Filters */}
+                <Col md={6}>
+                    <Card>
+                        <Card.Body>
+                            <Card.Title>Filters</Card.Title>
+                            <div className="d-flex flex-column gap-3">
+                                {/* Filter by Source Location */}
+                                <DropdownButton id="dropdown-location-button"
+                                                title={sites.find(site => site.siteId === selectedSource)?.siteName || 'Select Source'}>
+                                    {sites.map((site) => (
+                                        <Dropdown.Item key={`site-${site.siteId}`}
+                                                       onClick={() => setSelectedSource(site.siteId)}>
+                                            {site.siteName}
+                                        </Dropdown.Item>
+                                    ))}
+                                    <Dropdown.Item
+                                        onClick={() => setSelectedSource('Select Source')}>None</Dropdown.Item>
+                                </DropdownButton>
+
+                                {/* Filter by Internal Site */}
+                                <DropdownButton id="dropdown-location-button"
+                                                title={sites.find(site => site.siteId === selectedDestination)?.siteName || 'Select Source'}>
+                                    {sites.map((site) => (
+                                        <Dropdown.Item key={`site-${site.siteId}`}
+                                                       onClick={() => setSelectedDestination(site.siteId)}>
+                                            {site.siteName}
+                                        </Dropdown.Item>
+                                    ))}
+                                    <Dropdown.Item
+                                        onClick={() => setSelectedDestination('Select Destination')}>None</Dropdown.Item>
+                                </DropdownButton>
+
+                                {/* Filter by Site Status */}
+                                <DropdownButton id="dropdown-status-button" title={selectedStatus || 'Shipment Status'}>
+                                    <Dropdown.Item onClick={() => setSelectedStatus('Pending')}>Pending</Dropdown.Item>
+                                    <Dropdown.Item onClick={() => setSelectedStatus('In Transit')}>In
+                                        Transit</Dropdown.Item>
+                                    <Dropdown.Item
+                                        onClick={() => setSelectedStatus('Delivered')}>Delivered</Dropdown.Item>
+                                    <Dropdown.Item
+                                        onClick={() => setSelectedStatus('Select Status')}>None</Dropdown.Item>
+                                </DropdownButton>
+
+                                {/* Reset Filters Button */}
+                                <Button variant="secondary" onClick={resetFilters}>Reset Filters</Button>
+                            </div>
+                        </Card.Body>
+                    </Card>
+                </Col>
             </Row>
         </Container>
     );
