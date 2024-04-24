@@ -2,6 +2,7 @@
 package com.depot.ims.controllers;
 
 // Import statements
+
 import com.depot.ims.models.Availability;
 import com.depot.ims.repositories.AvailabilityRepository;
 import com.depot.ims.repositories.ItemRepository;
@@ -36,11 +37,10 @@ public class AvailabilityController {
     /**
      * Constructor for Availability Controller.
      *
-     * @param availabilityService service for shipment related operations
+     * @param availabilityService    service for shipment related operations
      * @param availabilityRepository Repository for item data access.
-     * @param siteRepository Repository for site data access.
-     * @param itemRepository Repository for item data access.
-     *
+     * @param siteRepository         Repository for site data access.
+     * @param itemRepository         Repository for item data access.
      */
     public AvailabilityController(AvailabilityService availabilityService, AvailabilityRepository
             availabilityRepository, SiteRepository siteRepository, ItemRepository itemRepository) {
@@ -99,7 +99,7 @@ public class AvailabilityController {
      */
     @GetMapping("/site")
     public ResponseEntity<?> getAvailability(
-            @RequestParam(value = "siteId",required = false) Long siteID) {
+            @RequestParam(value = "siteId", required = false) Long siteID) {
         return this.availabilityService.getAvailability((siteID));
     }
 
@@ -122,7 +122,7 @@ public class AvailabilityController {
      * @return ResponseEntity with the details of the list of availabilities.
      */
     @GetMapping("/item")
-    public  ResponseEntity<?>  getAvailabilitiesByItemId(@RequestParam(value = "itemId") Long itemId) {
+    public ResponseEntity<?> getAvailabilitiesByItemId(@RequestParam(value = "itemId") Long itemId) {
 
         return this.availabilityService.getAvailabilitiesByItemId(itemId);
 

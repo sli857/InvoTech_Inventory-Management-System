@@ -1,6 +1,7 @@
 package com.depot.ims.services;
 
 import com.depot.ims.models.*;
+import com.depot.ims.models.compositeKeys.ShipKey;
 import com.depot.ims.repositories.*;
 import com.depot.ims.requests.ShipRequest;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +17,7 @@ public class ShipService {
     private final ItemRepository itemRepository;
     private final AvailabilityRepository availabilityRepository;
     private final SiteRepository siteRepository;
+    private final AuditService auditService;
 
     /**
      * Constructor for ShipService.
@@ -28,12 +30,15 @@ public class ShipService {
     public ShipService(ShipRepository shipRepository,
                        ShipmentRepository shipmentRepository,
                        ItemRepository itemRepository,
-                       AvailabilityRepository availabilityRepository, SiteRepository siteRepository) {
+                       AvailabilityRepository availabilityRepository,
+                       AuditService auditService,
+                       SiteRepository siteRepository) {
         this.shipRepository = shipRepository;
         this.shipmentRepository = shipmentRepository;
         this.itemRepository = itemRepository;
         this.availabilityRepository = availabilityRepository;
         this.siteRepository = siteRepository;
+        this.auditService = auditService;
     }
 
     /**
@@ -112,7 +117,20 @@ public class ShipService {
         }
 
         // Save the changes
-        return ResponseEntity.ok().body(shipRepository.save(ship));
+        var res = shipRepository.save(ship);
+
+        // record audit
+        auditService.saveAudit("Ships",
+                null,
+                ShipKey.builder()
+                        .itemId(res.getItemId().getItemId())
+                        .shipmentId(res.getShipmentId().getShipmentId())
+                        .build().toString(),
+                null,
+                res.toString(),
+                "INSERT");
+
+        return ResponseEntity.ok().body(res);
     }
 
 }

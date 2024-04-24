@@ -1,23 +1,25 @@
 package com.depot.ims.controllers;
 
-import com.depot.ims.services.*;
-import com.depot.ims.repositories.*;
+import com.depot.ims.models.Item;
+import com.depot.ims.repositories.ItemRepository;
+import com.depot.ims.services.ItemService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import com.depot.ims.models.Item;
-import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Tests for ItemController - ensures correct handling of user-related requests.
@@ -92,7 +94,7 @@ public class ItemControllerTest {
      * JSON structure.
      */
     @Test
-    void getItem() throws Exception{
+    void getItem() throws Exception {
         mockMvc.perform(get("/items/item")
                         .param("itemId", "123")  // Example item ID
                         .param("itemName", "exampleItemName")) // Example item name
@@ -103,7 +105,7 @@ public class ItemControllerTest {
      * Tests updating an existing item, verifying the correct HTTP status.
      */
     @Test
-    void updateItem() throws Exception{
+    void updateItem() throws Exception {
         mockMvc.perform(post("/items/update")
                         .param("itemId", "123")  // Example item ID
                         .param("itemName", "newItemName") // Example new item name

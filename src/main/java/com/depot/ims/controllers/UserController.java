@@ -2,6 +2,7 @@
 package com.depot.ims.controllers;
 
 // Import statements
+
 import com.depot.ims.models.User;
 import com.depot.ims.repositories.UserRepository;
 import com.depot.ims.services.UserService;
@@ -27,7 +28,7 @@ public class UserController {
      * Constructor for UserController.
      *
      * @param usersRepository Repository for user data access.
-     * @param userService Service for user-related operations.
+     * @param userService     Service for user-related operations.
      */
     public UserController(UserRepository usersRepository, UserService userService) {
         this.usersRepository = usersRepository;
@@ -48,7 +49,7 @@ public class UserController {
     /**
      * Endpoint to fetch a specific user by their ID or username.
      *
-     * @param userId The ID of the user to retrieve (optional).
+     * @param userId   The ID of the user to retrieve (optional).
      * @param username The username of the user to retrieve (optional).
      * @return ResponseEntity with the details of the specified user.
      */
@@ -89,7 +90,7 @@ public class UserController {
      * Endpoint to update the details of an existing user.
      * This method allows partial updates to user properties.
      *
-     * @param userID The ID of the user to update.
+     * @param userID      The ID of the user to update.
      * @param newUsername New username for the user (optional).
      * @param newPassword New password for the user (optional).
      * @param newPosition New position/title for the user (optional).

@@ -25,11 +25,14 @@ class ShipServiceTest {
     private AvailabilityRepository availabilityRepositoryMock = mock(AvailabilityRepository.class);
     @Mock
     private SiteRepository siteRepositoryMock = mock(SiteRepository.class);
+    @Mock
+    private AuditService auditServiceMock = mock(AuditService.class);
     private final ShipService shipService = new ShipService(
             shipRepositoryMock,
             shipmentRepositoryMock,
             itemRepositoryMock,
             availabilityRepositoryMock,
+            auditServiceMock,
             siteRepositoryMock
     );
 

@@ -72,7 +72,7 @@ public class AvailabilityTest {
     /**
      * Tests retrieval of a specific availability entity by item id and site id.
      * Validates that the findBySiteIdAndItemId operation can successfully retrieve the correct
-     *availability entity
+     * availability entity
      */
     @Test
     void testFindBySiteIdAndItemId() {
