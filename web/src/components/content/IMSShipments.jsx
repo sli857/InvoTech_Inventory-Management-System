@@ -145,6 +145,8 @@ function IMSShipments() {
             return;
         }
 
+        const date = new Date().toISOString();
+
         // Start of submitting the form
         try {
             // API call to add a new shipment
@@ -157,10 +159,10 @@ function IMSShipments() {
                     source: source,
                     destination: destination,
                     currentLocation: "Site " + source,
-                    departureTime: new Date().toISOString(),
-                    estimatedArrivalTime: null,
-                    actualArrivalTime: null,
-                    shipmentStatus: "Pending",
+                    departureTime: date,
+                    estimatedArrivalTime: date,
+                    actualArrivalTime: date,
+                    shipmentStatus: "Delivered",
                 }),
             });
 
@@ -195,18 +197,13 @@ function IMSShipments() {
     }
 
     return (
-        <Container fluid="md" style={{
-            padding: '20px',
-            paddingBottom: "200px",
-            marginTop: '20px',
-            background: "#f7f7f7",
-            boxShadow: "0 2px 4px rgba(0,0,0,.1)"
-        }}>
-            <h2 style={{marginBottom: '20px', textAlign: 'center'}}>Shipments: {shipments.length} Active</h2>
+        <Container fluid="md" className="mt-3">
+            {/* Table of shipments */}
             <Row className="mb-4">
                 <Col>
-                    <Table striped bordered hover size="sm">
-                        <thead>
+                    <Table striped bordered hover responsive>
+                        <caption style={{fontSize: '20px'}}>{shipments.length} Shipments In Table</caption>
+                        <thead className="table-dark">
                         <tr>
                             <th>ID</th>
                             <th>Source</th>
@@ -248,6 +245,7 @@ function IMSShipments() {
                 </Col>
             </Row>
             <Row>
+                {/* Form for adding a new shipment */}
                 <Card>
                     <Card.Body>
                         <Card.Title>Add Shipment</Card.Title>
