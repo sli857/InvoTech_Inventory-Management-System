@@ -356,9 +356,9 @@ function IMSShipments() {
                                         onClick={() => setSelectedSource('Select Source')}>None</Dropdown.Item>
                                 </DropdownButton>
 
-                                {/* Filter by Internal Site */}
+                                {/* Filter by Destination Location */}
                                 <DropdownButton id="dropdown-location-button"
-                                                title={sites.find(site => site.siteId === selectedDestination)?.siteName || 'Select Source'}>
+                                                title={sites.find(site => site.siteId === selectedDestination)?.siteName || 'Select Destination'}>
                                     {sites.map((site) => (
                                         <Dropdown.Item key={`site-${site.siteId}`}
                                                        onClick={() => setSelectedDestination(site.siteId)}>
@@ -369,7 +369,7 @@ function IMSShipments() {
                                         onClick={() => setSelectedDestination('Select Destination')}>None</Dropdown.Item>
                                 </DropdownButton>
 
-                                {/* Filter by Site Status */}
+                                {/* Filter by Shipment Status */}
                                 <DropdownButton id="dropdown-status-button" title={selectedStatus || 'Shipment Status'}>
                                     <Dropdown.Item onClick={() => setSelectedStatus('Pending')}>Pending</Dropdown.Item>
                                     <Dropdown.Item onClick={() => setSelectedStatus('In Transit')}>In
