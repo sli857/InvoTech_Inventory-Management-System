@@ -10,30 +10,27 @@ import org.springframework.web.bind.annotation.*;
 @CrossOrigin(origins = {"http://cs506-team-35.cs.wisc.edu", "http://localhost:5173/"})
 public class AuditController {
 
-    private final AuditRepository auditRepository;
-    private final AuditService auditService;
+  private final AuditRepository auditRepository;
+  private final AuditService auditService;
 
-    public AuditController(AuditRepository auditRepository, AuditService auditService) {
-        this.auditRepository = auditRepository;
-        this.auditService = auditService;
-    }
+  public AuditController(AuditRepository auditRepository, AuditService auditService) {
+    this.auditRepository = auditRepository;
+    this.auditService = auditService;
+  }
 
-    @GetMapping
-    public ResponseEntity<?> getAllAudits() {
-        return auditService.findAll();
-    }
+  @GetMapping
+  public ResponseEntity<?> getAllAudits() {
+    return auditService.findAll();
+  }
 
-    @GetMapping("/onTable")
-    public ResponseEntity<?> getAuditOnTable(@RequestParam String tableName) {
-        return auditService.findAuditsOnTable(tableName);
-    }
+  @GetMapping("/onTable")
+  public ResponseEntity<?> getAuditOnTable(@RequestParam String tableName) {
+    return auditService.findAuditsOnTable(tableName);
+  }
 
-    @GetMapping("/betweenPeriod")
-    public ResponseEntity<?> getAuditsBetweenPeriod(@RequestParam String start,
-                                                    @RequestParam String end) {
-        return auditService.findAuditsBetweenPeriod(start, end);
-
-    }
-
-
+  @GetMapping("/betweenPeriod")
+  public ResponseEntity<?> getAuditsBetweenPeriod(
+      @RequestParam String start, @RequestParam String end) {
+    return auditService.findAuditsBetweenPeriod(start, end);
+  }
 }
