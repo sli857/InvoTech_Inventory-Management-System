@@ -2,6 +2,7 @@
 package com.depot.ims.controllers;
 
 // Import statements
+
 import com.depot.ims.models.Item;
 import com.depot.ims.repositories.ItemRepository;
 import com.depot.ims.services.ItemService;
@@ -18,7 +19,8 @@ import org.springframework.web.bind.annotation.*;
  */
 @RestController
 @RequestMapping(value = "/items", produces = MediaType.APPLICATION_JSON_VALUE)
-@CrossOrigin(origins = "http://localhost:5173/")
+//@CrossOrigin(origins = "http://localhost:8080/")
+@CrossOrigin(origins = "http://cs506-team-35.cs.wisc.edu")
 public class ItemController {
 
     // Fields for the item repository and item service
@@ -29,7 +31,7 @@ public class ItemController {
      * Constructor for ShipmentController.
      *
      * @param itemRepository Repository for item data access.
-     * @param itemService Service for item related operations.
+     * @param itemService    Service for item related operations.
      */
     public ItemController(ItemRepository itemRepository,
                           ItemService itemService) {
@@ -62,7 +64,7 @@ public class ItemController {
     /**
      * Endpoint to fetch a specific item by its ID or name.
      *
-     * @param itemID The ID of the item to retrieve.
+     * @param itemID   The ID of the item to retrieve.
      * @param itemName the name of the item to retrieve
      * @return ResponseEntity with the details of the specified item.
      */
@@ -77,8 +79,8 @@ public class ItemController {
      * Endpoint to update the details of an existing item.
      * This method allows partial updates to item properties.
      *
-     * @param itemID ID of the item to update.
-     * @param newName New item name (optional).
+     * @param itemID   ID of the item to update.
+     * @param newName  New item name (optional).
      * @param newPrice New item price (optional).
      * @return ResponseEntity indicating the result of the update operation.
      */

@@ -2,6 +2,7 @@
 package com.depot.ims.controllers;
 
 // Import statements
+
 import com.depot.ims.models.Shipment;
 import com.depot.ims.repositories.ShipmentRepository;
 import com.depot.ims.services.ShipmentService;
@@ -9,6 +10,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
 import java.sql.Timestamp;
 
 
@@ -21,7 +23,8 @@ import java.sql.Timestamp;
 
 @RestController
 @RequestMapping(value = "/shipments", produces = MediaType.APPLICATION_JSON_VALUE)
-@CrossOrigin(origins = "http://localhost:5173/")
+//@CrossOrigin(origins = "http://localhost:8080/")
+@CrossOrigin(origins = "http://cs506-team-35.cs.wisc.edu")
 public class ShipmentController {
 
     // Fields for the shipment repository and shipment service
@@ -32,7 +35,7 @@ public class ShipmentController {
      * Constructor for ShipmentController.
      *
      * @param shipmentsRepository Repository for shipment data access.
-     * @param shipmentService Service for shipment related operations.
+     * @param shipmentService     Service for shipment related operations.
      */
     public ShipmentController(ShipmentRepository shipmentsRepository,
                               ShipmentService shipmentService) {
@@ -67,14 +70,14 @@ public class ShipmentController {
      * Endpoint to update the details of an existing shipment.
      * This method allows partial updates to shipment properties.
      *
-     * @param shipmentId ID of the shipment to update.
-     * @param newSource New source location ID (optional).
-     * @param newDestination New destination location ID (optional).
-     * @param newCurrentLocation New current location (optional).
-     * @param newDepartureTime New departure time (optional).
+     * @param shipmentId              ID of the shipment to update.
+     * @param newSource               New source location ID (optional).
+     * @param newDestination          New destination location ID (optional).
+     * @param newCurrentLocation      New current location (optional).
+     * @param newDepartureTime        New departure time (optional).
      * @param newEstimatedArrivalTime New estimated arrival time (optional).
-     * @param newActualArrivalTime New actual arrival time (optional).
-     * @param newShipmentStatus New status of the shipment (optional).
+     * @param newActualArrivalTime    New actual arrival time (optional).
+     * @param newShipmentStatus       New status of the shipment (optional).
      * @return ResponseEntity indicating the result of the update operation.
      */
     @Modifying

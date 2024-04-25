@@ -1,9 +1,7 @@
 package com.depot.ims.models;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 /**
  * Represents a user entity in the system.
@@ -14,6 +12,8 @@ import lombok.NoArgsConstructor;
 @Data // Lombok annotation to generate getters, setters, equals, hashCode, and toString methods.
 @NoArgsConstructor  // Generates a no-argument constructor.
 @AllArgsConstructor // Generates a constructor initializing all fields.
+@ToString
+@Builder
 @Entity // Indicates that this class is a JPA entity.
 @Table(name = "Users") // Maps this entity to the "Users" table in the database.
 public class User {

@@ -1,10 +1,7 @@
 package com.depot.ims.models;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 /**
  * Represents a item entity in the system.
@@ -15,6 +12,7 @@ import lombok.NoArgsConstructor;
 @Data // Lombok annotation to generate getters, setters, equals, hashCode, and toString methods.
 @NoArgsConstructor  // Generates a no-argument constructor.
 @AllArgsConstructor // Generates a constructor initializing all fields.
+@ToString
 @Entity // Indicates that this class is a JPA entity.
 @Builder
 @Table(name = "Items") // Maps this entity to the "Items" table in the database.
@@ -28,7 +26,7 @@ public class Item {
     private Long itemId;
 
     // Specifies the itemName column
-    @Column(name = "item_name", nullable = false)
+    @Column(name = "item_name", unique = true, nullable = false)
     private String itemName;
 
     // Specifies the itemPrice column
@@ -39,7 +37,7 @@ public class Item {
      * Constructor for Item.
      *
      * @param itemPrice Item price
-     * @param itemName Item name
+     * @param itemName  Item name
      */
     public Item(String itemName, double itemPrice) {
         this.itemName = itemName;

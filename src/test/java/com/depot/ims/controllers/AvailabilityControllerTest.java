@@ -1,7 +1,9 @@
 package com.depot.ims.controllers;
 
-import com.depot.ims.models.*;
-import com.depot.ims.repositories.*;
+import com.depot.ims.models.Availability;
+import com.depot.ims.models.Item;
+import com.depot.ims.models.Site;
+import com.depot.ims.repositories.AvailabilityRepository;
 import com.depot.ims.services.AvailabilityService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
@@ -9,18 +11,24 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
+
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -39,7 +47,7 @@ public class AvailabilityControllerTest {
 
     @Mock
     AvailabilityService availabilityService;
-    private ObjectMapper objectMapper = new ObjectMapper();
+    private final ObjectMapper objectMapper = new ObjectMapper();
     private MockMvc mockMvc;
 
     /**
@@ -99,6 +107,24 @@ public class AvailabilityControllerTest {
         item.add("item1", "1");
         mockMvc.perform(get("/availabilities/searchByItems").params(item))
                 .andExpect(status().isOk());
+    }
+
+    /**
+     * Tests changing the quantity of an item, verifying correct HTTP
+     * status and JSON structure.
+     *
+     * @throws Exception
+     *
+     */
+    @Test
+    void testChangeQuantity() throws Exception{
+        String requestBody = "{\"siteId\": 1, \"itemId\": 2, \"operation\": \"+\", \"quantity\": 10}";
+        // Perform POST request
+        mockMvc.perform(MockMvcRequestBuilders.post("/availabilities/quantity")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestBody))
+                .andExpect(MockMvcResultMatchers.status().isOk());
+
     }
 
     /**
