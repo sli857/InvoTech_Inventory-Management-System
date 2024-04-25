@@ -34,6 +34,11 @@ function IMSAudits() {
             .catch(error => console.error('Failed to fetch audits', error));
     };
 
+    // Helper function to format date as YYYY-MM-DD
+    const formatDate = (date) => {
+        return `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')}`;
+    };
+
     return (
         <Container fluid="md" className="mt-3">
             <Row>
@@ -55,7 +60,7 @@ function IMSAudits() {
                                     <Col sm={6}>
                                         <DatePicker className="form-control" selected={startDate} onChange={date => setStartDate(date)} />
                                         <DatePicker className="form-control mt-2" selected={endDate} onChange={date => setEndDate(date)} />
-                                        <Button className="mt-2" onClick={() => handleFetchAudits(`http://localhost:8080/audits/betweenPeriod?start=${startDate.toISOString()}&end=${endDate.toISOString()}`)}>Filter by Date</Button>
+                                        <Button className="mt-2" onClick={() => handleFetchAudits(`http://localhost:8080/audits/betweenPeriod?start=${formatDate(startDate)}&end=${formatDate(endDate)}`)}>Filter by Date</Button>
                                     </Col>
                                 </Row>
                             </Form>
