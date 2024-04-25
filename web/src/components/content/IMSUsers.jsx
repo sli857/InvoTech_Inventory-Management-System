@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Table, Container, Row, Col, Form, Button, Card } from 'react-bootstrap';
 
+const backend_baseurl = 'http://cs506-team-35.cs.wisc.edu:8080'
 // Define the IMSUsers component
 const IMSUsers = () => {
     // State for storing user data
@@ -17,7 +18,7 @@ const IMSUsers = () => {
         const fetchUsers = async () => {
             try {
                 // Attempt to retrieve user data from the server
-                const response = await axios.get('http://localhost:8080/users');
+                const response = await axios.get(`${backend_baseurl}/users`);
                 // Update the users state with the fetched data
                 setUsers(response.data);
             } catch (error) {

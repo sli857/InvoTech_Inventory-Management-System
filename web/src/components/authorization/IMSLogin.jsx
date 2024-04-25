@@ -4,6 +4,8 @@ import { Alert, Button, Container, Form } from 'react-bootstrap';
 import PropTypes from 'prop-types';
 import crest from '../../assets/logo.webp'; 
 
+const backend_baseurl = 'http://cs506-team-35.cs.wisc.edu:8080'
+
 /**
  * The IMSLogin component handles user authentication, allowing users to log in or sign up.
  * It interacts with a backend service to authenticate users and optionally register new accounts.
@@ -40,7 +42,7 @@ function IMSLogin({ setAuth }) {
 
     // Form submission
     const bodyContent = { username, password, position };
-    const url = `http://localhost:8080/users/add`;
+    const url = `${backend_baseurl}/users/add`;
     const options = {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -71,14 +73,14 @@ function IMSLogin({ setAuth }) {
   const handleLogin = async (e) => {
     e.preventDefault();
 
-    const confirmUrl = `http://localhost:8080/users/confirm?username=${username}&password=${password}`;
+    const confirmUrl = `${backend_baseurl}/users/confirm?username=${username}&password=${password}`;
 
     try {
       const confirmResponse = await fetch(confirmUrl);
       const confirmData = await confirmResponse.text();
 
       if (confirmResponse.ok) {
-        const userUrl = `http://localhost:8080/users/user?username=${username}&password=${password}`;
+        const userUrl = `${backend_baseurl}/users/user?username=${username}&password=${password}`;
         const response = await fetch(userUrl);
         const data = await response.json();
 

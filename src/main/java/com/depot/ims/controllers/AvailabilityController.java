@@ -25,7 +25,7 @@ import java.util.Map;
  */
 @RestController
 @RequestMapping(value = "/availabilities", produces = MediaType.APPLICATION_JSON_VALUE)
-@CrossOrigin(origins = "http://localhost:5173/")
+@CrossOrigin(origins = {"http://cs506-team-35.cs.wisc.edu", "http://localhost:5173/"})
 public class AvailabilityController {
 
     // Fields for the availability repository, siteRepository, itemRepository and availability service
