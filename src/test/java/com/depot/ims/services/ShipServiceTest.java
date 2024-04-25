@@ -27,10 +27,13 @@ class ShipServiceTest {
     private ShipRepository shipRepositoryMock = mock(ShipRepository.class);
     @Mock
     private AvailabilityRepository availabilityRepositoryMock = mock(AvailabilityRepository.class);
+    @Mock
+    private AuditService auditServiceMock = mock(AuditService.class);
     private final ShipService shipService = new ShipService(shipRepositoryMock,
             shipmentRepositoryMock,
             itemRepositoryMock,
-            availabilityRepositoryMock);
+            availabilityRepositoryMock,
+            auditServiceMock);
 
     /**
      * This test checks if the addShip method works as expected.
