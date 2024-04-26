@@ -18,7 +18,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/ships")
-@CrossOrigin(origins = "http://localhost:5173/")
+@CrossOrigin(origins = {"http://cs506-team-35.cs.wisc.edu", "http://localhost:5173/"})
 public class ShipController {
 
     // Fields for the ship repository and ship service
