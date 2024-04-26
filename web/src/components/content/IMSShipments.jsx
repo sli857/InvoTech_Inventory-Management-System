@@ -13,6 +13,8 @@ import {
     Tooltip
 } from 'react-bootstrap';
 
+const backend_baseurl = 'http://cs506-team-35.cs.wisc.edu:8080'
+
 /**
  * IMSShipments Component
  * Fetches and displays a list of shipment information from a mock API endpoint through Postman.
@@ -59,7 +61,7 @@ function IMSShipments() {
      */
     const fetchShipments = useCallback(async () => {
         try {
-            const response = await fetch("http://localhost:8080/shipments")
+            const response = await fetch(`${backend_baseurl}/shipments`)
             if (!response.ok) {
                 throw new Error("Network response was not ok");
             }
@@ -86,7 +88,7 @@ function IMSShipments() {
      */
     const fetchSites = async () => {
         try {
-            const response = await fetch("http://localhost:8080/sites");
+            const response = await fetch(`${backend_baseurl}/sites`);
             if (!response.ok) {
                 throw new Error("Network response was not ok");
             }
@@ -104,7 +106,7 @@ function IMSShipments() {
      */
     const fetchItems = async () => {
         try {
-            const response = await fetch("http://localhost:8080/items");
+            const response = await fetch(`${backend_baseurl}/items`);
             if (!response.ok) {
                 throw new Error("Network response was not ok");
             }
@@ -181,7 +183,7 @@ function IMSShipments() {
         // Start of submitting the form
         try {
             // API call to add a new shipment
-            const shipmentResponse = await fetch("http://localhost:8080/shipments/add", {
+            const shipmentResponse = await fetch(`${backend_baseurl}/shipments/add`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -202,7 +204,7 @@ function IMSShipments() {
                 console.error("There was a problem adding the shipment.", shipmentResponse);
             } else {
                 // API call to add a new ship
-                const shipResponse = await fetch("http://localhost:8080/ships/add", {
+                const shipResponse = await fetch(`${backend_baseurl}/ships/add`, {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",
