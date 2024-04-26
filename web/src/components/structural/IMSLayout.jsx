@@ -35,6 +35,9 @@ function IMSLayout() {
             <Nav.Link as={Link} to="shipments">
               Shipments
             </Nav.Link>
+            <Nav.Link as={Link} to="audits">
+              Audits
+            </Nav.Link>
             <Nav.Link as={Link} to="users">
               Users
             </Nav.Link>
