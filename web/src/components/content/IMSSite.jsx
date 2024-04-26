@@ -143,7 +143,7 @@ function IMSSite() {
     event.preventDefault();
 
     if (addItem === "new item") {
-      await fetch(`${backend_baseurl}items/add`, {
+      await fetch(`${backend_baseurl}/items/add`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
