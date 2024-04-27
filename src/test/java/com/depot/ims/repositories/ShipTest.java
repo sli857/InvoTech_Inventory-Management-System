@@ -91,6 +91,8 @@ class ShipTest {
     // setUp() method
 
     // When
+    List<Ship> resz = shipRepository.findAll();
+    System.out.println(resz);
     List<Ship> res = shipRepository.findByShipmentId(9L);
 
     // Then
@@ -109,6 +111,8 @@ class ShipTest {
     // setUp() method
 
     // When
+    List<Ship> resz = shipRepository.findAll();
+    System.out.println(resz);
     List<Ship> res = shipRepository.findByItemIdAndShipmentId(7L, 11L);
     List<Ship> res2 = shipRepository.findByItemIdAndShipmentId(8L, 12L);
 
