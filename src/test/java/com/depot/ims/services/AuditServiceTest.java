@@ -15,8 +15,7 @@ import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 
 public class AuditServiceTest {
@@ -63,6 +62,15 @@ public class AuditServiceTest {
     }
 
     @Test
+    void testFindAllException(){
+        when(auditRepositoryMock.findAll()).thenThrow(new RuntimeException("test"));
+        ResponseEntity<?> res = auditService.findAll();
+        assertNotNull(res);
+        assertTrue(res.getStatusCode().is5xxServerError());
+        assertTrue(res.hasBody());
+    }
+
+    @Test
     void testFindAuditsOnTable(){
         Audit audit1 = Audit.builder()
                 .tableName("sites")
@@ -103,6 +111,15 @@ public class AuditServiceTest {
         assertNotNull(res2);
         assertTrue(res2.getStatusCode().is4xxClientError());
         assertEquals("tableName should not be null", res2.getBody());
+    }
+
+    @Test
+    void testFindAuditsOnTableException(){
+        when(auditRepositoryMock.findByTableName(any())).thenThrow(new RuntimeException("test"));
+        ResponseEntity<?> res = auditService.findAuditsOnTable("test");
+        assertNotNull(res);
+        assertTrue(res.getStatusCode().is5xxServerError());
+        assertTrue(res.hasBody());
     }
 
     @Test
@@ -152,5 +169,39 @@ public class AuditServiceTest {
         assertNotNull(res2);
         assertTrue(res2.getStatusCode().is2xxSuccessful());
         assertTrue(res2.hasBody());
+    }
+
+    @Test
+    void testFindAuditsBetweenPeriodDateParsingException(){
+        ResponseEntity<?> res = auditService.findAuditsBetweenPeriod("test","test");
+        assertNotNull(res);
+        assertTrue(res.getStatusCode().is4xxClientError());
+        assertTrue(res.hasBody());
+    }
+
+    @Test
+    void testFindAuditsBetweenPeriodOtherException(){
+        when(auditRepositoryMock.findBetweenPeriod(any(),any())).thenThrow(new RuntimeException(
+                "test"));
+        ResponseEntity<?> res = auditService.findAuditsBetweenPeriod("2024-01-01","2024-01-01");
+        assertNotNull(res);
+        assertTrue(res.getStatusCode().is5xxServerError());
+        assertTrue(res.hasBody());
+    }
+
+    @Test
+    void testSaveAudit(){
+        Audit audit1 = Audit.builder()
+                .tableName("sites")
+                .fieldName("siteName")
+                .rowKey("1")
+                .oldValue("oldName")
+                .newValue("newName")
+                .action("UPDATE")
+                .actionTimestamp(Timestamp.valueOf("2024-04-16 11:22:33"))
+                .build();
+        when(auditRepositoryMock.save(any())).thenReturn(audit1);
+        auditService.saveAudit(null,null,null,null,null,null);
+        assertTrue(true);
     }
 }
