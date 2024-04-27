@@ -32,9 +32,15 @@ public class SiteService {
      */
     public ResponseEntity<?> getSite(Long siteId, String siteName) {
         if (siteId != null) {
-            return ResponseEntity.ok(siteRepository.findBySiteId(siteId));
+            var res = siteRepository.findBySiteId(siteId);
+            return res==null?
+                    ResponseEntity.ok("Site not found by siteId: " + siteId):
+                    ResponseEntity.ok(res);
         } else if (siteName != null) {
-            return ResponseEntity.ok(siteRepository.findBySiteName(siteName));
+            var res = siteRepository.findBySiteName(siteName);
+            return res==null?
+                    ResponseEntity.ok("Site not found by siteName: " + siteName):
+                    ResponseEntity.ok(res);
         } else {
             return ResponseEntity.badRequest().body("Either siteId or siteName must be provided");
         }

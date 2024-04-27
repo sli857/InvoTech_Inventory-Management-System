@@ -5,7 +5,6 @@ import com.depot.ims.repositories.SiteRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.http.ResponseEntity;
 
@@ -22,10 +21,8 @@ import static org.mockito.Mockito.*;
  */
 public class SiteServiceTest {
     @Mock
-    private final SiteRepository siteRepositoryMock = mock(SiteRepository.class);
-    @Mock
+    private SiteRepository siteRepositoryMock = mock(SiteRepository.class);
     private final AuditService auditService = mock(AuditService.class);
-    @InjectMocks
     private final SiteService siteService = new SiteService(siteRepositoryMock, auditService);
 
 

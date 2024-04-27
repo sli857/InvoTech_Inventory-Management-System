@@ -23,7 +23,8 @@ import java.sql.Timestamp;
 
 @RestController
 @RequestMapping(value = "/shipments", produces = MediaType.APPLICATION_JSON_VALUE)
-@CrossOrigin(origins = "http://localhost:5173/")
+//@CrossOrigin(origins = "http://localhost:8080/")
+@CrossOrigin(origins = "http://cs506-team-35.cs.wisc.edu")
 public class ShipmentController {
 
     // Fields for the shipment repository and shipment service

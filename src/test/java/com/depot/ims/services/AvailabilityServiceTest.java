@@ -152,7 +152,7 @@ public class AvailabilityServiceTest {
      * Verifies correct return of the getSitesByItems method
      */
     @Test
-    public void getSitesByItems() {
+    public void testGetSitesByItems() {
         MultiValueMap<String, String> item = new LinkedMultiValueMap<>();
         MultiValueMap<String, String> items = new LinkedMultiValueMap<>();
 
@@ -220,6 +220,34 @@ public class AvailabilityServiceTest {
         assertEquals(HttpStatus.OK, response7.getStatusCode());
         assertNotNull(response7.getBody());
         assertTrue(response7.getBody().equals(siteList));
+
+    }
+
+    /**
+     * Tests changing the quantity of an item in a site
+     * mock the availability repository, item repository, and site repository
+     * Verifies correct return of the changeQuantity method
+     */
+    @Test
+    public void TestChangeQuantity() {
+
+        Item item1 = new Item(1L, "item1", 3.0);
+        Site site1 = new Site(13L, "HomeDepot 2", "W54 N53", "open", null,
+                true);
+        Availability availability = new Availability(site1, item1, 20);
+        Availability updatedAvailability = new Availability(site1, item1, 40);
+
+        when(this.itemRepository.existsById(1L)).thenReturn(true);
+        when(this.siteRepository.existsById(13L)).thenReturn(true);
+        when(this.availabilityRepository.findBySiteIdAndItemId(13L, 1L)).thenReturn(availability);
+        when(this.availabilityRepository.save(availability)).thenReturn(updatedAvailability);
+
+        ResponseEntity<?> response8 = this.availabilityService.changeQuantity(13L, 1L, "+", 20);
+        assertEquals(HttpStatus.OK, response8.getStatusCode());
+        assertNotNull(response8.getBody());
+        assertEquals( true, response8.getBody().equals(updatedAvailability));
+
+
 
     }
 

@@ -5,6 +5,8 @@ import removeIcon from '../../assets/remove_icon.png';
 import { Typeahead } from 'react-bootstrap-typeahead';
 import 'react-bootstrap-typeahead/css/Typeahead.css';
 
+const backend_baseurl = 'http://cs506-team-35.cs.wisc.edu:8080'
+
 /**
  * The IMSSites component displays a list of sites, allows for filtering, adding, and removing sites.
  * It fetches site data from a backend service on load and provides an interface for site management.
@@ -54,7 +56,7 @@ function IMSSites() {
    */
   const fetchSites = async () => {
     try {
-      const response = await fetch("http://localhost:8080/sites");
+      const response = await fetch(`${backend_baseurl}/sites`);
       if (!response.ok) {
         throw new Error("Network response was not ok");
       }
@@ -63,6 +65,7 @@ function IMSSites() {
     } catch (error) {
       console.error("There was a problem with fetching sites:", error);
     }
+    
   };
 
   /**
@@ -70,7 +73,7 @@ function IMSSites() {
    */
   const fetchItems = async () => {
     try {
-      const response = await fetch("http://localhost:8080/items");
+      const response = await fetch(`${backend_baseurl}/items`);
       if (!response.ok) {
         throw new Error("Network response was not ok");
       }
@@ -88,7 +91,7 @@ function IMSSites() {
     let counter = 0;
     // for each item selected: generate an url extension by combining them with an & for api request
     const queryParams = currentSelection.map(item => `item${counter++}=${item.itemId}`).join(`&`); 
-    const url = `http://localhost:8080/availabilities/searchByItems?${queryParams}`;
+    const url = `${backend_baseurl}/availabilities/searchByItems?${queryParams}`;
     try {
       const response = await fetch(url);
       if (!response.ok) {
@@ -124,7 +127,7 @@ function IMSSites() {
       return;
     }
     // Add the site to the database 
-    const response = await fetch("http://localhost:8080/sites/add", {
+    const response = await fetch(`${backend_baseurl}/sites/add`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -137,9 +140,12 @@ function IMSSites() {
         internalSite: internalSite,
       }),
     });
+
+
     if (response.status === 200) {
       fetchSites(); // Re-fetch sites to update the list
     }
+
     // Assuming the form submission is successful, reset form fields here
     setSiteName('');
     setLocation('');
@@ -159,7 +165,7 @@ function IMSSites() {
    */
   const removeSite = async (siteId) => {
     try {
-      const response = await fetch(`http://localhost:8080/sites/delete?siteId=${siteId}`, {
+      const response = await fetch(`${backend_baseurl}/sites/delete?siteId=${siteId}`, {
         method: 'DELETE',
       });
       if (response.status === 200) {
@@ -213,8 +219,6 @@ function IMSSites() {
     return "";
   }
 
-
-
   
 
   /**
@@ -225,9 +229,10 @@ function IMSSites() {
       {/* Filter sites based on item */}
       <Row className="mb-3">
         <Col>
+
           <Typeahead
             id="items-typeahead"
-            labelKey="itemName"
+            labelKey={(option) => `${option.itemName} - Id: ${option.itemId}`}
             multiple
             onChange={(selected) => {
               // Update the state component with each new selection
@@ -239,6 +244,7 @@ function IMSSites() {
             placeholder="Select items..."
             selected={selectedItems}
           />
+          
         </Col>
       </Row>
       {/* Table of sites */}
