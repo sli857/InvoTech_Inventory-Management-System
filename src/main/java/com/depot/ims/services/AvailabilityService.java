@@ -104,7 +104,7 @@ public class AvailabilityService {
         String rowKey = "itemId: " + updatedAvailability.getItemId().getItemId() + " ,siteId: "
                 + updatedAvailability.getSiteId().getSiteId();
 
-        auditService.saveAudit("Availability", "quantity", rowKey, current_quantity.toString(),
+        auditService.saveAudit("Availabilities", "quantity", rowKey, current_quantity.toString(),
                 new_quantity.toString(),
                 "UPDATE");
         return ResponseEntity.ok(updatedAvailability);

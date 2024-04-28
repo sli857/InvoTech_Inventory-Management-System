@@ -3,7 +3,6 @@ package com.depot.ims.services;
 import com.depot.ims.models.Item;
 import com.depot.ims.models.Ship;
 import com.depot.ims.models.Shipment;
-import com.depot.ims.models.compositeKeys.ShipKey;
 import com.depot.ims.repositories.AvailabilityRepository;
 import com.depot.ims.repositories.ItemRepository;
 import com.depot.ims.repositories.ShipRepository;
@@ -94,13 +93,12 @@ public class ShipService {
         // Save the changes
         var res = shipRepository.save(ship);
 
+        String rowKey =
+                "shipmentId: " + res.getShipmentId().getShipmentId() + " ,itemId: " + res.getItemId().getItemId();
         // record audit
         auditService.saveAudit("Ships",
                 null,
-                ShipKey.builder()
-                        .itemId(res.getItemId().getItemId())
-                        .shipmentId(res.getShipmentId().getShipmentId())
-                        .build().toString(),
+                rowKey,
                 null,
                 res.toString(),
                 "INSERT");
