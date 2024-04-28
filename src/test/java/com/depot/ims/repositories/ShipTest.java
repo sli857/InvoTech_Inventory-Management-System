@@ -12,6 +12,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.TestPropertySource;
 
 /** Test class for ShipRepository */
@@ -50,6 +51,7 @@ class ShipTest {
    * <p>Checks if the method returns all the entities in the database.
    */
   @Test
+  @DirtiesContext
   void findAllTest() {
     // Given
     // setUp() method
@@ -68,12 +70,13 @@ class ShipTest {
    * <p>Checks if the method returns the entities with the given item id.
    */
   @Test
+  @DirtiesContext
   void findByItemIdTest() {
     // Given
     // setUp() method
 
     // When
-    List<Ship> res = shipRepository.findByItemId(3L);
+    List<Ship> res = shipRepository.findByItemId(1L);
 
     // Then
     assertNotNull(res);
@@ -86,12 +89,13 @@ class ShipTest {
    * <p>Checks if the method returns the entities with the given shipment id.
    */
   @Test
+  @DirtiesContext
   void findByShipmentIdTest() {
     // Given
     // setUp() method
 
     // When
-    List<Ship> res = shipRepository.findByShipmentId(5L);
+    List<Ship> res = shipRepository.findByShipmentId(1L);
 
     // Then
     assertNotNull(res);
@@ -104,13 +108,14 @@ class ShipTest {
    * <p>Checks if the method returns the entities with the given item id and shipment id.
    */
   @Test
+  @DirtiesContext
   void findByItemIdAndShipmentIdTest() {
     // Given
     // setUp() method
 
     // When
-    List<Ship> res = shipRepository.findByItemIdAndShipmentId(7L, 7L);
-    List<Ship> res2 = shipRepository.findByItemIdAndShipmentId(8L, 8L);
+    List<Ship> res = shipRepository.findByItemIdAndShipmentId(1L, 1L);
+    List<Ship> res2 = shipRepository.findByItemIdAndShipmentId(2L, 2L);
 
     // Then
     assertNotNull(res);
