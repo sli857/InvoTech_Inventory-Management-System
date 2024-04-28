@@ -4,7 +4,8 @@ import { Alert, Button, Container, Form } from 'react-bootstrap';
 import PropTypes from 'prop-types';
 import crest from '../../assets/logo.webp'; 
 
-const backend_baseurl = 'http://cs506-team-35.cs.wisc.edu:8080'
+// const backend_baseurl = 'http://cs506-team-35.cs.wisc.edu:8080'
+const backend_baseurl = 'http://localhost:8080'
 
 /**
  * The IMSLogin component handles user authentication, allowing users to log in or sign up.

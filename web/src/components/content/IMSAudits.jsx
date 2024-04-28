@@ -3,7 +3,8 @@ import { Button, Card, Container, Row, Col, Form, Table } from 'react-bootstrap'
 import DatePicker from 'react-datepicker';
 import "react-datepicker/dist/react-datepicker.css";
 
-const backend_baseurl = 'http://cs506-team-35.cs.wisc.edu:8080'
+//const backend_baseurl = 'http://cs506-team-35.cs.wisc.edu:8080'
+const backend_baseurl = 'http://localhost:8080'
 
 /**
  * The IMSAudits component displays a list of audits, allows for filtering by table name and date range.

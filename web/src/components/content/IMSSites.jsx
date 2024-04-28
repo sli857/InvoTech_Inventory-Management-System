@@ -5,7 +5,8 @@ import removeIcon from '../../assets/remove_icon.png';
 import { Typeahead } from 'react-bootstrap-typeahead';
 import 'react-bootstrap-typeahead/css/Typeahead.css';
 
-const backend_baseurl = 'http://cs506-team-35.cs.wisc.edu:8080'
+//const backend_baseurl = 'http://cs506-team-35.cs.wisc.edu:8080'
+const backend_baseurl = 'http://localhost:8080'
 
 /**
  * The IMSSites component displays a list of sites, allows for filtering, adding, and removing sites.
