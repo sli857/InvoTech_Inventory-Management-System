@@ -73,11 +73,10 @@ public class SiteServiceTest {
      * test add a site, examine the return responseEntity has the correct site in its body
      */
     @Test
-    void testAdd() {
+    void testAdd(){
         Site site1 = new Site(1L, "site1", "location1", "open", null, true);
 
         when(siteRepositoryMock.save(any())).thenReturn(site1);
-        doNothing().when(auditService).saveAudit(any(), any(), any(), any(), any(), any());
         assertEquals(site1, siteService.addSite(site1).getBody());
     }
 
@@ -91,7 +90,6 @@ public class SiteServiceTest {
         when(siteRepositoryMock.existsById(1L)).thenReturn(true);
         when(siteRepositoryMock.findBySiteId(1L)).thenReturn(site1);
         when(siteRepositoryMock.save(any())).thenReturn(site2);
-        doNothing().when(auditService).saveAudit(any(), any(), any(), any(), any(), any());
 
         assertTrue(siteService.updateSite(null, "site1", "location1", "open", null, true).getStatusCode().is4xxClientError());
         assertTrue(siteService.updateSite(2L, "site1", "location1", "open", null, true).getStatusCode().is4xxClientError());
@@ -106,16 +104,15 @@ public class SiteServiceTest {
      * time if ceaseDate is not provided
      */
     @Test
-    void testDelete() {
+    void testDelete(){
 
         Site site1 = new Site(1L, "site1", "location1", "open", null, true);
-        Site site2 = new Site(1L, "site1", "location1", "closed", Date.valueOf("2024-4-5"), true);
+        Site site2 = new Site(1L, "site1","location1","closed", Date.valueOf("2024-4-5"),true);
 
         when(siteRepositoryMock.existsById(1L)).thenReturn(true);
         when(siteRepositoryMock.findBySiteId(1L)).thenReturn(site1);
         doReturn(site2).when(siteRepositoryMock).saveAndFlush(any());
-        doNothing().when(auditService).saveAudit(any(), any(), any(), any(), any(), any());
 
-        assertEquals(site2, siteService.deleteSite(1L, "2024-4-5").getBody());
+        assertEquals(site2,siteService.deleteSite(1L, "2024-4-5").getBody());
     }
 }

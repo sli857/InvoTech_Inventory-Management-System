@@ -77,6 +77,7 @@ public class AuditControllerTest {
                 .andExpect(jsonPath("$.length()").value(3));
     }
 
+
     @Test
     void testFindAuditsOnTable() throws Exception {
         User user1 = User.builder()

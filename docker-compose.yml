@@ -9,9 +9,10 @@ services:
       MYSQL_DATABASE: IMS_test
       MYSQL_ROOT_HOST: '%'
     ports:
-      - "3300:3306"
+      - "3306:3306"
   backend2:
     image: registry.doit.wisc.edu/cdis/cs/courses/cs506/sp2024/team/tuesdaythursdaylecture/t_35/ims/backend:latest 
+    pull_policy: always
     hostname: localhost
     restart: always
     depends_on:
@@ -22,11 +23,12 @@ services:
       - "8080:8080"
   frontend2:
     image: registry.doit.wisc.edu/cdis/cs/courses/cs506/sp2024/team/tuesdaythursdaylecture/t_35/ims/frontend:latest 
+    pull_policy: always
     restart: always
     depends_on:
       - backend2
     ports:
-      - '5173:5173'
+      - '80:5173'
     stdin_open: true
     tty: true
     

@@ -1,9 +1,7 @@
 package com.depot.ims.controllers;
 
-import com.depot.ims.models.Availability;
-import com.depot.ims.models.Item;
-import com.depot.ims.models.Site;
-import com.depot.ims.repositories.AvailabilityRepository;
+import com.depot.ims.models.*;
+import com.depot.ims.repositories.*;
 import com.depot.ims.services.AvailabilityService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
@@ -24,7 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -103,6 +101,24 @@ public class AvailabilityControllerTest {
         item.add("item1", "1");
         mockMvc.perform(get("/availabilities/searchByItems").params(item))
                 .andExpect(status().isOk());
+    }
+
+    /**
+     * Tests changing the quantity of an item, verifying correct HTTP
+     * status and JSON structure.
+     *
+     * @throws Exception
+     *
+     */
+    @Test
+    void testChangeQuantity() throws Exception{
+        String requestBody = "{\"siteId\": 1, \"itemId\": 2, \"operation\": \"+\", \"quantity\": 10}";
+        // Perform POST request
+        mockMvc.perform(MockMvcRequestBuilders.post("/availabilities/quantity")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestBody))
+                .andExpect(MockMvcResultMatchers.status().isOk());
+
     }
 
     /**
