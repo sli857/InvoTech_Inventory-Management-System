@@ -1,36 +1,69 @@
 import { useEffect, useState } from 'react';
 import { Container, Row, Col, Table } from 'react-bootstrap';
 
-/**
- * IMSShipments Component
- * Fetches and displays a list of shipment information from a mock API endpoint through Postman.
- * Showcases each shipment's details including source, destination, current location,
- * departure and arrival times, and status.
- *
- * @returns {JSX.Element} A container with a table displaying the shipment data.
- */
 function IMSShipments() {
   const [shipments, setShipments] = useState([]);
-  const [shipmentCount, setShipmentCount] = useState(0);
+  const [filteredShipments, setFilteredShipments] = useState([]);
+  const [filter, setFilter] = useState({
+    id: '',
+    source: '',
+    destination: '',
+  });
 
   useEffect(() => {
-    // Fetches shipment data from a mock API endpoint.
-    fetch("https://930ca83e-ce9f-4adc-bb48-3e7f2cf4773b.mock.pstmn.io/shipments")
+    fetch("https://localhost:8080/shipments")
       .then(res => res.json())
       .then(data => {
         setShipments(data);
-        setShipmentCount(data.length);
+        setFilteredShipments(data); // Initialize filtered shipments
       })
       .catch(error => console.error("Failed to fetch shipments:", error));
   }, []);
 
+  // Handle input changes
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFilter(prev => ({ ...prev, [name]: value }));
+  };
+
+  // Filter the shipments based on input fields
+    const handleFilter = () => {
+      let filtered = shipments.filter(shipment =>
+        (filter.id ? shipment.id.toString().includes(filter.id) : true) &&
+        (filter.source ? shipment.source.toLowerCase().includes(filter.source.toLowerCase()) : true) &&
+        (filter.destination ? shipment.destination.toLowerCase().includes(filter.destination.toLowerCase()) : true)
+      );
+      setFilteredShipments(filtered);
+    };
+
+      const handleReset = () => {
+        setFilter({ id: '', source: '', destination: '' });
+        setFilteredShipments(shipments);
+      };
+
+
   return (
     <Container fluid="md" style={{ padding: '20px', paddingBottom: "200px", marginTop: '20px', background: "#f7f7f7", boxShadow: "0 2px 4px rgba(0,0,0,.1)" }}>
-      <h2 style={{ marginBottom: '20px', textAlign: 'center' }}>Shipments: {shipmentCount} Active</h2>
-      <Row className="mb-4">
+      <h2 style={{ marginBottom: '20px', textAlign: 'center' }}>Shipments: {filteredShipments.length} Active</h2>
+      <Row>
+        <Col md={3}>
+          <Form.Control type="text" placeholder="Filter by ID" name="id" onChange={handleChange} value={filter.id} />
+        </Col>
+        <Col md={3}>
+          <Form.Control type="text" placeholder="Filter by Source" name="source" onChange={handleChange} value={filter.source} />
+        </Col>
+        <Col md={3}>
+          <Form.Control type="text" placeholder="Filter by Destination" name="destination" onChange={handleChange} value={filter.destination} />
+        </Col>
+        <Col md={3}>
+          <Button onClick={handleFilter} variant="primary">Apply Filters</Button>
+          <Button onClick={handleReset} variant="secondary" style={{ marginLeft: "10px" }}>Reset</Button>
+        </Col>
+      </Row>
+      <Row className="mb-4" style={{ marginTop: '20px' }}>
         <Col>
           <Table striped bordered hover size="sm">
-            <thead>
+            <head>
               <tr>
                 <th>ID</th>
                 <th>Source</th>
@@ -41,9 +74,9 @@ function IMSShipments() {
                 <th>Actual Arrival</th>
                 <th>Status</th>
               </tr>
-            </thead>
-            <tbody>
-              {shipments.map(shipment => (
+            </head>
+            <body>
+              {filteredShipments.map(shipment => (
                 <tr key={shipment.id}>
                   <td>{shipment.id}</td>
                   <td>{shipment.source}</td>
@@ -55,7 +88,7 @@ function IMSShipments() {
                   <td>{shipment.shipmentStatus}</td>
                 </tr>
               ))}
-            </tbody>
+            </body>
           </Table>
         </Col>
       </Row>
