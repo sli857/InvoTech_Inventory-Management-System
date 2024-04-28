@@ -4,8 +4,7 @@ import { Button, Card, Col, Form, Row, Table, Dropdown, DropdownButton, Containe
 import 'leaflet/dist/leaflet.css';
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 
-//const backend_baseurl = 'http://cs506-team-35.cs.wisc.edu:8080'
-const backend_baseurl = 'http://localhost:8080'
+const backend_baseurl = 'http://cs506-team-35.cs.wisc.edu:8080'
 
 /**
  * The IMSSite component is responsible for displaying detailed information about a specific site.
