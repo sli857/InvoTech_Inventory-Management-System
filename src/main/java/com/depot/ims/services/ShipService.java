@@ -94,7 +94,7 @@ public class ShipService {
         var res = shipRepository.save(ship);
 
         String rowKey =
-                "shipmentId: " + res.getShipmentId().getShipmentId() + " ,itemId: " + res.getItemId().getItemId();
+                "shipmentId: " + res.getShipmentId().getShipmentId() + ", itemId: " + res.getItemId().getItemId();
         // record audit
         auditService.saveAudit("Ships",
                 null,

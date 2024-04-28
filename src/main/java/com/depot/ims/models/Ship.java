@@ -30,7 +30,7 @@ public class Ship {
 
     @Override
     public String toString(){
-        return "shipmentId: " + shipmentId.getShipmentId() + " ,itemId: " + itemId.getItemId() +
+        return "shipmentId: " + shipmentId.getShipmentId() + ", itemId: " + itemId.getItemId() +
                 " ,quantity: " + quantity;
     }
 }
