@@ -100,6 +100,13 @@ public class AvailabilityService {
         availability.setQuantity(new_quantity);
         Availability updatedAvailability = this.availabilityRepository.save(availability);
 
+        // construct rowKey as: "itemId: *** ,siteId: ***"
+        String rowKey = "itemId: " + updatedAvailability.getItemId().getItemId() + " ,siteId: "
+                + updatedAvailability.getSiteId().getSiteId();
+
+        auditService.saveAudit("Availability", "quantity", rowKey, current_quantity.toString(),
+                new_quantity.toString(),
+                "UPDATE");
         return ResponseEntity.ok(updatedAvailability);
     }
 
