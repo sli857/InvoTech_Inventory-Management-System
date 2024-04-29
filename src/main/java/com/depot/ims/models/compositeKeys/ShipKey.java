@@ -13,7 +13,8 @@ import java.util.Objects;
 
 /**
  * Represents the primary key of Ship entity. It addresses a Many-to-Many relationship between
- * shipments and items. Therefore, every unique tuple of (itemId, shipmentId)
+ * shipments and items. Therefore, every unique tuple of (itemId, shipmentId) identifies a unique
+ * ship entity
  */
 @Data
 @ToString
@@ -27,6 +28,13 @@ public class ShipKey implements Serializable {
     @Reference(to = Shipment.class)
     private Long shipmentId;
 
+    /**
+     * override equals() for identifying whether two ship entities are identical, which means
+     * this.itemId == other.itemId && this.shipmentId == other.shipmentId
+     *
+     * @param o the other Object to compare to
+     * @return true if two ship entities are considered identical, false or not
+     */
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -36,6 +44,10 @@ public class ShipKey implements Serializable {
                 Objects.equals(shipmentId, that.shipmentId);
     }
 
+    /**
+     * override hashCode() that is one-to-one mapped by each unique Ship entity
+     * @return calculated hashCode
+     */
     @Override
     public int hashCode() {
         return Objects.hash(itemId, shipmentId);
