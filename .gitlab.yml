@@ -47,9 +47,10 @@ checkstyle:
 
 npm-lint:
   stage: lint
-  image: node:10-alpine
+  image: node:21-alpine
   script:
-    - cd web && npm run lint
+    - cd web && npm install
+    - npm run lint 
   rules:
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH || $CI_PIPELINE_SOURCE == 'merge_request_event'
   allow_failure: true
@@ -66,7 +67,7 @@ test-jdk17:
     - cat target/site/jacoco/index.html | grep -o 'Total[^%]*%'
   artifacts:
     paths:
-      - target/site/jacoco/jacoco.xml
+      - target/site/jacoco/
   coverage: /Total.*?([0-9]{1,3})%/
   rules:
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH || $CI_PIPELINE_SOURCE == 'merge_request_event'
@@ -93,7 +94,7 @@ coverage-jdk17:
 #####################################
 test-frontend:
   stage: test
-  image: node:10-alpine 
+  image: node:21-alpine 
   script:
     - cd web && npm install
     - npm test
