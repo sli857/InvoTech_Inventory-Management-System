@@ -12,6 +12,7 @@ import {
     Table,
     Tooltip
 } from 'react-bootstrap';
+import {useNavigate} from "react-router-dom";
 
 const backend_baseurl = 'http://cs506-team-35.cs.wisc.edu:8080'
 
@@ -39,6 +40,8 @@ function IMSShipments() {
     const [selectedSource, setSelectedSource] = useState('Select Source');
     const [selectedDestination, setSelectedDestination] = useState('Select Destination');
     const [selectedStatus, setSelectedStatus] = useState('Select Status');
+
+    const navigate = useNavigate();
 
     // Filter shipment based on selected filters
     const filteredShipments = shipments.filter(shipment => {
@@ -257,7 +260,7 @@ function IMSShipments() {
                                     inventory contents.</Tooltip>}
                                 placement={'top'}
                             >
-                                <tr key={shipment.shipmentId} style={{cursor: 'pointer'}}>
+                                <tr key={shipment.shipmentId} onClick={() => navigate(`/shipment/${shipment.shipmentId}`)} style={{cursor: 'pointer'}}>
                                     <td>{shipment.shipmentId}</td>
                                     <td>{sites.find(site => site.siteId === shipment.source)?.siteName}</td>
                                     <td>{sites.find(site => site.siteId === shipment.destination)?.siteName}</td>
