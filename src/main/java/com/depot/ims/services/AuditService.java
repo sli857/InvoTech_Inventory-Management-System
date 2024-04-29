@@ -1,6 +1,6 @@
 package com.depot.ims.services;
 
-import com.depot.ims.dto.AuditResponse;
+import com.depot.ims.response.AuditResponse;
 import com.depot.ims.models.Audit;
 import com.depot.ims.repositories.AuditRepository;
 import org.springframework.http.ResponseEntity;

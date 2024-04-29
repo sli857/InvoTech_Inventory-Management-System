@@ -1,4 +1,4 @@
-package com.depot.ims.dto;
+package com.depot.ims.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
