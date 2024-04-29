@@ -51,7 +51,7 @@ public class SiteController {
     }
 
     /**
-     * get status of a site by siteId
+     * get the status of a site by siteId
      *
      * @param siteId siteId
      * @return the result of SiteService.getStatusBySiteId()

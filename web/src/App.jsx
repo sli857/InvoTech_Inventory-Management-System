@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import IMSApp from "./components/structural/IMSApp";
-import IMSLogin from "./components/authorization/IMSLogin"; 
-import IMSLogout from "./components/authorization/IMSLogout"; 
+import IMSLogin from "./components/authorization/IMSLogin";
+import IMSLogout from "./components/authorization/IMSLogout";
 
 /**
  * Main application component that handles routing and authentication.
