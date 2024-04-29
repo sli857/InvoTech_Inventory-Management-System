@@ -8,6 +8,9 @@ import lombok.NoArgsConstructor;
 
 import java.sql.Timestamp;
 
+/**
+ * This class represents an audit entity
+ */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

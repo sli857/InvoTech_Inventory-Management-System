@@ -39,7 +39,7 @@ public class AuditController {
      * @return ResponseEntity that contains the result of this operation
      */
     @GetMapping("/onTable")
-    public ResponseEntity<?> getAuditOnTable(@RequestParam String tableName) {
+    public ResponseEntity<?> getAuditsOnTable(@RequestParam String tableName) {
         return auditService.findAuditsOnTable(tableName);
     }
 

@@ -4,6 +4,12 @@ import com.depot.ims.models.compositeKeys.ShipKey;
 import jakarta.persistence.*;
 import lombok.*;
 
+/**
+ * Represents a ship entity.
+ * Encapsulates user details and credentials for access control and identification.
+ * Annotations from JPA are used for ORM (Object Relational Mapping) to a database table,
+ * while Lombok annotations reduce boilerplate code for standard Java functionalities.
+ */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 /**
- * Represents a item entity in the system.
+ * Represents an item entity in the system.
  * Encapsulates user details and credentials for access control and identification.
  * Annotations from JPA are used for ORM (Object Relational Mapping) to a database table,
  * while Lombok annotations reduce boilerplate code for standard Java functionalities.
