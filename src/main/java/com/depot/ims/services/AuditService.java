@@ -1,6 +1,6 @@
 package com.depot.ims.services;
 
-import com.depot.ims.dto.AuditResponse;
+import com.depot.ims.response.AuditResponse;
 import com.depot.ims.models.Audit;
 import com.depot.ims.repositories.AuditRepository;
 import org.springframework.http.ResponseEntity;
@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
 import java.util.List;
 
 @Service
@@ -20,6 +21,7 @@ public class AuditService {
     }
 
     private static AuditResponse convertToAuditResponse(Audit audit) {
+
         return AuditResponse.builder()
                 .auditId(audit.getAuditId())
                 .tableName(audit.getTableName())
@@ -43,6 +45,9 @@ public class AuditService {
     }
 
     public ResponseEntity<?> findAuditsOnTable(String tableName) {
+        if(tableName == null){
+            return ResponseEntity.badRequest().body("tableName should not be null");
+        }
         try {
             List<Audit> result = auditRepository.findByTableName(tableName);
             List<AuditResponse> responses = result.stream().map(AuditService::convertToAuditResponse).toList();
@@ -54,13 +59,17 @@ public class AuditService {
 
     public ResponseEntity<?> findAuditsBetweenPeriod(String start, String end) {
         try {
-            LocalDate startTmp = LocalDate.parse(start);
-            LocalDate endTmp = LocalDate.parse(end);
-            List<Audit> result = auditRepository.findBetweenPeriod(Timestamp.valueOf(startTmp.atStartOfDay()),
-                    Timestamp.valueOf(endTmp.atStartOfDay()));
+            LocalDate startDate = LocalDate.parse(start);
+            LocalDate endDate = LocalDate.parse(end);
+            List<Audit> result = auditRepository.findBetweenPeriod(Timestamp.valueOf(startDate.atStartOfDay()),
+                    Timestamp.valueOf(endDate.atStartOfDay()));
             List<AuditResponse> responses = result.stream().map(AuditService::convertToAuditResponse).toList();
             return ResponseEntity.ok(responses);
-        } catch (Exception e) {
+        }
+        catch (DateTimeParseException e){
+            return ResponseEntity.badRequest().body("Datetime format should be:\nYYYY-MM-DD");
+        }
+        catch (Exception e) {
             return ResponseEntity.internalServerError().body(e.getMessage());
         }
     }

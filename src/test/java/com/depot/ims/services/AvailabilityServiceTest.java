@@ -1,24 +1,18 @@
 package com.depot.ims.services;
 
-import com.depot.ims.models.Availability;
-import com.depot.ims.models.Item;
-import com.depot.ims.models.Site;
-import com.depot.ims.repositories.AvailabilityRepository;
-import com.depot.ims.repositories.ItemRepository;
-import com.depot.ims.repositories.SiteRepository;
+import com.depot.ims.models.*;
+import com.depot.ims.repositories.*;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
-
 import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 /**
  * Unit tests for the AvailabilityService class.
@@ -26,7 +20,7 @@ import static org.mockito.Mockito.when;
  * and adding of availability details. Utilizes Mockito to mock
  * the siteRepository, ItemRepository, AvailabilityRepository for isolated testing of service logic.
  */
-public class AvailabilityServiceTest {
+class AvailabilityServiceTest {
 
     @Mock
     private SiteRepository siteRepository = mock(SiteRepository.class);
@@ -45,10 +39,10 @@ public class AvailabilityServiceTest {
     /**
      * Tests adding an availability
      * mock the availability repository
-     * Verifies correct return of the addAvailabilities  method
+     * Verifies correct return of the addAvailabilities method
      */
     @Test
-    public void TestAddAvailabilities() {
+    void TestAddAvailabilities() {
         Item item = new Item(20L, "item1", 3.0);
         Item item1 = new Item(30L, "item2", 4.0);
         Site site = new Site(11L, "HomeDepot 2", "W54 N53", "open", null,
@@ -59,17 +53,17 @@ public class AvailabilityServiceTest {
         ResponseEntity<?> response1 = this.availabilityService.addAvailabilities(availability);
         assertEquals(HttpStatus.OK, response1.getStatusCode());
         assertNotNull(response1.getBody());
-        assertTrue(response1.getBody().equals(availability));
+        assertEquals(response1.getBody(), availability);
 
     }
 
     /**
      * Tests retrieving an availability
      * mock the availability repository and site repository
-     * Verifies correct return of the addAvailability method
+     * Verifies the correct return of the addAvailability method
      */
     @Test
-    public void TestGetAvailability() {
+    void TestGetAvailability() {
 
         Item item = new Item(20L, "item1", 3.0);
         Item item1 = new Item(30L, "item2", 4.0);
@@ -87,17 +81,17 @@ public class AvailabilityServiceTest {
         assertEquals(HttpStatus.OK, response3.getStatusCode());
         assertNotNull(response3.getBody());
         System.out.println(response3.getBody());
-        assertTrue(response3.getBody().equals(list));
+        assertEquals(response3.getBody(), list);
 
     }
 
     /**
      * Tests retrieving a list of availability by item id
      * mock the availability repository and item repository
-     * Verifies correct return of the getAvailabilitiesByItemId method
+     * Verifies the correct return of the getAvailabilitiesByItemId method
      */
     @Test
-    public void getAvailabilitiesByItemId() {
+    void getAvailabilitiesByItemId() {
         Item item = new Item(20L, "item1", 3.0);
         Item item1 = new Item(30L, "item2", 4.0);
         Site site = new Site(11L, "HomeDepot 2", "W54 N53", "open", null,
@@ -113,10 +107,10 @@ public class AvailabilityServiceTest {
         when(this.itemRepository.existsById(20L)).thenReturn(true);
         when(this.itemRepository.findByItemId(20L)).thenReturn(item);
         when(this.availabilityRepository.findSitesByOneItem(item)).thenReturn(list);
-        ResponseEntity<?> response4 = this.availabilityService.getAvailabilitiesByItemId(20L);
+        ResponseEntity<?> response4= this.availabilityService.getAvailabilitiesByItemId(20L);
         assertEquals(HttpStatus.OK, response4.getStatusCode());
         assertNotNull(response4.getBody());
-        assertTrue(response4.getBody().equals(list));
+        assertEquals(response4.getBody(), list);
 
     }
 
@@ -126,7 +120,7 @@ public class AvailabilityServiceTest {
      * Verifies correct return of the getAvailabilityBySiteIdAndItemId method
      */
     @Test
-    public void TestGetAvailabilityBySiteIdAndItemId() {
+    void TestGetAvailabilityBySiteIdAndItemId() {
         Item item = new Item(20L, "item1", 3.0);
         Item item1 = new Item(30L, "item2", 4.0);
         Site site = new Site(11L, "HomeDepot 2", "W54 N53", "open", null,
@@ -139,20 +133,20 @@ public class AvailabilityServiceTest {
         when(this.itemRepository.existsById(20L)).thenReturn(true);
         when(this.siteRepository.existsById(11L)).thenReturn(true);
         when(this.availabilityRepository.findBySiteIdAndItemId(11L, 20L)).thenReturn(availability);
-        ResponseEntity<?> response5 = this.availabilityService.getAvailabilityBySiteIdAndItemId(11L, 20L);
+        ResponseEntity<?> response5= this.availabilityService.getAvailabilityBySiteIdAndItemId(11L, 20L);
         assertEquals(HttpStatus.OK, response5.getStatusCode());
         assertNotNull(response5.getBody());
-        assertTrue(response5.getBody().equals(availability));
+        assertEquals(response5.getBody(), availability);
 
     }
 
     /**
      * Tests retrieving a list of sites by a list of items
      * mock the availability repository, item repository, and site repository
-     * Verifies correct return of the getSitesByItems method
+     * Verifies the correct return of the getSitesByItems method
      */
     @Test
-    public void testGetSitesByItems() {
+    void getSitesByItems() {
         MultiValueMap<String, String> item = new LinkedMultiValueMap<>();
         MultiValueMap<String, String> items = new LinkedMultiValueMap<>();
 
@@ -205,7 +199,7 @@ public class AvailabilityServiceTest {
         ResponseEntity<?> response6 = this.availabilityService.getSitesByItems(items);
         assertEquals(HttpStatus.OK, response6.getStatusCode());
         assertNotNull(response6.getBody());
-        assertTrue(response6.getBody().equals(expectedList));
+        assertEquals(response6.getBody(), expectedList);
 
 
         //Test2: when only has one item
@@ -219,17 +213,17 @@ public class AvailabilityServiceTest {
         ResponseEntity<?> response7 = this.availabilityService.getSitesByItems(item);
         assertEquals(HttpStatus.OK, response7.getStatusCode());
         assertNotNull(response7.getBody());
-        assertTrue(response7.getBody().equals(siteList));
+        assertEquals(response7.getBody(), siteList);
 
     }
 
     /**
      * Tests changing the quantity of an item in a site
      * mock the availability repository, item repository, and site repository
-     * Verifies correct return of the changeQuantity method
+     * Verifies the correct return of the changeQuantity method
      */
     @Test
-    public void TestChangeQuantity() {
+    void TestChangeQuantity() {
 
         Item item1 = new Item(1L, "item1", 3.0);
         Site site1 = new Site(13L, "HomeDepot 2", "W54 N53", "open", null,
@@ -245,9 +239,7 @@ public class AvailabilityServiceTest {
         ResponseEntity<?> response8 = this.availabilityService.changeQuantity(13L, 1L, "+", 20);
         assertEquals(HttpStatus.OK, response8.getStatusCode());
         assertNotNull(response8.getBody());
-        assertEquals( true, response8.getBody().equals(updatedAvailability));
-
-
+        assertEquals(response8.getBody(), updatedAvailability);
 
     }
 

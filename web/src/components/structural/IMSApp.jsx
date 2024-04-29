@@ -9,6 +9,7 @@ import IMSSite from "../content/IMSSite";
 import IMSAudits from "../content/IMSAudits";
 import IMSLogout from "../authorization/IMSLogout";
 import IMSUsers from "../content/IMSUsers";
+import IMSHelp from "../content/IMSHelp";
 
 
 /**
@@ -35,6 +36,7 @@ function IMSApp() {
         <Route path="audits" element={<IMSAudits />} />
         <Route path="logout" element={<IMSLogout />} />
         <Route path="users" element={<IMSUsers />} />
+        <Route path="help" element={<IMSHelp />} />
         <Route path="*" element={<IMSNoMatch />} />
       </Route>
     </Routes>

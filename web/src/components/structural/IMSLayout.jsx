@@ -41,6 +41,9 @@ function IMSLayout() {
             <Nav.Link as={Link} to="users">
               Users
             </Nav.Link>
+            <Nav.Link as={Link} to="help">
+              Help
+            </Nav.Link>
             <Nav.Link as={Link} to="logout">
               Logout
             </Nav.Link>

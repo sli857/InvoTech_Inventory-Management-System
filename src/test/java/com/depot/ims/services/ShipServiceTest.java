@@ -12,7 +12,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.*;
 
-// For more information, please refer to the documentation in the README under Testing Documentation
+/** This class tests the ShipService class */
 class ShipServiceTest {
 
     @Mock
@@ -36,6 +36,15 @@ class ShipServiceTest {
             siteRepositoryMock
     );
 
+    /**
+     * This test checks if the addShip method works as expected.
+     *
+     * <p>It works by mock sending a shipment of 50 items from site1 to site2. Their availability is
+     * 50 and 20 respectively.
+     *
+     * <p>After the shipment, the availability of site1 should be 0 and site2 should be 70. The result
+     * should be an OK status code.
+     */
     @Test
     void addShipQuantityUpdateTest() {
         // Given
@@ -71,6 +80,14 @@ class ShipServiceTest {
         assertEquals(70, availability2.getQuantity());
     }
 
+    /**
+     * This tests the addShip method with a shipment that does not exist.
+     *
+     * <p>It works by returning null when querying for that requested shipment. The result should be a
+     * bad request status code with the following body:
+     *
+     * <p>"Invalid shipment, source, destination, or item"
+     */
     @Test
     void addShipInvalidShipmentTest() {
         // Given
@@ -91,6 +108,14 @@ class ShipServiceTest {
         assertEquals(String.format("Shipment or item do not exist%nShipment: %s%nItem: %s", null, item), result.getBody());
     }
 
+    /**
+     * This tests the addShip method with an item that does not exist.
+     *
+     * <p>It works by returning null when querying for that requested item. The result should be a bad
+     * request status code with the following body:
+     *
+     * <p>"Invalid shipment, source, destination, or item"
+     */
     @Test
     void addShipInvalidItemTest() {
         // Given
@@ -120,6 +145,17 @@ class ShipServiceTest {
         assertEquals(String.format("Shipment or item do not exist%nShipment: %s%nItem: %s", shipment, null), result.getBody());
     }
 
+    /**
+     * This tests the addShip method by attempting to ship a quantity of item greater than the source
+     * site's availability.
+     *
+     * <p>It works by specifying a quantity of 50 items to be shipped from site1 to site2. Their
+     * availability is 20 and 20 respectively.
+     *
+     * <p>The result should be a bad request status code with the following body:
+     *
+     * <p>"Not enough quantity in the source site"
+     */
     @Test
     void addShipItemNotAlreadyInAvailability() {
         // Given
@@ -185,6 +221,13 @@ class ShipServiceTest {
         assertEquals(String.format("Not enough quantity for %d in the source site", shipRequest.getQuantity()), result.getBody());
     }
 
+    /**
+     * This tests the addShip method with a null ship.
+     *
+     * <p>The result should be a bad request status code with the following body:
+     *
+     * <p>"Invalid ship"
+     */
     @Test
     void addShipNullTest() {
         // Given

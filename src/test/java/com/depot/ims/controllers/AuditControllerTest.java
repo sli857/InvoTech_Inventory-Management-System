@@ -40,17 +40,6 @@ public class AuditControllerTest {
 
     @Test
     void testGetAllAudits() throws Exception {
-        User user1 = User.builder()
-                .username("user1")
-                .password("pass")
-                .position("admin")
-                .build();
-        User user2 = User.builder()
-                .username("user2")
-                .password("pass")
-                .position("admin")
-                .build();
-
         Audit audit1 = Audit.builder()
                 .tableName("sites")
                 .fieldName("siteName")
@@ -139,27 +128,6 @@ public class AuditControllerTest {
 
     @Test
     void testFindAuditsBetweenDates() throws Exception {
-        User user1 = User.builder()
-                .username("user1")
-                .password("pass")
-                .position("admin")
-                .build();
-        User user2 = User.builder()
-                .username("user2")
-                .password("pass")
-                .position("admin")
-                .build();
-
-        Audit audit1 = Audit.builder()
-                .tableName("sites")
-                .fieldName("siteName")
-                .rowKey("1")
-                .oldValue("oldName")
-                .newValue("newName")
-                .action("UPDATE")
-                .actionTimestamp(Timestamp.valueOf("2024-04-16 11:22:33"))
-                .build();
-
         Audit audit2 = Audit.builder()
                 .tableName("sites")
                 .rowKey("1")
@@ -178,8 +146,10 @@ public class AuditControllerTest {
                 .actionTimestamp(Timestamp.valueOf("2024-03-16 11:22:33"))
                 .build();
         List<Audit> result = new ArrayList<>(Arrays.asList(audit2, audit3));
+
         doReturn(ResponseEntity.ok(result)).when(auditServiceMock)
                 .findAuditsBetweenPeriod("2024-02-01", "2024-04-01");
+
         mockMvc.perform(get("/audits/betweenPeriod?start=2024-02-01&end=2024-04-01"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").isArray())

@@ -3,6 +3,7 @@ import axios from 'axios';
 import { Table, Container, Row, Col, Form, Button, Card } from 'react-bootstrap';
 
 const backend_baseurl = 'http://cs506-team-35.cs.wisc.edu:8080'
+
 // Define the IMSUsers component
 const IMSUsers = () => {
     // State for storing user data

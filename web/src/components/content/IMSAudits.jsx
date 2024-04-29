@@ -3,6 +3,8 @@ import { Button, Card, Container, Row, Col, Form, Table } from 'react-bootstrap'
 import DatePicker from 'react-datepicker';
 import "react-datepicker/dist/react-datepicker.css";
 
+const backend_baseurl = 'http://cs506-team-35.cs.wisc.edu:8080'
+
 /**
  * The IMSAudits component displays a list of audits, allows for filtering by table name and date range.
  * It fetches all audits from a backend service on initial load and provides an interface for audit filtering.
@@ -20,7 +22,7 @@ function IMSAudits() {
      * Fetches all audits from the backend on component mount.
      */
     useEffect(() => {
-        handleFetchAudits('http://localhost:8080/audits');
+        handleFetchAudits(`${backend_baseurl}/audits`);
     }, []);
 
     /**
@@ -50,12 +52,12 @@ function IMSAudits() {
                                                 <option key={table} value={table}>{table}</option>
                                             ))}
                                         </Form.Control>
-                                        <Button className="mt-2" onClick={() => handleFetchAudits(`http://localhost:8080/audits/onTable?tableName=${selectedTable}`)}>Filter by Table</Button>
+                                        <Button className="mt-2" onClick={() => handleFetchAudits(backend_baseurl+`/audits/onTable?tableName=${selectedTable}`)}>Filter by Table</Button>
                                     </Col>
                                     <Col sm={6}>
                                         <DatePicker className="form-control" selected={startDate} onChange={date => setStartDate(date)} />
                                         <DatePicker className="form-control mt-2" selected={endDate} onChange={date => setEndDate(date)} />
-                                        <Button className="mt-2" onClick={() => handleFetchAudits(`http://localhost:8080/audits/betweenPeriod?start=${startDate.toISOString().slice(0,10)}&end=${endDate.toISOString().slice(0,10)}`)}>Filter by Date</Button>
+                                        <Button className="mt-2" onClick={() => handleFetchAudits(backend_baseurl+`/audits/betweenPeriod?start=${startDate.toISOString().slice(0,10)}&end=${endDate.toISOString().slice(0,10)}`)}>Filter by Date</Button>
                                     </Col>
                                 </Row>
                             </Form>
