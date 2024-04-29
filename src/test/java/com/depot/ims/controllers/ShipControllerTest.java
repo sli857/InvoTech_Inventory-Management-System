@@ -1,27 +1,40 @@
 package com.depot.ims.controllers;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
 import com.depot.ims.models.Ship;
 import com.depot.ims.repositories.ShipRepository;
-import java.util.ArrayList;
-import java.util.List;
+import com.depot.ims.requests.ShipRequest;
+import com.depot.ims.services.ShipService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-/** This class tests the ShipController class. */
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+// For more information, please refer to the documentation in the README under Testing Documentation
 class ShipControllerTest {
-    @InjectMocks ShipController shipController;
-    @Mock ShipRepository shipRepository;
+    @InjectMocks
+    ShipController shipController;
+    @Mock
+    ShipRepository shipRepository;
+    @Mock
+    ShipService shipService;
 
     private MockMvc mockMvc;
 
@@ -57,8 +70,7 @@ class ShipControllerTest {
         when(shipRepository.findAll()).thenReturn(ships);
 
         // Then
-        mockMvc
-                .perform(get("/ships"))
+        mockMvc.perform(get("/ships"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").isArray())
                 .andExpect(jsonPath("$.length()").value(2));
@@ -86,8 +98,7 @@ class ShipControllerTest {
         when(shipRepository.findByItemId(any())).thenReturn(ships);
 
         // Then
-        mockMvc
-                .perform(get("/ships/item=" + itemId))
+        mockMvc.perform(get("/ships/item=" + itemId))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").isArray())
                 .andExpect(jsonPath("$.length()").value(1));
@@ -115,8 +126,7 @@ class ShipControllerTest {
         when(shipRepository.findByShipmentId(any())).thenReturn(ships);
 
         // Then
-        mockMvc
-                .perform(get("/ships/shipment=" + shipmentId))
+        mockMvc.perform(get("/ships/shipment=" + shipmentId))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").isArray())
                 .andExpect(jsonPath("$.length()").value(1));
@@ -146,10 +156,31 @@ class ShipControllerTest {
         when(shipRepository.findByItemIdAndShipmentId(any(), any())).thenReturn(ships);
 
         // Then
-        mockMvc
-                .perform(get("/ships/item=" + itemId + "/shipment=" + shipmentId))
+        mockMvc.perform(get("/ships/item=" + itemId + "/shipment=" + shipmentId))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").isArray())
                 .andExpect(jsonPath("$.length()").value(1));
     }
+
+    @Test
+    void testAddShip() throws Exception {
+        // Given
+        ShipRequest shipRequest = new ShipRequest();
+        Ship ship = new Ship();
+        ResponseEntity<?> res = new ResponseEntity<>(
+                ship,
+                HttpStatus.OK
+        );
+
+        // When
+        doReturn(res).when(shipService).addShip(any(ShipRequest.class));
+
+        // Then
+        mockMvc.perform(post("/ships/add")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(new ObjectMapper().writeValueAsString(shipRequest)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$").value(ship));
+    }
+
 }

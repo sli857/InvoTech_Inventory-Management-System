@@ -13,9 +13,9 @@ import crest from "../../assets/logo.webp";
 function IMSLayout() {
   return (
     <div style={{
-      minHeight: '100vh', 
+      minHeight: '100vh',
       display: 'flex',
-      flexDirection: 'column', 
+      flexDirection: 'column',
       backgroundColor: "#007699"
     }}>
       <Navbar sticky="top" bg="dark" variant="dark">

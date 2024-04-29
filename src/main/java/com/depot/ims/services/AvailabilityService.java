@@ -53,8 +53,10 @@ public class AvailabilityService {
     public ResponseEntity<?> addAvailabilities(@RequestBody Availability availability) {
         try {
             var res = availabilityRepository.save(availability);
+            String rowKey =
+                    "itemId: " + res.getItemId().getItemId() + ", siteId: " + res.getSiteId().getSiteId();
             this.auditService.saveAudit("Availabilities", null,
-                    String.join(res.getItemId().toString(), res.getSiteId().toString())
+                    rowKey
                     , null,
                     res.toString(), "INSERT");
             return ResponseEntity.ok(res);
@@ -66,18 +68,18 @@ public class AvailabilityService {
     /**
      * Change the quantity of the item of the site
      *
-     * @param itemId the id of item
-     * @param siteId the id of site
+     * @param itemId    the id of item
+     * @param siteId    the id of site
      * @param operation one of the three operation(+,- or direct modification)
-     * @param quantity quantity to change
+     * @param quantity  quantity to change
      * @return ResponseEntity containing the result of the updated availability
      */
     public ResponseEntity<?> changeQuantity(Long siteId, Long itemId, String operation, Integer quantity) {
 
-        if(!this.siteRepository.existsById(siteId)) {
+        if (!this.siteRepository.existsById(siteId)) {
             return ResponseEntity.badRequest().body("Site not found by siteId");
         }
-        if(!this.itemRepository.existsById(itemId)) {
+        if (!this.itemRepository.existsById(itemId)) {
             return ResponseEntity.badRequest().body("Item not found by item Id");
         }
 
@@ -99,6 +101,15 @@ public class AvailabilityService {
         }
         availability.setQuantity(new_quantity);
         Availability updatedAvailability = this.availabilityRepository.save(availability);
+
+        // construct rowKey as: "itemId: *** ,siteId: ***"
+        String rowKey = "itemId: " + updatedAvailability.getItemId().getItemId() + ", siteId: "
+                + updatedAvailability.getSiteId().getSiteId();
+
+        // record audit
+        auditService.saveAudit("Availabilities", "quantity", rowKey, current_quantity.toString(),
+                new_quantity.toString(),
+                "UPDATE");
 
         return ResponseEntity.ok(updatedAvailability);
     }
