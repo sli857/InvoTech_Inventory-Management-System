@@ -192,6 +192,17 @@ class ShipServiceTest {
         assertEquals(50, availability2.getQuantity());
     }
 
+    /**
+     * This tests the addShip method by attempting to ship a quantity of item greater than the source
+     * site's availability.
+     *
+     * <p>It works by specifying a quantity of 50 items to be shipped from site1 to site2. Their
+     * availability is 20 and 20 respectively.
+     *
+     * <p>The result should be a bad request status code with the following body:
+     *
+     * <p>"Not enough quantity in the source site"
+     */
     @Test
     void addShipInsufficientQuantityTest() {
         // Given
