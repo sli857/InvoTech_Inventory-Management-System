@@ -73,6 +73,7 @@ function IMSAudits() {
                                 <th>Audit ID</th>
                                 <th>Table Name</th>
                                 <th>Field Name</th>
+                                <th>Row Key</th>
                                 <th>Old Value</th>
                                 <th>New Value</th>
                                 <th>Action</th>
@@ -85,6 +86,7 @@ function IMSAudits() {
                                     <td>{audit.auditId}</td>
                                     <td>{audit.tableName}</td>
                                     <td>{audit.fieldName}</td>
+                                    <td>{audit.rowKey}</td>
                                     <td>{audit.oldValue}</td>
                                     <td>{audit.newValue}</td>
                                     <td>{audit.action}</td>
