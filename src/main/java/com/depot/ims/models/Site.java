@@ -6,6 +6,9 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import java.sql.Date;
 
+/**
+ * represents a site entity in the system
+ */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

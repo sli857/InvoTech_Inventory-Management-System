@@ -11,6 +11,10 @@ import org.springframework.data.annotation.Reference;
 import java.io.Serializable;
 import java.util.Objects;
 
+/**
+ * Represents the primary key of Ship entity. It addresses a Many-to-Many relationship between
+ * shipments and items. Therefore, every unique tuple of (itemId, shipmentId)
+ */
 @Data
 @ToString
 @AllArgsConstructor

@@ -22,8 +22,9 @@ public class SiteService {
     }
 
     /**
-     * Try to find a single site based on siteId first. If siteId is not provided, find a single
-     * site by siteName.
+     * try to find a single site by siteId or siteName. If siteId is provided, siteName is
+     * ignored; if siteId is not provided then look up this site by siteName; if both are not
+     * provided, badRequest will be returned.
      *
      * @param siteId   siteId
      * @param siteName siteName
@@ -33,13 +34,13 @@ public class SiteService {
     public ResponseEntity<?> getSite(Long siteId, String siteName) {
         if (siteId != null) {
             var res = siteRepository.findBySiteId(siteId);
-            return res==null?
-                    ResponseEntity.ok("Site not found by siteId: " + siteId):
+            return res == null ?
+                    ResponseEntity.ok("Site not found by siteId: " + siteId) :
                     ResponseEntity.ok(res);
         } else if (siteName != null) {
             var res = siteRepository.findBySiteName(siteName);
-            return res==null?
-                    ResponseEntity.ok("Site not found by siteName: " + siteName):
+            return res == null ?
+                    ResponseEntity.ok("Site not found by siteName: " + siteName) :
                     ResponseEntity.ok(res);
         } else {
             return ResponseEntity.badRequest().body("Either siteId or siteName must be provided");
@@ -144,11 +145,11 @@ public class SiteService {
 
 
     /**
-     * invalidate a site, set status to "closed" and set ceaseDate accordingly if ceaseDate is
-     * provided, otherwise set ceaseDate to current moment.
+     * invalidate a site by setting status to "closed" and setting ceaseDate accordingly if
+     * ceaseDate is provided, otherwise set ceaseDate to current moment.
      *
      * @param siteId    siteId
-     * @param ceaseDate ceaseDate
+     * @param ceaseDate the time when the site was closed
      * @return ResponseEntity that contains the deleted site entity in its body; return
      * corresponding error code and message necessarily
      */

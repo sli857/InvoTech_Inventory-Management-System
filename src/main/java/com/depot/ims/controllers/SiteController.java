@@ -37,11 +37,11 @@ public class SiteController {
     }
 
     /**
-     * find a site either by siteId or siteName
+     * find a site either by siteId or siteName.
      *
      * @param siteId   siteId
      * @param siteName siteName
-     * @return the result of SiteService.getSite()
+     * @return  ResponseEntity that contains the result of this operation
      */
     @GetMapping("/site")
     public ResponseEntity<?> getSite(
@@ -54,7 +54,7 @@ public class SiteController {
      * get status of a site by siteId
      *
      * @param siteId siteId
-     * @return the result of SiteService.getStatusBySiteId()
+     * @return ResponseEntity that contains the result of this operation
      */
     @GetMapping("/status")
     public ResponseEntity<?> getStatusBySiteId(
@@ -65,8 +65,8 @@ public class SiteController {
     /**
      * add a site to table Sites
      *
-     * @param site a site entity
-     * @return result of siteService.addSite()
+     * @param site a site entity that is passed from frontend in JSON format
+     * @return ResponseEntity that contains the result of this operation
      */
     @PostMapping(value = "/add", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> addSite(@RequestBody Site site) {
@@ -82,7 +82,7 @@ public class SiteController {
      * @param newLocation     newLocation
      * @param newInternalSite newInternalSite
      * @param newCeaseDate    newCeaseDate
-     * @return result of SiteService.updateSite()
+     * @return ResponseEntity that contains the result of this operation
      */
     @Modifying
     @PostMapping("/update")
@@ -111,7 +111,7 @@ public class SiteController {
      * @param siteId    primary key to find the site to delete
      * @param ceaseDate date when the site was ceased if provided; set to current date if not
      *                  provided
-     * @return result of SiteService.deleteSite()
+     * @return ResponseEntity that contains the result of this operation
      */
     @DeleteMapping("/delete")
     public ResponseEntity<?> deleteSite(
