@@ -7,7 +7,6 @@ import lombok.*;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString
 @Entity
 @Builder
 @IdClass(ShipKey.class)
@@ -28,4 +27,11 @@ public class Ship {
 
     @Column(name = "quantity", nullable = false)
     private Integer quantity;
+
+    @Override
+    public String toString(){
+        return "shipmentId: " + shipmentId.getShipmentId() + ", itemId: " + itemId.getItemId() +
+                " ,quantity: " + quantity;
+    }
+
 }

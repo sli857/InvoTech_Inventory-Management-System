@@ -119,16 +119,17 @@ public class ShipService {
         // Save the changes
         var res = shipRepository.save(ship);
 
+        // construct rowKey as: "shipmentId: ***, itemId: ***"
+        String rowKey =
+                "shipmentId: " + res.getShipmentId().getShipmentId() + ", itemId: " + res.getItemId().getItemId();
         // record audit
         auditService.saveAudit("Ships",
                 null,
-                ShipKey.builder()
-                        .itemId(res.getItemId().getItemId())
-                        .shipmentId(res.getShipmentId().getShipmentId())
-                        .build().toString(),
+                rowKey,
                 null,
                 res.toString(),
                 "INSERT");
+
 
         return ResponseEntity.ok().body(res);
     }
