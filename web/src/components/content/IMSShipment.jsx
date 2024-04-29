@@ -9,23 +9,23 @@ function IMSShipment() {
 
   const { shipmentId } = useParams();
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const responseShips = await fetch(
-            `${backendBaseurl}/ships/shipment=${shipmentId}`
-        );
-        if (!responseShips.ok) {
-          throw new Error('Network response was not ok');
-        }
-        const dataShips = await responseShips.json();
-        setShips(dataShips);
-      } catch (error) {
-        console.error('There was a problem with fetching:', error);
+  const fetchData = async () => {
+    try {
+      const responseShips = await fetch(
+          `${backendBaseurl}/ships/shipment=${shipmentId}`
+      );
+      if (!responseShips.ok) {
+        throw new Error('Network response was not ok');
       }
-    };
+      const dataShips = await responseShips.json();
+      setShips(dataShips);
+    } catch (error) {
+      console.error('There was a problem with fetching:', error);
+    }
+  };
 
-    fetchData().then(() => console.log('Data fetched'));
+  useEffect(() => {
+    fetchData();
   }, [shipmentId]);
 
   return (
