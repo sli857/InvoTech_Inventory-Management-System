@@ -13,7 +13,11 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-/** TODO. */
+/**
+ * Represents a ship entity. Encapsulates user details and credentials for access control and
+ * identification. Annotations from JPA are used for ORM (Object Relational Mapping) to a database
+ * table, while Lombok annotations reduce boilerplate code for standard Java functionalities.
+ */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -38,6 +42,13 @@ public class Ship {
   @Column(name = "quantity", nullable = false)
   private Integer quantity;
 
+  /**
+   * Override toString() so that only the entire Item and Shipment within this ship entity won't be
+   * printed out. Instead, after applying toString(), a ship entity will only contain the simplified
+   * format: "shipmentId: ??, itemId: ??, quantity: ??"
+   *
+   * @return the simplified string representation of a ship entity
+   */
   @Override
   public String toString() {
     return "shipmentId: "

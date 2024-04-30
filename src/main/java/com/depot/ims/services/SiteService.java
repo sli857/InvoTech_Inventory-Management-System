@@ -9,7 +9,7 @@ import java.util.stream.Stream;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-/** TODO. */
+/** This class provides methods for business level logic operations for managing sites. */
 @Service
 public class SiteService {
 
@@ -22,8 +22,9 @@ public class SiteService {
   }
 
   /**
-   * Try to find a single site based on siteId first. If siteId is not provided, find a single site
-   * by siteName.
+   * Try to find a single site by siteId or siteName. If siteId is provided, siteName is ignored; if
+   * siteId is not provided then look up this site by siteName; if both are not provided, badRequest
+   * will be returned.
    *
    * @param siteId siteId
    * @param siteName siteName
@@ -47,7 +48,7 @@ public class SiteService {
   }
 
   /**
-   * get the status of a site.
+   * Get the status of a site.
    *
    * @param siteId primary key to find the site
    * @return ResponseEntity that contains the status of the site in its body, or BadRequest if site
@@ -63,7 +64,7 @@ public class SiteService {
   }
 
   /**
-   * add a site to table Sites.
+   * Add a site to table Sites.
    *
    * @param site site entity
    * @return ResponseEntity that contains the successfully added site in its body, or BadRequest if
@@ -82,7 +83,7 @@ public class SiteService {
   }
 
   /**
-   * update any of the fields of a site entity found by siteId in table Site.
+   * Update any of the fields of a site entity found by siteId in table Site.
    *
    * @param siteId siteId
    * @param newStatus newStatus
@@ -162,7 +163,7 @@ public class SiteService {
   }
 
   /**
-   * invalidate a site, set status to "closed" and set ceaseDate accordingly if ceaseDate is
+   * Invalidate a site, set status to "closed" and set ceaseDate accordingly if ceaseDate is
    * provided, otherwise set ceaseDate to current date.
    *
    * @param siteId siteId

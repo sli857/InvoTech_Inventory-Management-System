@@ -18,7 +18,7 @@ import org.springframework.stereotype.Repository;
 public interface AvailabilityRepository extends JpaRepository<Availability, Long> {
 
   /**
-   * find all the availabilities with the given siteId Uses a custom JPQL query to retrieve a list
+   * Find all the availabilities with the given siteId Uses a custom JPQL query to retrieve a list
    * of availability.
    *
    * @param siteId The ID of the site
@@ -28,7 +28,7 @@ public interface AvailabilityRepository extends JpaRepository<Availability, Long
   List<Availability> findBySiteId(Long siteId);
 
   /**
-   * find all the availabilities with the given itemId Uses a custom JPQL query to retrieve a list
+   * Find all the availabilities with the given itemId Uses a custom JPQL query to retrieve a list
    * of availability.
    *
    * @param itemId The ID of the item
@@ -38,7 +38,7 @@ public interface AvailabilityRepository extends JpaRepository<Availability, Long
   List<Availability> findByItemId(Long itemId);
 
   /**
-   * find the availability with the given itemId and given siteId Uses a custom JPQL query to
+   * Find the availability with the given itemId and given siteId Uses a custom JPQL query to
    * retrieve a specific availability.
    *
    * @param siteId The ID of the site
@@ -49,7 +49,7 @@ public interface AvailabilityRepository extends JpaRepository<Availability, Long
   Availability findBySiteIdAndItemId(Long siteId, Long itemId);
 
   /**
-   * find a list of sites that contains all the items in the item list. Uses a custom JPQL query to
+   * Find a list of sites that contains all the items in the item list. Uses a custom JPQL query to
    * retrieve a specific availability.
    *
    * @param itemList The list of item entity
@@ -59,7 +59,7 @@ public interface AvailabilityRepository extends JpaRepository<Availability, Long
   List<Site> findSitesByItems(@Param("itemList") List<Item> itemList);
 
   /**
-   * find a list of sites that contains the item Uses a custom JPQL query to retrieve a specific
+   * Find a list of sites that contains the item Uses a custom JPQL query to retrieve a specific
    * availability.
    *
    * @param item The item entity

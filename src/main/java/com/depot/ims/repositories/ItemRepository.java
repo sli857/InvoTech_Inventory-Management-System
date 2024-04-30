@@ -14,7 +14,7 @@ import org.springframework.stereotype.Repository;
 public interface ItemRepository extends JpaRepository<Item, Long> {
 
   /**
-   * find all the items with the given itemName Uses a custom JPQL query to retrieve the user.
+   * Find all the items with the given itemName Uses a custom JPQL query to retrieve the user.
    *
    * @param itemName The name of the site
    * @return a list of item entity if found, or null otherwise.
@@ -23,7 +23,7 @@ public interface ItemRepository extends JpaRepository<Item, Long> {
   List<Item> findByItemName(String itemName);
 
   /**
-   * find the item with the given item id Uses a custom JPQL query to retrieve the user.
+   * Find the item with the given item id Uses a custom JPQL query to retrieve the user.
    *
    * @param itemId The id of the item
    * @return item entity if found, or null otherwise.

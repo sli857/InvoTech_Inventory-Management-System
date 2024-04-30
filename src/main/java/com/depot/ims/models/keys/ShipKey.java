@@ -11,7 +11,11 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 import org.springframework.data.annotation.Reference;
 
-/** TODO. */
+/**
+ * Represents the primary key of Ship entity. It addresses a Many-to-Many relationship between
+ * shipments and items. Therefore, every unique tuple of (itemId, shipmentId) identifies a unique
+ * ship entity.
+ */
 @Data
 @ToString
 @AllArgsConstructor
@@ -25,6 +29,13 @@ public class ShipKey implements Serializable {
   @Reference(to = Shipment.class)
   private Long shipmentId;
 
+  /**
+   * Override equals() for identifying whether two ship entities are identical, which means
+   * this.itemId == other.itemId && this.shipmentId == other.shipmentId.
+   *
+   * @param o the other Object to compare to
+   * @return true if two ship entities are considered identical, false or not
+   */
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -37,6 +48,11 @@ public class ShipKey implements Serializable {
     return Objects.equals(itemId, that.itemId) && Objects.equals(shipmentId, that.shipmentId);
   }
 
+  /**
+   * Override hashCode() that is one-to-one mapped by each unique Ship entity.
+   *
+   * @return calculated hashCode
+   */
   @Override
   public int hashCode() {
     return Objects.hash(itemId, shipmentId);

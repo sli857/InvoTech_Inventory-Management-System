@@ -11,7 +11,7 @@ import java.util.List;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-/** TODO. */
+/** This class provides methods for business level logic operations managing audits. */
 @Service
 public class AuditService {
   private final AuditRepository auditRepository;
@@ -20,6 +20,13 @@ public class AuditService {
     this.auditRepository = auditRepository;
   }
 
+  /**
+   * This method convert an Audit object to AuditResponse object to screen out sensitive user's
+   * information, such as password.
+   *
+   * @param audit the Audit object to convert
+   * @return the converted AuditResponse
+   */
   private static AuditResponse convertToAuditResponse(Audit audit) {
 
     return AuditResponse.builder()
@@ -35,13 +42,16 @@ public class AuditService {
   }
 
   /**
-   * TODO.
+   * Find all audits from table Audits. Apply convertToAuditResponse() on each audit.
    *
-   * @return return.
+   * @return ResponseEntity OK with a list of AuditResponses; or InternalServerError if exception
+   *     happens
    */
   public ResponseEntity<?> findAll() {
     try {
       List<Audit> result = auditRepository.findAll();
+
+      // convert each Audit from the result to AuditResponse
       List<AuditResponse> responses =
           result.stream().map(AuditService::convertToAuditResponse).toList();
       return ResponseEntity.ok(responses);
@@ -51,10 +61,11 @@ public class AuditService {
   }
 
   /**
-   * TODO.
+   * Find all audits that relates to a specific table. Apply convertToAuditResponse() on each audit.
    *
-   * @param tableName tableName
-   * @return return
+   * @param tableName the name of a table that user want to use to search by for audits
+   * @return ResponseEntity OK with a list of AuditResponses; or InternalServerError if * exception
+   *     happens
    */
   public ResponseEntity<?> findAuditsOnTable(String tableName) {
     if (tableName == null) {
@@ -62,6 +73,8 @@ public class AuditService {
     }
     try {
       List<Audit> result = auditRepository.findByTableName(tableName);
+
+      // convert each Audit from the result to AuditResponse
       List<AuditResponse> responses =
           result.stream().map(AuditService::convertToAuditResponse).toList();
       return ResponseEntity.ok(responses);
@@ -71,11 +84,13 @@ public class AuditService {
   }
 
   /**
-   * TODO.
+   * Find all audits that are recorded between a specific time period. Apply
+   * convertToAuditResponse() on each row.
    *
-   * @param start start
-   * @param end end
-   * @return return
+   * @param start the start of the time period. Format: YYYY-MM-DD
+   * @param end the end of the time period. Format: YYYY-MM-DD
+   * @return ResponseEntity OK with a list of AuditResponses; ResponseEntity badRequest if the
+   *     client sends incorrect time format; InternalServerError if other exception happens
    */
   public ResponseEntity<?> findAuditsBetweenPeriod(String start, String end) {
     try {
@@ -85,6 +100,8 @@ public class AuditService {
           auditRepository.findBetweenPeriod(
               Timestamp.valueOf(startDate.atStartOfDay()),
               Timestamp.valueOf(endDate.atStartOfDay()));
+
+      // convert each Audit from the result to AuditResponse
       List<AuditResponse> responses =
           result.stream().map(AuditService::convertToAuditResponse).toList();
       return ResponseEntity.ok(responses);
@@ -96,14 +113,15 @@ public class AuditService {
   }
 
   /**
-   * TODO.
+   * Helper method for other service classes to save an audit into database.
    *
-   * @param tableName tableName
-   * @param fieldName fieldName
-   * @param rowKey rowKey
-   * @param oldValue oldValue
-   * @param newValue newValue
-   * @param action action
+   * @param tableName the table that has been changed
+   * @param fieldName the field of the table that has been changed. Null if the operation is INSERT
+   *     or DELETE
+   * @param rowKey the value of the primary key of the row that has been changed
+   * @param oldValue old value. Null if the operation is INSERT
+   * @param newValue new value. Null if the operation is DELETE
+   * @param action Enum from INSERT, UPDATE, DELETE
    */
   public void saveAudit(
       String tableName,
