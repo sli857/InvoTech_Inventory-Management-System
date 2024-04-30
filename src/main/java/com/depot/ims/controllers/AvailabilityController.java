@@ -18,10 +18,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+
 /**
- * AvailabilityController class provides API endpoints for managing availabilities within the
+ * AvailabilityController class provides API endpoints for managing availability within the
  * Inventory Management System. This controller supports operations such as creating, updating, and
- * fetching availabilities details, Or using availabilities table to fetch sites or items details
+ * fetching availability details, or using availabilities table to fetch sites or items
+ * details.
  */
 @RestController
 @RequestMapping(value = "/availabilities", produces = MediaType.APPLICATION_JSON_VALUE)

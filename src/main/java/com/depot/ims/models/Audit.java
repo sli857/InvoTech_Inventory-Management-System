@@ -12,7 +12,12 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-/** TODO. */
+/**
+ * This class represents an audit entity Encapsulates user details and credentials for access
+ * control and identification. Annotations from JPA are used for ORM (Object Relational Mapping) to
+ * a database table, while Lombok annotations reduce boilerplate code for standard Java
+ * functionalities.
+ */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

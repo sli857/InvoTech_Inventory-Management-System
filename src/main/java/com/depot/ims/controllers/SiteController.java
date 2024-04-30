@@ -17,7 +17,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-/** Site controller class that provides APIs for CRUD operations on table Sites. */
+/**
+ * SiteController class provides API endpoints for managing site within the Inventory Management
+ * System. This controller supports operations such as creating, updating, and fetching site
+ * details.
+ */
 @RestController
 @RequestMapping(value = "/sites", produces = MediaType.APPLICATION_JSON_VALUE)
 @CrossOrigin(origins = {"http://cs506-team-35.cs.wisc.edu", "http://localhost:5173/"})
@@ -33,7 +37,7 @@ public class SiteController {
   }
 
   /**
-   * get all sites in table Sites.
+   * Get all sites in table Sites.
    *
    * @return ResponseEntity that contains a list of sites in its body
    */
@@ -43,7 +47,7 @@ public class SiteController {
   }
 
   /**
-   * find a site either by siteId or siteName.
+   * Find a site either by siteId or siteName.
    *
    * @param siteId siteId
    * @param siteName siteName
@@ -57,7 +61,7 @@ public class SiteController {
   }
 
   /**
-   * get the status of a site by siteId.
+   * Get the status of a site by siteId.
    *
    * @param siteId siteId
    * @return the result of SiteService.getStatusBySiteId()
@@ -68,7 +72,7 @@ public class SiteController {
   }
 
   /**
-   * add a site to table Sites.
+   * Add a site to table Sites.
    *
    * @param site a site entity
    * @return result of siteService.addSite()
@@ -79,7 +83,7 @@ public class SiteController {
   }
 
   /**
-   * update the fields a particular site that has the provided siteId.
+   * Update the fields a particular site that has the provided siteId.
    *
    * @param siteId primary key to find the site to modify
    * @param newStatus newStatus
@@ -105,7 +109,7 @@ public class SiteController {
   }
 
   /**
-   * delete a site that has the provided siteId.
+   * Delete a site that has the provided siteId.
    *
    * @param siteId primary key to find the site to delete
    * @param ceaseDate date when the site was ceased if provided; set to current date if not provided

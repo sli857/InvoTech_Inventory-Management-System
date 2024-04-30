@@ -5,7 +5,12 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 
-/** TODO. */
+/**
+ * An auditResponse is a DTO for audit entity that screens out user information, so the frontend
+ * won't
+ * receive these
+ * sensitive data.
+ */
 @Data
 @AllArgsConstructor
 @Builder

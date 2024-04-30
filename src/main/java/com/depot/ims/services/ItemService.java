@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
-/** item class for managing Ship operations. */
+/** Item class for managing Ship operations. */
 @Service
 public class ItemService {
 

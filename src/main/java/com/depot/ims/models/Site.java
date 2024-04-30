@@ -14,7 +14,12 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 import org.springframework.format.annotation.DateTimeFormat;
 
-/** TODO. */
+/**
+ * Represents a site entity in the system Encapsulates user details and credentials for access
+ * control and identification. Annotations from JPA are used for ORM (Object Relational Mapping) to
+ * a database table, while Lombok annotations reduce boilerplate code for standard Java
+ * functionalities.
+ */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -46,7 +51,7 @@ public class Site {
   private Boolean internalSite;
 
   /**
-   * TODO.
+   * Constructor with parameters.
    *
    * @param siteName siteName
    * @param siteLocation siteLocation
