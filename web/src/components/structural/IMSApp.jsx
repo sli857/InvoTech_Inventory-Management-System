@@ -1,15 +1,15 @@
-import { Route, Routes } from "react-router-dom";
+import {Route, Routes} from 'react-router-dom';
 
 // Import layout and page components
-import IMSLayout from "./IMSLayout";
-import IMSSites from "./../content/IMSSites"
-import IMSShipments from "./../content/IMSShipments"
-import IMSNoMatch from "./../content/IMSNoMatch"
-import IMSSite from "../content/IMSSite";
-import IMSAudits from "../content/IMSAudits";
-import IMSLogout from "../authorization/IMSLogout";
-import IMSUsers from "../content/IMSUsers";
-import IMSHelp from "../content/IMSHelp";
+import IMSLayout from './IMSLayout';
+import IMSSites from './../content/IMSSites';
+import IMSShipments from './../content/IMSShipments';
+import IMSNoMatch from './../content/IMSNoMatch';
+import IMSSite from '../content/IMSSite';
+import IMSAudits from '../content/IMSAudits';
+import IMSLogout from '../authorization/IMSLogout';
+import IMSUsers from '../content/IMSUsers';
+import IMSHelp from '../content/IMSHelp';
 
 
 /**
@@ -17,14 +17,14 @@ import IMSHelp from "../content/IMSHelp";
  * Defines the main routes of the IMS application.
  * Uses React Router's <Routes> and <Route> components to set up routing.
  * <IMSLayout> is used as a wrapper for the main content routes, providing consistent layout across pages.
- * 
+ *
  * Routes:
  * - "/" : Renders the IMSSites component as the homepage.
  * - "/site/:siteId" : Dynamically renders details for a specific site using the IMSSite component.
  * - "/shipments" : Renders the IMSShipments component to show shipment information.
  * - "*" : Catch-all route that renders the IMSNoMatch component for unmatched paths (404).
- * 
- * @returns {JSX.Element} The router setup for the application.
+ *
+ * @return {JSX.Element} The router setup for the application.
  */
 function IMSApp() {
   return (

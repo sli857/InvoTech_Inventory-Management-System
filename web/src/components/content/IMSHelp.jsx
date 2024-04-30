@@ -1,5 +1,10 @@
-import React, { useState } from 'react';
+import {useState} from 'react';
 
+/**
+ * IMSHelp Component displays a list of frequently asked questions and provides a contact us section.
+ * It uses an accordion to display the questions and answers.
+ * @return {JSX.Element}
+ */
 function IMSHelp() {
   // State to keep track of the currently active accordion section
   const [activeIndex, setActiveIndex] = useState(null);
@@ -14,7 +19,7 @@ function IMSHelp() {
   const styles = {
     accordionItem: {
       marginBottom: '10px',
-      boxShadow: '0 2px 5px rgba(0,0,0,0.1)'
+      boxShadow: '0 2px 5px rgba(0,0,0,0.1)',
     },
     accordionButton: {
       background: '#f7f7f7',
@@ -25,7 +30,7 @@ function IMSHelp() {
       fontSize: '16px',
       padding: '15px 20px',
       cursor: 'pointer',
-      borderBottom: '1px solid #ddd'
+      borderBottom: '1px solid #ddd',
     },
     accordionContent: {
       maxHeight: '0',
@@ -33,12 +38,12 @@ function IMSHelp() {
       transition: 'max-height 0.3s ease',
       background: '#fff',
       padding: '0 20px',
-      fontSize: '14px'
+      fontSize: '14px',
     },
     accordionContentActive: {
       maxHeight: '150px',
-      padding: '10px 20px'
-    }
+      padding: '10px 20px',
+    },
   };
 
   return (

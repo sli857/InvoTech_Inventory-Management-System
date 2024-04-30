@@ -1,16 +1,17 @@
-import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { Button, Card, Col, Form, Row, Table, Dropdown, DropdownButton, Container, OverlayTrigger, Tooltip, } from 'react-bootstrap';
+import {useEffect, useState} from 'react';
+import {useNavigate} from 'react-router-dom';
+import {Button, Card, Col, Form, Row, Table, Dropdown, DropdownButton, Container, OverlayTrigger, Tooltip} from 'react-bootstrap';
 import removeIcon from '../../assets/remove_icon.png';
-import { Typeahead } from 'react-bootstrap-typeahead';
+import {Typeahead} from 'react-bootstrap-typeahead';
 import 'react-bootstrap-typeahead/css/Typeahead.css';
 
-const backend_baseurl = 'http://cs506-team-35.cs.wisc.edu:8080'
+const backendBaseurl = 'http://cs506-team-35.cs.wisc.edu:8080';
 
 /**
  * The IMSSites component displays a list of sites, allows for filtering, adding, and removing sites.
- * It fetches site data from a backend service on load and provides an interface for site management.
+ * It fetches site data from a backend service on a load and provides an interface for site management.
  * Users can add a new site via a form, filter sites based on location and name, and remove sites.
+ * @return {JSX.Element} The IMSSites component.
  */
 function IMSSites() {
   // State for managing site data
@@ -21,27 +22,26 @@ function IMSSites() {
   const [ceaseDate, setCeaseDate] = useState('');
   const [internalSite, setInternalSite] = useState(false);
   const [availableItems, setAvailableItems] = useState([]);
-  
+
   // State for filter queries
   const [selectedLocation, setSelectedLocation] = useState('Select Location');
   const [selectedName, setSelectedName] = useState('Select Name');
   const [selectedStatus, setSelectedStatus] = useState('Select Status');
   const [selectedInternalSite, setSelectedInternalSite] = useState('Select Internal Site');
-  // State for item querry 
+  // State for item query
   const [selectedItems, setSelectedItems] = useState([]);
-  
+
   // State for form validation
   const [siteNameValid, setSiteNameValid] = useState(true);
   const [siteLocationValid, setSiteLocationValid] = useState(true);
   const [siteStatusValid, setSiteStatusValid] = useState(true);
-  
-  // Used for displaying an error for GPS coordinates 
-  let locationError = "Please enter site location in format 'latitude longitude'.";
-  
+
+  // Used for displaying an error for GPS coordinates
+  let locationError = 'Please enter site location in format \'latitude longitude\'.';
+
   // Navigation hook for redirecting
   const navigate = useNavigate();
 
-  
 
   /**
    * Calls the fetchSites function on page LOAD
@@ -56,16 +56,15 @@ function IMSSites() {
    */
   const fetchSites = async () => {
     try {
-      const response = await fetch(`${backend_baseurl}/sites`);
+      const response = await fetch(`${backendBaseurl}/sites`);
       if (!response.ok) {
-        throw new Error("Network response was not ok");
+        throw new Error('Network response was not ok');
       }
       const data = await response.json();
       setSites(data);
     } catch (error) {
-      console.error("There was a problem with fetching sites:", error);
+      console.error('There was a problem with fetching sites:', error);
     }
-    
   };
 
   /**
@@ -73,34 +72,35 @@ function IMSSites() {
    */
   const fetchItems = async () => {
     try {
-      const response = await fetch(`${backend_baseurl}/items`);
+      const response = await fetch(`${backendBaseurl}/items`);
       if (!response.ok) {
-        throw new Error("Network response was not ok");
+        throw new Error('Network response was not ok');
       }
       const data = await response.json();
       setAvailableItems(data);
     } catch (error) {
-      console.error("There was a problem with fetching sites:", error);
+      console.error('There was a problem with fetching sites:', error);
     }
   };
 
   /**
-   * Fetches all the sites that contain all the items selected in the Select Items querry 
+   * Fetches all the sites that contain all the items selected in the Select Items query
+   * @param {Array} currentSelection - The array of items selected in the Select Items query
    */
   const fetchSitesWithItems = async (currentSelection) => {
     let counter = 0;
     // for each item selected: generate an url extension by combining them with an & for api request
-    const queryParams = currentSelection.map(item => `item${counter++}=${item.itemId}`).join(`&`); 
-    const url = `${backend_baseurl}/availabilities/searchByItems?${queryParams}`;
+    const queryParams = currentSelection.map((item) => `item${counter++}=${item.itemId}`).join(`&`);
+    const url = `${backendBaseurl}/availabilities/searchByItems?${queryParams}`;
     try {
       const response = await fetch(url);
       if (!response.ok) {
-        throw new Error("Network response was not ok");
+        throw new Error('Network response was not ok');
       }
       const data = await response.json();
       setSites(data);
     } catch (error) {
-      console.error("There was a problem with fetching sites:", error);
+      console.error('There was a problem with fetching sites:', error);
     }
   };
 
@@ -116,8 +116,8 @@ function IMSSites() {
     const statusIsValid = siteStatus.trim() !== '' && (siteStatus === 'open' || siteStatus === 'closed');
     // Validate location using the helper function
     locationError = validateLocationFormat(siteLocation);
-    const locationIsValid = locationError === "";
-  
+    const locationIsValid = locationError === '';
+
     setSiteNameValid(nameIsValid);
     setSiteLocationValid(locationIsValid);
     setSiteStatusValid(statusIsValid);
@@ -126,11 +126,11 @@ function IMSSites() {
       // Prevent form submission if validation fails
       return;
     }
-    // Add the site to the database 
-    const response = await fetch(`${backend_baseurl}/sites/add`, {
-      method: "POST",
+    // Add the site to the database
+    const response = await fetch(`${backendBaseurl}/sites/add`, {
+      method: 'POST',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify({
         siteName: siteName,
@@ -150,22 +150,22 @@ function IMSSites() {
     setSiteName('');
     setLocation('');
     setStatus('');
-    setCeaseDate(''); 
-    setInternalSite(false); 
+    setCeaseDate('');
+    setInternalSite(false);
 
     // Reset validation states
     setSiteNameValid(true);
     setSiteLocationValid(true);
     setSiteStatusValid(true);
   }
- 
+
   /**
    * Removes a site by its ID.
    * @param {number} siteId - The ID of the site to be removed.
    */
   const removeSite = async (siteId) => {
     try {
-      const response = await fetch(`${backend_baseurl}/sites/delete?siteId=${siteId}`, {
+      const response = await fetch(`${backendBaseurl}/sites/delete?siteId=${siteId}`, {
         method: 'DELETE',
       });
       if (response.status === 200) {
@@ -179,15 +179,15 @@ function IMSSites() {
     }
   };
 
-  // Filter sites based on name, locaation, status and whether they are internal site
-  const filteredSites = sites.filter(site => {
+  // Filter sites based on name, location, status and whether they are internal site
+  const filteredSites = sites.filter((site) => {
     return (selectedName === 'Select Name' || site.siteName === selectedName) &&
       (selectedLocation === 'Select Location' || site.siteLocation === selectedLocation) &&
       (selectedInternalSite === 'Select Internal Site' || (selectedInternalSite === 'Yes' && site.internalSite) || (selectedInternalSite === 'No' && !site.internalSite)) &&
       (selectedStatus === 'Select Status' || site.siteStatus === selectedStatus);
   });
 
-  // Helper function to reset filter fields 
+  // Helper function to reset filter fields
   const resetFilters = () => {
     setSelectedLocation('Select Location');
     setSelectedName('Select Name');
@@ -195,35 +195,34 @@ function IMSSites() {
     setSelectedStatus('Select Status');
   };
 
-  // Helper function to validate the location format and range
+  /**
+   * Validates the location format and range.
+   * @param {string} location - The location strings to validate.
+   * @return {string} - An error message if the location is invalid, or an empty string if it is valid.
+   */
   function validateLocationFormat(location) {
     const regex = /^([-+]?\d{1,2}(\.\d+)?)[ ]([-+]?\d{1,3}(\.\d+)?)$/;
     const match = location.match(regex);
 
     if (!match) {
-      return "Location must be in the format: 'latitude longitude'.";
+      return 'Location must be in the format: \'latitude longitude\'.';
     }
 
     const latitude = parseFloat(match[1]);
     const longitude = parseFloat(match[3]);
 
     if (latitude < -90 || latitude > 90) {
-      return "Latitude must be between -90 and +90 degrees.";
+      return 'Latitude must be between -90 and +90 degrees.';
     }
 
     if (longitude < -180 || longitude > 180) {
-      return "Longitude must be between -180 and +180 degrees.";
+      return 'Longitude must be between -180 and +180 degrees.';
     }
 
     // If the location is valid
-    return "";
+    return '';
   }
 
-  
-
-  /**
-   * JSX Component that represents the Home Page of the Application
-   */
   return (
     <Container fluid="md" className="mt-3">
       {/* Filter sites based on item */}
@@ -236,7 +235,7 @@ function IMSSites() {
             multiple
             onChange={(selected) => {
               // Update the state component with each new selection
-              setSelectedItems(selected); 
+              setSelectedItems(selected);
               // Fetch sites with the new set of selected Items
               fetchSitesWithItems(selected);
             }}
@@ -244,7 +243,7 @@ function IMSSites() {
             placeholder="Select items..."
             selected={selectedItems}
           />
-          
+
         </Col>
       </Row>
       {/* Table of sites */}
@@ -270,15 +269,17 @@ function IMSSites() {
                   overlay={<Tooltip id={`tooltip-${site.siteId}`}>Press this site to see its inventory contents.</Tooltip>}
                   placement="top"
                 >
-                  <tr key={site.siteId} onClick={() => navigate(`/site/${site.siteId}`)} style={{ cursor: 'pointer' }}>
+                  <tr key={site.siteId} onClick={() => navigate(`/site/${site.siteId}`)} style={{cursor: 'pointer'}}>
                     <td>{site.siteId}</td>
                     <td>{site.siteName}</td>
                     <td>{site.siteLocation}</td>
                     <td>{site.siteStatus}</td>
                     <td>{site.ceaseDate || 'N/A'}</td>
                     <td>{site.internalSite ? 'Yes' : 'No'}</td>
-                    <td onClick={(e) => { e.stopPropagation(); removeSite(site.siteId); }} style={{ cursor: 'pointer' }}>
-                      <img src={removeIcon} alt="Delete" style={{ width: '20px', height: '20px' }} />
+                    <td onClick={(e) => {
+                      e.stopPropagation(); removeSite(site.siteId);
+                    }} style={{cursor: 'pointer'}}>
+                      <img src={removeIcon} alt="Delete" style={{width: '20px', height: '20px'}} />
                     </td>
                   </tr>
                 </OverlayTrigger>

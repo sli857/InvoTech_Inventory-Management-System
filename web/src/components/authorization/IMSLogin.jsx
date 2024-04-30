@@ -1,23 +1,25 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { Alert, Button, Container, Form } from 'react-bootstrap';
+import {useState} from 'react';
+import {useNavigate} from 'react-router-dom';
+import {Alert, Button, Container, Form} from 'react-bootstrap';
 import PropTypes from 'prop-types';
-import crest from '../../assets/logo.webp'; 
+import crest from '../../assets/logo.webp';
 
-const backend_baseurl = 'http://cs506-team-35.cs.wisc.edu:8080'
+const backendBaseurl = 'http://cs506-team-35.cs.wisc.edu:8080';
 
 /**
  * The IMSLogin component handles user authentication, allowing users to log in or sign up.
  * It interacts with a backend service to authenticate users and optionally register new accounts.
+ * @param {Object} props - The component's properties.
+ * @param {Function} props.setAuth - A function to set the authentication status.
+ * @return {JSX.Element} The rendered IMSLogin component.
  */
-function IMSLogin({ setAuth }) {
+function IMSLogin({setAuth}) {
   // State variables for managing user input and authentication status
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [position, setPosition] = useState('');
   const [isSignUp, setIsSignUp] = useState(false); // Toggle between SignUp and Login modes
   const [error, setError] = useState('');
-  //const [userLogged, setUserLogged] = useState(); // Stores the logged-in user's information
   const navigate = useNavigate();
 
   /**
@@ -41,11 +43,11 @@ function IMSLogin({ setAuth }) {
     }
 
     // Form submission
-    const bodyContent = { username, password, position };
-    const url = `${backend_baseurl}/users/add`;
+    const bodyContent = {username, password, position};
+    const url = `${backendBaseurl}/users/add`;
     const options = {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: {'Content-Type': 'application/json'},
       body: JSON.stringify(bodyContent),
     };
 
@@ -73,20 +75,19 @@ function IMSLogin({ setAuth }) {
   const handleLogin = async (e) => {
     e.preventDefault();
 
-    const confirmUrl = `${backend_baseurl}/users/confirm?username=${username}&password=${password}`;
+    const confirmUrl = `${backendBaseurl}/users/confirm?username=${username}&password=${password}`;
 
     try {
       const confirmResponse = await fetch(confirmUrl);
       const confirmData = await confirmResponse.text();
 
       if (confirmResponse.ok) {
-        const userUrl = `${backend_baseurl}/users/user?username=${username}&password=${password}`;
+        const userUrl = `${backendBaseurl}/users/user?username=${username}&password=${password}`;
         const response = await fetch(userUrl);
         const data = await response.json();
 
         if (response.ok) {
           setAuth(true);
-          //setUserLogged(data);
           navigate('/');
         } else {
           setError(data.message || 'Invalid login. Please try again.');
@@ -99,28 +100,37 @@ function IMSLogin({ setAuth }) {
     }
   };
 
-  // Component layout
   return (
-    <Container style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: `url(${crest}) no-repeat center center`, backgroundSize: 'cover' }}>
+    <Container style={{minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: `url(${crest}) no-repeat center center`, backgroundSize: 'cover'}}>
       {error && <Alert variant="danger">{error}</Alert>}
-      <Form onSubmit={isSignUp ? handleSignIn : handleLogin} style={{ width: '100%', maxWidth: '330px', padding: '15px', background: '#fff', borderRadius: '10px', boxShadow: '0 4px 8px rgba(0,0,0,.05)' }}>
+      <Form onSubmit={isSignUp ? handleSignIn : handleLogin} style={{width: '100%', maxWidth: '330px', padding: '15px', background: '#fff', borderRadius: '10px', boxShadow: '0 4px 8px rgba(0,0,0,.05)'}}>
         <Form.Group className="mb-3" controlId="username">
           <Form.Label>Username</Form.Label>
-          <Form.Control type="text" placeholder="Enter username" value={username} onChange={(e) => { setUsername(e.target.value); if (error) setError(''); }} />
+          <Form.Control type="text" placeholder="Enter username" value={username} onChange={(e) => {
+            setUsername(e.target.value); if (error) setError('');
+          }} />
         </Form.Group>
         <Form.Group className="mb-3" controlId="password">
           <Form.Label>Password</Form.Label>
-          <Form.Control type="password" placeholder="Password" value={password} onChange={(e) => { setPassword(e.target.value); if (error) setError(''); }} />
+          <Form.Control type="password" placeholder="Password" value={password} onChange={(e) => {
+            setPassword(e.target.value); if (error) setError('');
+          }} />
         </Form.Group>
-        {/* The position input field is only shown if the signing in proccess is open (isSignUp = true)*/}  
+        {/* The position input field is only shown if the signing in proccess is open (isSignUp = true)*/}
         {isSignUp && (
           <Form.Group className="mb-3" controlId="position">
             <Form.Label>Position</Form.Label>
-            <Form.Control type="text" placeholder="Enter your position" value={position} onChange={(e) => { setPosition(e.target.value); if (error) setError(''); }} />
+            <Form.Control type="text" placeholder="Enter your position" value={position} onChange={(e) => {
+              setPosition(e.target.value); if (error) setError('');
+            }} />
           </Form.Group>
         )}
-        <Button variant="primary" type="submit" onClick={() => { if (error) setError(''); }}>{isSignUp ? 'Sign Up' : 'Login'}</Button>
-        <Button variant="secondary" onClick={() => { setIsSignUp(!isSignUp); if (error) setError(''); }} style={{ marginTop: '10px', width: '100%' }}>{isSignUp ? 'Switch to Login' : 'Switch to Sign Up'}</Button>
+        <Button variant="primary" type="submit" onClick={() => {
+          if (error) setError('');
+        }}>{isSignUp ? 'Sign Up' : 'Login'}</Button>
+        <Button variant="secondary" onClick={() => {
+          setIsSignUp(!isSignUp); if (error) setError('');
+        }} style={{marginTop: '10px', width: '100%'}}>{isSignUp ? 'Switch to Login' : 'Switch to Sign Up'}</Button>
       </Form>
     </Container>
   );
