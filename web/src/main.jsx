@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import App from './App.jsx'; 
+import App from './App.jsx';
 
 /**
  * Entry point for the React application.
@@ -9,7 +9,7 @@ import App from './App.jsx';
  * StrictMode does not render any visible UI. It activates additional checks and warnings for its descendants.
  */
 ReactDOM.createRoot(document.getElementById('root')).render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
+    <React.StrictMode>
+      <App />
+    </React.StrictMode>,
 );

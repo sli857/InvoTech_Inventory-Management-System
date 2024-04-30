@@ -4,30 +4,30 @@ import PropTypes from 'prop-types'; // Import PropTypes
 
 /**
  * Component that handles user logout.
- *
  * @param {{ setAuth: Function }} props - Component props containing the setAuth function to update authentication state.
+ * @return {JSX.Element} JSX Element for user logout.
  */
 function IMSLogout({setAuth}) {
-    const navigate = useNavigate();
+  const navigate = useNavigate();
 
-    useEffect(() => {
-        // Clear the authentication state
-        setAuth(false);
+  useEffect(() => {
+    // Clear the authentication state
+    setAuth(false);
 
-        // Redirect to login page
-        navigate('/login');
-    }, [setAuth, navigate]);
+    // Redirect to login page
+    navigate('/login');
+  }, [setAuth, navigate]);
 
-    return (
-        <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh'}}>
+  return (
+    <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh'}}>
             Logging you out...
-        </div>
-    );
+    </div>
+  );
 }
 
 // Define PropTypes for IMSLogout
 IMSLogout.propTypes = {
-    setAuth: PropTypes.func.isRequired, // Validate setAuth as a required function
+  setAuth: PropTypes.func.isRequired, // Validate setAuth as a required function
 };
 
 export default IMSLogout;
